@@ -6,18 +6,23 @@ Based on Geant4 framework, version 4.10
 
 # Structure
 
-* CRTest.cxx	- main function
+* CRTest.cxx
+  * // Main function
 
-* CRTestConfigure
+* CRTestMessenger
+  * // Deal with User Options
 
 * CRTestDetectorConstruction
 
 * CRTestVDetector
+  * // Inherited from G4LogicalVolume
   
   * CRTestUnifiedDetector
 
   * CRTestScintDetector
-  
+
+* CRTestSensitiveDetector
+
 * CRTestVParticleGenerator
 
   * CRTestPDGGenerator
@@ -38,6 +43,19 @@ Based on Geant4 framework, version 4.10
 
 * CRTestSteppingAction
 
+# Configuration
+
+* Geometry
+
+* Detector
+
+* Target
+
+* Generator
+
+* Physicslist
+
+* Readout
 
 # Author
 
