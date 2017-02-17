@@ -1,3 +1,13 @@
+################
+# Build Path
+################
+.build/
+
+######################
+## Visual Studio Code
+######################
+.vscode/
+
 #################
 ## Eclipse
 #################
@@ -27,11 +37,6 @@ local.properties
 
 # PDT-specific
 .buildpath
-
-######################
-## Visual Studio Code
-######################
-.vscode/
 
 #################
 ## Visual Studio
