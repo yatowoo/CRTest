@@ -12,7 +12,7 @@ Based on Geant4 framework, version 4.10
 * CRTestMessenger
   * // Deal with User Options
 
-* CRTestDetectorConstruction
+* SysConstruction
 
 * CRTestVDetector
   * // Inherited from G4LogicalVolume
