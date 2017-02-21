@@ -21,4 +21,4 @@ add_executable(CRTest CRTest.cxx ${sources} ${headers})
 target_link_libraries(CRTest ${Geant4_LIBRARIES})
 
 # Add program to the project targets
-# add_custom_target(SimplePhys DEPENDS CRTest)
+add_custom_target(SimplePhys DEPENDS CRTest)

@@ -27,8 +27,7 @@
 
 int main (int argc, char** argv){
     
-    std::cout << std::endl << "CRTest Start!"
-        << std::endl << std::endl;
+    std::cout << std::endl << "CRTest Start!" << std::endl;
 
     // UI Session
 
