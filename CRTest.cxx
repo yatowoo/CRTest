@@ -12,6 +12,7 @@
 ** desc.: Main Program for CRTest
 */
 
+/*
 #ifdef G4UI_USE
 #include "G4UIExecutive.hh"
 #endif
@@ -22,12 +23,17 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
+*/
 
-#include<iostream>
+#include "G4ios.hh"
+
+#include "TString.h"
 
 int main (int argc, char** argv){
     
-    std::cout << std::endl << "CRTest Start!" << std::endl;
+    TString str = "CRTest Start!";
+
+    G4cout << G4endl << str << G4endl;
 
     // UI Session
 
