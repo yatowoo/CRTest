@@ -18,7 +18,6 @@
 #ifndef CRTest_SysConstruction_h
 #define CRTest_SysConstruction_h
 
-#include "globals.hh"
 #include "G4VUserDetectorConstruction.hh"
 
 #include "G4LogicalVolume.hh"
@@ -40,12 +39,9 @@ public:
     virtual void ConstructSDandField();
 
 private:
-    void ConstructMaterial();
+    //void ConstructMaterial();
 
 private:
-    G4Material* fMatWorld;
-    G4Material* fMatDetector;
-    G4Material* fMatTarget;
 
     G4LogicalVolume* fWorld;
     G4LogicalVolume* fDetector;
@@ -58,4 +54,4 @@ private:
 
 };
 
-#endif CRTest_SysConstruction_h
+#endif //CRTest_SysConstruction_h

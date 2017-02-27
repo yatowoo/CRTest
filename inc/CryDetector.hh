@@ -17,7 +17,7 @@
 
 #include "G4LogicalVolume.hh"
 
-class CryDetector : public G4LogicalVolume {
+class CryDetector {
 
 public:
     CryDetector();

@@ -1,26 +1,27 @@
 /*
-*   File : CRTest/inc/ParticleGenertaor.hh
+*   File : CRTest/inc/Generator.hh
 *
 *   Brief: Generate primary event vertex and define messenger commands
 *
 */
 
-#ifndef CRTest_ParticleGenertaor_h
-#define CRTest_ParticleGenertaor_h
+#ifndef CRTest_Generator_h
+#define CRTest_Generator_h
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 
 #include "G4ParticleGun.hh"
+#include "G4Event.hh"
 
-class ParticleGenertaor : public G4VUserPrimaryGeneratorAction {
+class Generator : public G4VUserPrimaryGeneratorAction {
 
 public:
-    ParticleGenertaor();
-    virtual ~ParticleGenertaor();
+    Generator();
+    virtual ~Generator();
 public:
     virtual void GeneratePrimaries(G4Event* anEvent);
 private:
     G4ParticleGun* fParticleGun;
 };
 
-#endif /*CRTest_ParticleGenertaor_h*/
+#endif /*CRTest_Generator_h*/
