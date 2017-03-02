@@ -17,6 +17,8 @@
 
 #include "G4VSensitiveDetector.hh"
 
+#include "CryHit.hh"
+
 #include "G4Step.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4TouchableHistory.hh"
@@ -33,6 +35,7 @@ public:
     virtual G4bool ProcessHits(G4Step* aStep, G4TouchableHistory* roHist);
 private:
     G4int fHCID;
+    CryHC* fHC;
 };
 
 #endif /*CRTest_CryPositionSD_h*/

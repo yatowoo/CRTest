@@ -5,6 +5,8 @@
 
 #include "SysConstruction.hh"
 
+#include "CryPositionSD.hh"
+
 #include "G4Material.hh"
 #include "G4NistManager.hh"
 #include "G4GeometryManager.hh"
@@ -51,8 +53,8 @@ G4VPhysicalVolume *SysConstruction::Construct()
     G4double worldW = 1.2 * detectorW;
 
     // Position
-    G4ThreeVector worldPos = G4ThreeVector(0,0,0);;
-    G4ThreeVector targetPos = G4ThreeVector(0,0,0);;
+    G4ThreeVector worldPos = G4ThreeVector(0,0,0);
+    G4ThreeVector targetPos = G4ThreeVector(0,0,0);
     G4ThreeVector detectorPos
         = G4ThreeVector(0, 0, targetZ / 2. + spacing + detectorZ / 2.);
 
@@ -96,5 +98,10 @@ G4VPhysicalVolume *SysConstruction::Construct()
 
 void SysConstruction::ConstructSDandField()
 {
+    G4String sdName = "CryPostionSD";
+    CryPositionSD* crySD = new CryPositionSD(sdName);
+
+    SetSensitiveDetector(fDetector, crySD);
+
     return;
 }
