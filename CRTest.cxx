@@ -12,15 +12,12 @@
 ** desc.: Main Program for CRTest
 */
 
-#include "globals.hh"
-
 #include "SysConstruction.hh"
 #include "ActionRegister.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
 #endif
-
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIExecutive.hh"
@@ -28,18 +25,20 @@
 #include "FTFP_BERT.hh"
 #include "G4StepLimiterPhysics.hh"
 
-#include<iostream>
+#include "globals.hh"
+#include "G4ios.hh"
 
 int main (int argc, char** argv){
     
-    std::cout << std::endl << "CRTest Start!"
-        << std::endl << std::endl;
+    G4cout << G4endl << "CRTest Start!"
+        << G4endl << G4endl;
 
     // UI Session
     G4UIExecutive* ui = new G4UIExecutive(argc, argv);
     
     // Random
     G4Random::setTheEngine(new CLHEP::RanecuEngine);
+    
     // Run manager
     G4RunManager* runManager = new G4RunManager;
     // User defined classes 

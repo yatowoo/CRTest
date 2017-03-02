@@ -5,9 +5,15 @@
 
 #include "EventAction.hh"
 
+#include "Analysis.hh"
+#include "CryHit.hh"
+
 #include "G4UserEventAction.hh"
 #include "G4Event.hh"
+#include "G4SDManager.hh"
+
 #include "G4ios.hh"
+#include "G4SystemOfUnits.hh"
 
 EventAction::EventAction() : G4UserEventAction()
 {
@@ -33,4 +39,22 @@ void EventAction::EndOfEventAction(const G4Event *anEvent)
            << " end."
            << " - by EventAction"
            << G4endl;
+    
+    // Covert Hits info. into data
+    G4int hcID = G4SDManager::GetSDMpointer()
+        ->GetCollectionID("CryPostionSD/CryHC");
+
+    CryHC* cryHC = static_cast<CryHC*>(
+        anEvent->GetHCofThisEvent()->GetHC(hcID));
+
+    G4AnalysisManager* rootData = G4AnalysisManager::Instance();
+
+    G4double sdEdep = 0.;
+    for(int i = 0 ; i < cryHC->entries() ; i++){
+        sdEdep += (*cryHC)[i]->GetEdep();
+    }
+
+    rootData->FillNtupleDColumn(0, sdEdep / eV);
+
+    rootData->AddNtupleRow();
 }
