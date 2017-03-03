@@ -65,12 +65,10 @@ int main (int argc, char** argv){
     ui->SessionStart();
 
     // delete
-    delete messenger; 
-    delete uiManager;
-    delete visManager;
-    delete physicsList;
-    delete runManager;
     delete ui;
+    delete messenger; 
+    delete visManager;
+    delete runManager;
 
     return 0;
 }
