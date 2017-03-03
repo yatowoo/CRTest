@@ -14,6 +14,7 @@
 
 #include "SysConstruction.hh"
 #include "ActionRegister.hh"
+#include "SysMessenger.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -49,6 +50,8 @@ int main (int argc, char** argv){
     runManager->SetUserInitialization(physicsList);
     
     runManager->SetUserInitialization(new ActionRegister);
+    
+    SysMessenger* messenger = new SysMessenger(runManager);
     // Visualization Manager
     G4VisManager* visManager = new G4VisExecutive;
     visManager->Initialize();
@@ -61,7 +64,8 @@ int main (int argc, char** argv){
     // Start Session
     ui->SessionStart();
 
-    // delete 
+    // delete
+    delete messenger; 
     delete uiManager;
     delete visManager;
     delete physicsList;

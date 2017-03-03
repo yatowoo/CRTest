@@ -22,6 +22,11 @@
 #include "G4UImessenger.hh"
 
 #include "G4RunManager.hh"
+#include "G4UIdirectory.hh"
+#include "G4UIcommand.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
+
+#include "G4String.hh"
 
 class SysMessenger : public G4UImessenger
 {
@@ -30,8 +35,8 @@ public:
     virtual ~SysMessenger();
 
 public:
-    virtual G4String GetCurrentValue(G4UIcommand * command);
-    virtual void SetNewValue(G4UIcommand * command,G4String newValue);
+    virtual G4String GetCurrentValue(G4UIcommand *);
+    virtual void SetNewValue(G4UIcommand *,G4String);
 
 private:
     G4RunManager* fRunManager;
