@@ -28,9 +28,6 @@ SysConstruction::SysConstruction()
 
 SysConstruction::~SysConstruction()
 {
-    delete fWorld;
-    delete fDetector;
-    delete fTarget;
     delete fStepLimit;
 }
 
