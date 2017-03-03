@@ -38,6 +38,9 @@ public:
     virtual G4VPhysicalVolume* Construct();
     virtual void ConstructSDandField();
 
+public: // User Interface
+    G4bool SetSpacing(G4double);
+
 private:
     //void ConstructMaterial();
 

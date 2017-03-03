@@ -102,3 +102,29 @@ void SysConstruction::ConstructSDandField()
 
     return;
 }
+
+G4bool SysConstruction::SetSpacing(G4double spacing)
+{
+    if(spacing < 0*mm){
+        G4cout << "[X] WARNNING - Illegal Value - by SetSpacing."
+            << G4endl;
+        return false;
+    }
+
+    G4double worldZ = ((G4Box*)fWorld->GetSolid())->GetZHalfLength();
+    G4double targetZ = ((G4Box*)fTarget->GetSolid())->GetZHalfLength();
+    G4double detectorZ = ((G4Box*)fDetector->GetSolid())->GetZHalfLength();
+
+    G4double newWorldZ = 1.1 * (spacing + targetZ + 2*detectorZ);
+    ((G4Box*)(fWorld->GetSolid()))->SetZHalfLength(newWorldZ);
+
+    G4double newDetectorPosZ = targetZ + spacing + detectorZ;
+
+    G4PVPlacement* detectorPV = 
+        (G4PVPlacement*)(fWorld->GetDaughter(1));
+
+    if(detectorPV)
+        detectorPV->SetTranslation(G4ThreeVector(0,0,newDetectorPosZ));
+
+    return true;
+}

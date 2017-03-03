@@ -5,6 +5,8 @@
 
 #include "SysMessenger.hh"
 
+#include "SysConstruction.hh"
+
 #include "G4UIdirectory.hh"
 #include "G4UIcommand.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
@@ -40,8 +42,17 @@ SysMessenger::~SysMessenger()
 void SysMessenger::SetNewValue(G4UIcommand* cmd, G4String val)
 {
     if(cmd == fSpacingCmd){
+        
         G4cout << "[+] CMD - Set Spacing between target & detector - "
-            << val  << " mm" << G4endl;
+            << fSpacingCmd->GetNewDoubleValue(val) / cm
+            << " cm - by SysMessenger."
+            << G4endl;
+
+        SysConstruction* sysGeom = 
+            (SysConstruction*)fRunManager->GetUserDetectorConstruction();
+        if(sysGeom)
+            sysGeom->SetSpacing(fSpacingCmd->GetNewDoubleValue(val));
+    
     }
 }
 
