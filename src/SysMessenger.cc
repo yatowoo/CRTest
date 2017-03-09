@@ -6,6 +6,8 @@
 #include "SysMessenger.hh"
 
 #include "SysConstruction.hh"
+#include "Generator.hh"
+#include "CryGenerator.hh"
 
 #include "G4UIdirectory.hh"
 #include "G4UIcommand.hh"
@@ -30,6 +32,16 @@ SysMessenger::SysMessenger(G4RunManager* runManager)
     fSpacingCmd->SetParameterName("spacing",false);
     fSpacingCmd->SetUnitCategory("Length");
     fSpacingCmd->AvailableForStates(G4State_Idle);
+
+    fGeneratorDir = new G4UIdirectory("/CRTest/generator/");
+    fGeneratorDir->SetGuidance("Set Generator");
+
+    fGeneratorType = new G4UIcmdWithAString("/CRTest/generator/set", this);
+    fGeneratorType->SetGuidance("Types: beam, CRY");
+    fGeneratorType->SetCandidates("beam CRY");
+    fGeneratorType->SetParameterName("type",true);
+    fGeneratorType->SetDefaultValue("beam");
+    fGeneratorType->AvailableForStates(G4State_Idle);
 }
 
 SysMessenger::~SysMessenger()
@@ -53,6 +65,24 @@ void SysMessenger::SetNewValue(G4UIcommand* cmd, G4String val)
         if(sysGeom)
             sysGeom->SetSpacing(fSpacingCmd->GetNewDoubleValue(val));
     
+    }else if(cmd == fGeneratorType){
+        G4cout << "[+] CMD - Set generator type - "
+            << val
+            << " - by SysMessenger."
+            << G4endl;
+        G4RunManager* runManager = G4RunManager::GetRunManager();
+        if(val != fGeneratorType->GetCurrentValue())
+        {
+            delete runManager->GetUserPrimaryGeneratorAction();
+            if(val == "beam")
+                runManager->SetUserAction(new Generator);
+            else if(val == "CRY")
+                runManager->SetUserAction(new CryGenerator("./mac/setup.file"));
+        }            
+        G4cout << "[+] CMD - Current Type : "
+            << fGeneratorType->GetCurrentValue()
+            << " - by SysMessenger."
+            << G4endl;
     }
 }
 

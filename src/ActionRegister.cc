@@ -24,8 +24,7 @@ void ActionRegister::BuildForMaster() const
 
 void ActionRegister::Build() const
 {
-    //SetUserAction(new Generator);
-    SetUserAction(new CryGenerator("./mac/setup.file"));
+    SetUserAction(new Generator);
     SetUserAction(new RunAction);
     SetUserAction(new EventAction);
 }
