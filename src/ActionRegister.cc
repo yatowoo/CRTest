@@ -7,6 +7,7 @@
 
 #include "EventAction.hh"
 #include "Generator.hh"
+#include "CryGenerator.hh"
 #include "RunAction.hh"
 
 ActionRegister::ActionRegister()
@@ -23,7 +24,8 @@ void ActionRegister::BuildForMaster() const
 
 void ActionRegister::Build() const
 {
-    SetUserAction(new Generator);
+    //SetUserAction(new Generator);
+    SetUserAction(new CryGenerator("./mac/setup.file"));
     SetUserAction(new RunAction);
     SetUserAction(new EventAction);
 }
