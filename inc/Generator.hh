@@ -20,6 +20,8 @@ public:
     virtual ~Generator();
 public:
     virtual void GeneratePrimaries(G4Event* anEvent);
+protected:
+    G4ThreeVector GetWorldBoundary();
 private:
     G4ParticleGun* fParticleGun;
 };
