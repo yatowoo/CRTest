@@ -38,14 +38,26 @@ Generator::~Generator()
 
 void Generator::GeneratePrimaries(G4Event *anEvent)
 {
-    G4double worldZ = 0;
+    G4ThreeVector position = GetWorldBoundary();
+    position.setX(0.);
+    position.setY(0.);
+    fParticleGun->SetParticlePosition(position);
+
+    fParticleGun->GeneratePrimaryVertex(anEvent);
+}
+
+G4ThreeVector Generator::GetWorldBoundary(){
+    G4double worldX, worldY, worldZ;
     G4LogicalVolume *worldLV = 
         G4LogicalVolumeStore::GetInstance()->GetVolume("WorldLV");
     G4Box *worldBox = NULL;
     if (worldLV)
         worldBox = dynamic_cast<G4Box *>(worldLV->GetSolid());
-    if (worldBox)
+    if (worldBox){
+        worldX = worldBox->GetXHalfLength();
+        worldY = worldBox->GetYHalfLength();
         worldZ = worldBox->GetZHalfLength();
+    }
     else
     {
         G4cout << "[X] ERROR - World volume of box not found."
@@ -54,8 +66,7 @@ void Generator::GeneratePrimaries(G4Event *anEvent)
         << G4endl << "\t"
         << "The gun will be place in the center. - by Generator"
         << G4endl;
+        return G4ThreeVector(0.,0.,0.);
     }
-    fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., -worldZ));
-
-    fParticleGun->GeneratePrimaryVertex(anEvent);
+    return G4ThreeVector(worldX,worldY,-worldZ);
 }

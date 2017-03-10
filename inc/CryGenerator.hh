@@ -8,7 +8,7 @@
 #ifndef CRTest_CryGenerator_h
 #define CRTest_CryGenerator_h
 
-#include "G4VUserPrimaryGeneratorAction.hh"
+#include "Generator.hh"
 
 #include "CRYSetup.h"
 #include "CRYUtils.h"
@@ -22,7 +22,7 @@
 
 #include<vector>
 
-class CryGenerator : public G4VUserPrimaryGeneratorAction {
+class CryGenerator : public Generator {
 
 public:
     CryGenerator(G4String);
