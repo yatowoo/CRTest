@@ -24,6 +24,7 @@
 #include "G4RunManager.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcommand.hh"
+#include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 
 #include "G4String.hh"
@@ -43,9 +44,11 @@ private:
     
     G4UIdirectory* fCRTestDir;
     G4UIdirectory* fGeomDir;
+    G4UIdirectory* fGeneratorDir;
 
     // TODO : use cmd collection?
     G4UIcmdWithADoubleAndUnit* fSpacingCmd;
+    G4UIcmdWithAString* fGeneratorType;
 };
 
 #endif // CRTest_SysMessenger_h

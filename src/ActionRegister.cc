@@ -7,6 +7,7 @@
 
 #include "EventAction.hh"
 #include "Generator.hh"
+#include "CryGenerator.hh"
 #include "RunAction.hh"
 
 ActionRegister::ActionRegister()
