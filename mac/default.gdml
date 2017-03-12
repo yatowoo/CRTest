@@ -29,10 +29,6 @@
     <solidref ref="worldS" />
     <physvol>
         <volumeref ref="Detector" />
-        <positionref ref="detectorPos1" />
-    </physvol>
-    <physvol>
-        <volumeref ref="Detector" />
         <positionref ref="detectorPos2" />
     </physvol>
     <physvol>
