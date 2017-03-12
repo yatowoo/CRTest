@@ -44,14 +44,13 @@ public: // User Interface
 private:
     //void ConstructMaterial();
 
-private:
-
+protected:
     G4LogicalVolume* fWorld;
     G4LogicalVolume* fDetector;
     G4LogicalVolume* fTarget;
 
     G4UserLimits* fStepLimit;
-
+private:
     G4double fPosZTarget;
     G4double fPosZDetector;
 

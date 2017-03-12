@@ -13,6 +13,7 @@
 */
 
 #include "SysConstruction.hh"
+#include "GdmlConstruction.hh"
 #include "ActionRegister.hh"
 #include "SysMessenger.hh"
 
@@ -22,9 +23,12 @@
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIExecutive.hh"
+
 #include "G4VModularPhysicsList.hh"
 #include "FTFP_BERT.hh"
 #include "G4StepLimiterPhysics.hh"
+
+#include "G4GDMLParser.hh"
 
 #include "globals.hh"
 #include "G4ios.hh"
@@ -43,7 +47,12 @@ int main (int argc, char** argv){
     // Run manager
     G4RunManager* runManager = new G4RunManager;
     // User defined classes 
-    runManager->SetUserInitialization(new SysConstruction());
+        // Detector Construction
+    G4GDMLParser* gdml = new G4GDMLParser;
+    gdml->Read("./mac/default.gdml");
+    runManager->SetUserInitialization(
+        new GdmlConstruction(gdml));
+    //runManager->SetUserInitialization(new SysConstruction());
     
     G4VModularPhysicsList* physicsList = new FTFP_BERT;
     physicsList->RegisterPhysics(new G4StepLimiterPhysics());
@@ -66,6 +75,7 @@ int main (int argc, char** argv){
 
     // delete
     delete ui;
+    delete gdml;
     delete messenger; 
     delete visManager;
     delete runManager;

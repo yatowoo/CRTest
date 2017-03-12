@@ -10,24 +10,20 @@
 
 #include "SysConstruction.hh"
 
+#include "G4GDMLParser.hh"
+
 #include "G4VPhysicalVolume.hh"
 
 class GdmlConstruction : public SysConstruction
 {
 public:
-    GdmlConstruction(G4VPhysicalVolume* world)
-        : SysConstruction(){
-        fWorld = world;
-    };
-    virtual ~GdmlConstruction(){};
+    GdmlConstruction(G4GDMLParser* gdml);
+    virtual ~GdmlConstruction();
 
-    virtual G4VPhysicalVolume* Construct()
-    {return fWorld;};
-
-    virtual void ConstructSDandField(){};
+    virtual G4VPhysicalVolume* Construct();
 
 private:
-    G4VPhysicalVolume* fWorld;
+    G4VPhysicalVolume* fWorldPV;
 };
 
 #endif // CRTest_GdmlConstruction_h
