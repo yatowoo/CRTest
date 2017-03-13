@@ -69,21 +69,21 @@ G4VPhysicalVolume *SysConstruction::Construct()
 
     // Construction
     // World
-    G4Box *worldS = new G4Box("World", worldW / 2., worldW / 2., worldZ / 2.);
-    fWorld = new G4LogicalVolume(worldS, air, "WorldLV");
+    G4Box *worldS = new G4Box("WorldS", worldW / 2., worldW / 2., worldZ / 2.);
+    fWorld = new G4LogicalVolume(worldS, air, "World");
     G4VPhysicalVolume *worldPV =
         new G4PVPlacement(NULL, worldPos, fWorld, "WorldPV", NULL, false, 0, false);
     fWorld->SetVisAttributes(worldVis);
     // Target
-    G4Box *targetS = new G4Box("Target", targetW / 2., targetW / 2., targetZ / 2.);
-    fTarget = new G4LogicalVolume(targetS, lead, "TargetLV");
+    G4Box *targetS = new G4Box("TargetS", targetW / 2., targetW / 2., targetZ / 2.);
+    fTarget = new G4LogicalVolume(targetS, lead, "Target");
     G4VPhysicalVolume *targetPV =
         new G4PVPlacement(NULL, targetPos, fTarget, "TargetPV", fWorld, false, 0, false);
     fTarget->SetVisAttributes(targetVis);
     fTarget->SetUserLimits(fStepLimit);
     // Detector
-    G4Box *detectorS = new G4Box("Detector", detectorW / 2., detectorW / 2., detectorZ / 2.);
-    fDetector = new G4LogicalVolume(detectorS, silicon, "DetectorLV");
+    G4Box *detectorS = new G4Box("DetectorS", detectorW / 2., detectorW / 2., detectorZ / 2.);
+    fDetector = new G4LogicalVolume(detectorS, silicon, "Detector");
     G4VPhysicalVolume *detectorPV =
         new G4PVPlacement(NULL, detectorPos, fDetector, "DetectorPV",fWorld, false, 0, false);
     fDetector->SetVisAttributes(detectorVis);

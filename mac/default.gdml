@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<gdml
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="file:///D:/OneDrive/CODE/GEANT4/GDML/schema/gdml.xsd">
+
+<define>
+  <position name="targetPos" unit="cm" x="0" y="0" z="0" />
+  <position name="detectorPos1" unit="cm" x="0" y="0" z="-10" />
+  <position name="detectorPos2" unit="cm" x="0" y="0" z="10" />
+</define>
+
+<materials>
+</materials>
+
+<solids>
+  <box aunit="radian" lunit="cm" name="targetS" x="1" y="1" z="5" />
+  <box aunit="radian" lunit="cm" name="detectorS" x="5" y="5" z="0.1" />
+  <box aunit="radian" lunit="cm" name="worldS" x="6" y="6" z="24" />
+</solids>
+
+<structure>
+  <volume name="Target">
+    <materialref ref="G4_Pb" />
+    <solidref ref="targetS" />
+  </volume>
+  <volume name="Detector">
+    <materialref ref="G4_Si" />
+    <solidref ref="detectorS" />
+  </volume>
+  <volume name="World">
+    <materialref ref="G4_AIR" />
+    <solidref ref="worldS" />
+    <physvol>
+        <volumeref ref="Detector" />
+        <positionref ref="detectorPos2" />
+    </physvol>
+    <physvol>
+        <volumeref ref="Target" />
+        <positionref ref="targetPos" />
+    </physvol>
+  </volume>
+</structure>
+
+<setup name="Default" version="1.0" >
+  <world ref="World" />
+</setup>
+
+</gdml>
