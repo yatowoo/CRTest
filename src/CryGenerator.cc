@@ -96,6 +96,7 @@ void CryGenerator::GeneratePrimaries(G4Event* anEvent)
         G4ThreeVector position = GetWorldBoundary();
         position.setX(position.x()*(1-2*G4UniformRand()));
         position.setY(position.y()*(1-2*G4UniformRand()));
+        position.setZ(-position.z());
         fParticleGun->SetParticlePosition(position);
         
         fParticleGun->SetParticleMomentumDirection(

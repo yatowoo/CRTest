@@ -41,6 +41,7 @@ void Generator::GeneratePrimaries(G4Event *anEvent)
     G4ThreeVector position = GetWorldBoundary();
     position.setX(0.);
     position.setY(0.);
+    position.setZ(-position.z());
     fParticleGun->SetParticlePosition(position);
 
     fParticleGun->GeneratePrimaryVertex(anEvent);
@@ -49,7 +50,7 @@ void Generator::GeneratePrimaries(G4Event *anEvent)
 G4ThreeVector Generator::GetWorldBoundary(){
     G4double worldX, worldY, worldZ;
     G4LogicalVolume *worldLV = 
-        G4LogicalVolumeStore::GetInstance()->GetVolume("WorldLV");
+        G4LogicalVolumeStore::GetInstance()->GetVolume("World");
     G4Box *worldBox = NULL;
     if (worldLV)
         worldBox = dynamic_cast<G4Box *>(worldLV->GetSolid());
@@ -68,5 +69,5 @@ G4ThreeVector Generator::GetWorldBoundary(){
         << G4endl;
         return G4ThreeVector(0.,0.,0.);
     }
-    return G4ThreeVector(worldX,worldY,-worldZ);
+    return G4ThreeVector(worldX,worldY,worldZ);
 }
