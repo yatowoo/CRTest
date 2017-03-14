@@ -24,4 +24,5 @@ target_link_libraries(${PROJECT_NAME}
     $ENV{CRYHOME}/lib/libCRY.a)
 
 # Add program to the project targets
-# add_custom_target(SimplePhys DEPENDS CRTest)
+add_custom_target(LINK_MAC COMMAND ln -s ${PROJECT_SOURCE_DIR}/mac . )
+add_dependencies(${PROJECT_NAME} LINK_MAC)
