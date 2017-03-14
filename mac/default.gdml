@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <gdml
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:noNamespaceSchemaLocation="file:///D:/OneDrive/CODE/GEANT4/GDML/schema/gdml.xsd">
+  xsi:noNamespaceSchemaLocation="file:///schema/gdml.xsd">
 
 <define>
   <position name="targetPos" unit="cm" x="0" y="0" z="0" />
