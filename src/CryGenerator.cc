@@ -61,7 +61,7 @@ void CryGenerator::InputCRY(){
 
 void CryGenerator::UpdateCRY(G4String input){
     // TODO : Check Memory Leak
-    CRYSetup *setup = new CRYSetup(input,getenv("CRYDATA"));
+    CRYSetup *setup = new CRYSetup(input,getenv("CRYDATAPATH"));
     fCryGenerator = new CRYGenerator(setup);
     // set random number generator
     RNGWrapper<CLHEP::HepRandomEngine>::set(
