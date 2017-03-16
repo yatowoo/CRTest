@@ -28,10 +28,16 @@
 #include "G4ios.hh"
 
 #include "TString.h"
+#include "TROOT.h"
+#include "TF1.h"
+
 
 int main (int argc, char** argv){
     
     TString str = "CRTest Start!";
+
+    TF1* fcn = (TF1*)gROOT->GetFunction("gaus");
+    fcn->Print();
 
     G4cout << G4endl << str << G4endl;
 
