@@ -39,11 +39,18 @@ int main (int argc, char** argv){
         << G4endl << G4endl;
 
     // UI Session
-    G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-    
+#ifdef G4UI_USE
+    G4UIExecutive* ui = NULL;
+    if (argc == 1)
+        ui = new G4UIExecutive(argc, argv);
+    // else in Batch mode
+#endif
+
     // Random
     G4Random::setTheEngine(new CLHEP::RanecuEngine);
-    
+    srand(time(NULL));
+    G4Random::setTheSeed(rand(),3);
+
     // Run manager
     G4RunManager* runManager = new G4RunManager;
     // User defined classes 
@@ -62,17 +69,28 @@ int main (int argc, char** argv){
     
     SysMessenger* messenger = new SysMessenger(runManager);
     // Visualization Manager
+#ifdef G4VIS_USE
     G4VisManager* visManager = new G4VisExecutive;
     visManager->Initialize();
+#endif
+
     // UIManager
     G4UImanager* uiManager = G4UImanager::GetUIpointer();
-    // Execute Initialization Macro by UIManager
-    uiManager->ApplyCommand("/control/execute ./mac/init.mac");
-    if(ui->IsGUI())
-        uiManager->ApplyCommand("/control/execute ./mac/gui.mac");
-    // Start Session
-    ui->SessionStart();
-
+    if( argc == 2){
+        // Execute macro from argument
+        G4String command = "/control/execute ";
+        G4String fileName = argv[1];
+        uiManager->ApplyCommand(command+fileName);
+    }
+    else{
+        // Execute Initialization Macro by UIManager
+        uiManager->ApplyCommand("/control/execute ./mac/init.mac");
+        if(ui->IsGUI())
+            uiManager->ApplyCommand("/control/execute ./mac/gui.mac");
+        // Start Session
+        ui->SessionStart();
+    }// mode case
+    
     // delete
     delete ui;
     delete gdml;
