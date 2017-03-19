@@ -14,7 +14,23 @@ RunAction::RunAction()
 {
     G4RunManager::GetRunManager()->SetPrintProgress(1);
 
-    //G4AnalysisManager* rootData = G4AnalysisManager::Instance();
+    // Initialize .root file
+    G4AnalysisManager* rootData = G4AnalysisManager::Instance();
+
+    rootData->SetFileName("Cry.root");
+    rootData->CreateNtuple("Cry","Event");
+    rootData->CreateNtupleDColumn("Edep");
+    rootData->CreateNtupleIColumn("pri.num");
+    rootData->CreateNtupleIColumn("pri.id");
+    rootData->CreateNtupleDColumn("pri.x");
+    rootData->CreateNtupleDColumn("pri.y");
+    rootData->CreateNtupleDColumn("pri.z");
+    rootData->CreateNtupleDColumn("pri.px");
+    rootData->CreateNtupleDColumn("pri.py");
+    rootData->CreateNtupleDColumn("pri.pz");
+    rootData->CreateNtupleDColumn("pri.E");
+    rootData->FinishNtuple();
+
 }
 
 RunAction::~RunAction()
@@ -29,11 +45,6 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
     
     // Initialize .root file
     G4AnalysisManager* rootData = G4AnalysisManager::Instance();
-    // TODO : Parameters, data file name
-    rootData->SetFileName("Cry.root");
-    rootData->CreateNtuple("Cry","Event");
-    rootData->CreateNtupleDColumn("Edep");
-    rootData->FinishNtuple();
 
     rootData->OpenFile();
 }
