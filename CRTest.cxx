@@ -16,6 +16,7 @@
 #include "GdmlConstruction.hh"
 #include "ActionRegister.hh"
 #include "SysMessenger.hh"
+#include "PhysicsList.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -61,8 +62,9 @@ int main (int argc, char** argv){
         new GdmlConstruction(gdml));
     //runManager->SetUserInitialization(new SysConstruction());
     
-    G4VModularPhysicsList* physicsList = new FTFP_BERT;
-    physicsList->RegisterPhysics(new G4StepLimiterPhysics());
+    //G4VModularPhysicsList* physicsList = new FTFP_BERT;
+    //physicsList->RegisterPhysics(new G4StepLimiterPhysics());
+    G4VModularPhysicsList* physicsList = new PhysicsList;
     runManager->SetUserInitialization(physicsList);
     
     runManager->SetUserInitialization(new ActionRegister);
