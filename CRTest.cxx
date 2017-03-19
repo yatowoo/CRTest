@@ -56,7 +56,7 @@ int main (int argc, char** argv){
     // User defined classes 
         // Detector Construction
     G4GDMLParser* gdml = new G4GDMLParser;
-    gdml->Read("./mac/default.gdml");
+    gdml->Read("./mac/default.gdml",false);
     runManager->SetUserInitialization(
         new GdmlConstruction(gdml));
     //runManager->SetUserInitialization(new SysConstruction());
