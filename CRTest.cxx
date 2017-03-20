@@ -38,13 +38,18 @@ int main (int argc, char** argv){
     
     G4cout << G4endl << "CRTest Start!"
         << G4endl << G4endl;
+    
+    G4String gdmlFileName = "./mac/default.gdml";
+    G4String rootFileName = "CRTest";
 
     // UI Session
 #ifdef G4UI_USE
     G4UIExecutive* ui = NULL;
-    if (argc == 1)
+    if (argc < 3)
         ui = new G4UIExecutive(argc, argv);
     // else in Batch mode
+    if(argc > 1)
+        gdmlFileName = argv[1];
 #endif
 
     // Random
@@ -57,7 +62,7 @@ int main (int argc, char** argv){
     // User defined classes 
         // Detector Construction
     G4GDMLParser* gdml = new G4GDMLParser;
-    gdml->Read("./mac/default.gdml",false);
+    gdml->Read(gdmlFileName,false);
     runManager->SetUserInitialization(
         new GdmlConstruction(gdml));
     //runManager->SetUserInitialization(new SysConstruction());
@@ -78,10 +83,10 @@ int main (int argc, char** argv){
 
     // UIManager
     G4UImanager* uiManager = G4UImanager::GetUIpointer();
-    if( argc == 2){
+    if( argc > 2){
         // Execute macro from argument
         G4String command = "/control/execute ";
-        G4String fileName = argv[1];
+        G4String fileName = argv[2];
         uiManager->ApplyCommand(command+fileName);
     }
     else{

@@ -3,7 +3,7 @@
 # Setup the project
 cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
 set(CMAKE_BUILD_TYPE Debug)
-project(SimplePhys)
+project(CRTest)
 
 # Find Geant4 package
 find_package(Geant4 REQUIRED ui_all vis_all)
