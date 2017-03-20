@@ -33,8 +33,10 @@ void CryPositionSD::Initialize(G4HCofThisEvent *hce)
 
 G4bool CryPositionSD::ProcessHits(G4Step *aStep, G4TouchableHistory *roHist)
 {
+    /* For further : verbose > 1 
     G4cout << "[+] Hit - Processing by CryPositionSD"
            << G4endl;
+    */
 
     G4double edep = aStep->GetTotalEnergyDeposit();
     if(edep <= 0) return false;

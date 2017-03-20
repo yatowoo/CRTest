@@ -29,6 +29,10 @@ RunAction::RunAction()
     rootData->CreateNtupleDColumn("pri.py");
     rootData->CreateNtupleDColumn("pri.pz");
     rootData->CreateNtupleDColumn("pri.E");
+    rootData->CreateNtupleDColumn("scint.E");
+    rootData->CreateNtupleDColumn("scint.px");
+    rootData->CreateNtupleDColumn("scint.py");
+    rootData->CreateNtupleDColumn("scint.pz");
     rootData->FinishNtuple();
 
 }

@@ -58,16 +58,16 @@ void EventAction::EndOfEventAction(const G4Event *anEvent)
     G4PrimaryVertex* priV = anEvent->GetPrimaryVertex();
     G4PrimaryParticle* priP = priV->GetPrimary();
 
-    rootData->FillNtupleDColumn(0, sdEdep / eV);
+    rootData->FillNtupleDColumn(0, sdEdep / MeV);
     rootData->FillNtupleIColumn(1,anEvent->GetNumberOfPrimaryVertex());
     rootData->FillNtupleIColumn(2,priP->GetPDGcode());
     rootData->FillNtupleDColumn(3,priV->GetX0()/cm);
     rootData->FillNtupleDColumn(4,priV->GetY0()/cm);
     rootData->FillNtupleDColumn(5,priV->GetZ0()/cm);
-    rootData->FillNtupleDColumn(6,priP->GetPx()/cm);
-    rootData->FillNtupleDColumn(7,priP->GetPy()/cm);
-    rootData->FillNtupleDColumn(8,priP->GetPz()/cm);
-    rootData->FillNtupleDColumn(9,priP->GetTotalEnergy()/GeV);
+    rootData->FillNtupleDColumn(6,priP->GetPx()/MeV);
+    rootData->FillNtupleDColumn(7,priP->GetPy()/MeV);
+    rootData->FillNtupleDColumn(8,priP->GetPz()/MeV);
+    rootData->FillNtupleDColumn(9,priP->GetTotalEnergy()/MeV);
 
     rootData->AddNtupleRow();
 }

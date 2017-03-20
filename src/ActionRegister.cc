@@ -9,6 +9,7 @@
 #include "Generator.hh"
 #include "CryGenerator.hh"
 #include "RunAction.hh"
+#include "StepAction.hh"
 
 ActionRegister::ActionRegister()
     : G4VUserActionInitialization()
@@ -27,4 +28,5 @@ void ActionRegister::Build() const
     SetUserAction(new Generator);
     SetUserAction(new RunAction);
     SetUserAction(new EventAction);
+    SetUserAction(new StepAction);
 }
