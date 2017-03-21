@@ -14,6 +14,13 @@ if(DEFINED ROOTSYS AND NOT DEFINED ROOT_DIR)
 endif()
 find_package(ROOT REQUIRED)
 
+# Find ROOT
+set(ROOTSYS $ENV{ROOTSYS})
+if(DEFINED ROOTSYS AND NOT DEFINED ROOT_DIR)
+  set(ROOT_DIR ${ROOTSYS}/cmake)
+endif()
+find_package(ROOT REQUIRED)
+
 # Setup include directories for project
 include(${Geant4_USE_FILE}
      ${ROOT_USE_FILE})
