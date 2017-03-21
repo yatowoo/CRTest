@@ -12,56 +12,98 @@
 ** desc.: Main Program for CRTest
 */
 
-/*
-#ifdef G4UI_USE
-#include "G4UIExecutive.hh"
-#endif
+#include "SysConstruction.hh"
+#include "GdmlConstruction.hh"
+#include "ActionRegister.hh"
+#include "SysMessenger.hh"
+#include "PhysicsList.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
 #endif
-
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-*/
+#include "G4UIExecutive.hh"
 
+#include "G4VModularPhysicsList.hh"
+#include "FTFP_BERT.hh"
+#include "G4StepLimiterPhysics.hh"
+
+#include "G4GDMLParser.hh"
+
+#include "globals.hh"
 #include "G4ios.hh"
-
-#include "TString.h"
-#include "TROOT.h"
-#include "TF1.h"
-
 
 int main (int argc, char** argv){
     
-    TString str = "CRTest Start!";
-
-    TF1* fcn = (TF1*)gROOT->GetFunction("gaus");
-    fcn->Print();
-
-    G4cout << G4endl << str << G4endl;
+    G4cout << G4endl << "CRTest Start!"
+        << G4endl << G4endl;
+    
+    G4String gdmlFileName = "./mac/default.gdml";
+    G4String rootFileName = "CRTest";
 
     // UI Session
+#ifdef G4UI_USE
+    G4UIExecutive* ui = NULL;
+    if (argc < 3)
+        ui = new G4UIExecutive(argc, argv);
+    // else in Batch mode
+    if(argc > 1)
+        gdmlFileName = argv[1];
+#endif
+
+    // Random
+    G4Random::setTheEngine(new CLHEP::RanecuEngine);
+    srand(time(NULL));
+    G4Random::setTheSeed(rand(),3);
 
     // Run manager
-
+    G4RunManager* runManager = new G4RunManager;
     // User defined classes 
-        // Detector
-        // PhysList
-        // Generator
-        // RunAction
-        // EventAction
+        // Detector Construction
+    G4GDMLParser* gdml = new G4GDMLParser;
+    gdml->Read(gdmlFileName,false);
+    runManager->SetUserInitialization(
+        new GdmlConstruction(gdml));
+    //runManager->SetUserInitialization(new SysConstruction());
     
+    //G4VModularPhysicsList* physicsList = new FTFP_BERT;
+    //physicsList->RegisterPhysics(new G4StepLimiterPhysics());
+    G4VModularPhysicsList* physicsList = new PhysicsList;
+    runManager->SetUserInitialization(physicsList);
+    
+    runManager->SetUserInitialization(new ActionRegister);
+    
+    SysMessenger* messenger = new SysMessenger(runManager);
     // Visualization Manager
+#ifdef G4VIS_USE
+    G4VisManager* visManager = new G4VisExecutive;
+    visManager->Initialize();
+#endif
 
     // UIManager
-
-    // Execute Initialization Macro by UIManager
-
-    // Start Session
-    // ui->SessionStart();
-
-    // delete 
+    G4UImanager* uiManager = G4UImanager::GetUIpointer();
+    if( argc > 2){
+        // Execute macro from argument
+        G4String command = "/control/execute ";
+        G4String fileName = argv[2];
+        uiManager->ApplyCommand(command+fileName);
+    }
+    else{
+        // Execute Initialization Macro by UIManager
+        uiManager->ApplyCommand("/control/execute ./mac/init.mac");
+        if(ui->IsGUI())
+            uiManager->ApplyCommand("/control/execute ./mac/gui.mac");
+        // Start Session
+        ui->SessionStart();
+    }// mode case
+    
+    // delete
+    delete ui;
+    delete gdml;
+    delete messenger; 
+    delete visManager;
+    delete runManager;
 
     return 0;
 }

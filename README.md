@@ -14,34 +14,36 @@ Based on Geant4 framework, version 4.10
 
 * CRTestDetectorConstruction
 
-* CRTestVDetector
+* CryDetector
   * // Inherited from G4LogicalVolume
   
   * CRTestUnifiedDetector
 
   * CRTestScintDetector
 
-* CRTestSensitiveDetector
+* CryPositionSD
 
-* CRTestVParticleGenerator
+* Generator
 
-  * CRTestPDGGenerator
+  * BeamGenerator
+
+  * PDGGenerator
  
-  * CRTestCRYGenerator
+  * CRYGenerator
   
-  * CRTestPurdueGenerator
+  * PurdueGenerator
 
-* CRTestPhysicsList
+* PhysicsList
 
-* CRTestRunAction
+* RunAction
 
-* CRTestRunInitialization
+* ActionRegister
 
-* CRTestEventAction
+* EventAction
 
-* CRTestTrackingAction
+* TrackingAction
 
-* CRTestSteppingAction
+* SteppingAction
 
 # Configuration
 
