@@ -6,7 +6,7 @@
 <define>
   <position name="targetPos" unit="cm" x="0" y="0" z="1" />
   <position name="detectorPos" unit="cm" x="0" y="0" z="0" />
-  <matrix name="PS_RINDEX" coldim="2" values="1.65*eV 1.58" />
+  <matrix name="PS_RINDEX" coldim="2" values="2.91*eV 1.58" />
   <matrix name="PS_FAST" coldim="2" values="3.1344*eV	0.00
                                             3.10754*eV	0.0087
                                             3.0839*eV	0.02435
@@ -43,12 +43,9 @@
                                             2.53596*eV	0.10609
                                             2.50728*eV	0.07652
                                             2.48165*eV	0.05391" />
-  <matrix name="PS_ABSL" coldim="2" values="2.00*eV 2.*cm
-                                            2.87*eV 2.*cm
-                                            2.90*eV 2.*cm
-                                            3.47*eV 2.*cm" />
-  <matrix name="PS_YIELD" coldim="1" values="10000" />
-  <matrix name="PS_FASTTAU" coldim="1" values="10.*ns" />
+  <matrix name="PS_ABSL" coldim="2" values="2.91*eV 380.*cm" />
+  <matrix name="PS_YIELD" coldim="1" values="10000/MeV" />
+  <matrix name="PS_FASTTAU" coldim="1" values="2.1*ns" />
   <matrix name="PS_SCALE" coldim="1" values="1." />
 </define>
 
@@ -66,9 +63,9 @@
     <property name="FASTTIMECONSTANT" ref="PS_FASTTAU"/>
     <property name="ABSLENGTH" ref="PS_ABSL"/>
     <property name="RESOLUTIONSCALE" ref="PS_SCALE"/>
-    <D value="1.06" />
-    <fraction n="0.077418" ref="Hydrogen" />
-    <fraction n="0.922582" ref="Carbon" />
+    <D value="1.023" />
+    <fraction n="0.085" ref="Hydrogen" />
+    <fraction n="0.915" ref="Carbon" />
   </material>
 </materials>
 
