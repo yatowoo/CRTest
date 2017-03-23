@@ -6,6 +6,7 @@
 #include "StepAction.hh"
 
 #include "Analysis.hh"
+#include "OpRecorder.hh"
 
 #include "G4Step.hh"
 #include "G4StepPoint.hh"
@@ -31,8 +32,7 @@ StepAction::~StepAction()
 void StepAction::UserSteppingAction(const G4Step *aStep)
 {
 
-    static G4int nScintTotal = 0;
-    static G4int nScintToFiber = 0;
+    OpRecorder* Recoder = OpRecorder::Instance();
 
     G4Track *theTrack = aStep->GetTrack();
 
@@ -44,19 +44,8 @@ void StepAction::UserSteppingAction(const G4Step *aStep)
         //G4TrackVector *fSecondary = fpSteppingManager->GetfSecondary();
         G4int tN2ndariesTot =
             fpSteppingManager->GetfN2ndariesAtRestDoIt() + fpSteppingManager->GetfN2ndariesAlongStepDoIt() + fpSteppingManager->GetfN2ndariesPostStepDoIt();
-
-        nScintTotal += tN2ndariesTot;
-
-        if (theTrack->GetNextVolume()->GetName() == "World_PV")
-        {
-            G4cout << "[+] INFO - Primary Track Scintillation "
-                   << "- OpPhotons Total Count : " << nScintTotal
-                   << G4endl
-                   << "- OpPhotons Scint. To Fiber : " << nScintToFiber
-                   << " - by StepAction." << G4endl;
-            nScintTotal = 0;
-            nScintToFiber = 0;
-        }
+        if(tN2ndariesTot > 0)
+        Recoder->nScintTotal += tN2ndariesTot;
 
         return;
     }
@@ -74,15 +63,17 @@ void StepAction::UserSteppingAction(const G4Step *aStep)
         thePostPV->GetName() == "Fiber_PV")
     {
 
-        nScintToFiber++;
-        
+        Recoder->nScintToFiber += 1;
+
+        theTrack->SetTrackStatus(G4TrackStatus::fStopAndKill);
+        /*
         G4cout << "[X] DEBUG - OpPhoton from Scint. to Fiber "
                << G4endl
                << "\t- ParentTrackID : " << theTrack->GetParentID()
                << "\t- TrackID : " << theTrack->GetTrackID()
                << G4endl;
-        theTrack->SetTrackStatus(G4TrackStatus::fStopAndKill);
-        /*
+        
+        
         G4cout << theTrack->GetTotalEnergy() / eV << " eV "
             << "Direction : " << theTrack->GetMomentumDirection()
             << G4endl;*/
