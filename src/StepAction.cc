@@ -30,25 +30,65 @@ StepAction::~StepAction()
 
 void StepAction::UserSteppingAction(const G4Step *aStep)
 {
+
+    static G4int nScintTotal = 0;
+    static G4int nScintToFiber = 0;
+
     G4Track *theTrack = aStep->GetTrack();
 
-    if (theTrack->GetParentID() != 0)
+    if (theTrack->GetParentID() == 0 && theTrack->GetVolume()->GetName() == "Detector_PV")
+    {
+
+        //This is a primary track
+
+        //G4TrackVector *fSecondary = fpSteppingManager->GetfSecondary();
+        G4int tN2ndariesTot =
+            fpSteppingManager->GetfN2ndariesAtRestDoIt() + fpSteppingManager->GetfN2ndariesAlongStepDoIt() + fpSteppingManager->GetfN2ndariesPostStepDoIt();
+
+        nScintTotal += tN2ndariesTot;
+
+        if (theTrack->GetNextVolume()->GetName() == "World_PV")
+        {
+            G4cout << "[+] INFO - Primary Track Scintillation "
+                   << "- OpPhotons Total Count : " << nScintTotal
+                   << G4endl
+                   << "- OpPhotons Scint. To Fiber : " << nScintToFiber
+                   << " - by StepAction." << G4endl;
+            nScintTotal = 0;
+            nScintToFiber = 0;
+        }
+
+        return;
+    }
+
+    if (theTrack->GetParticleDefinition() != G4OpticalPhoton::OpticalPhotonDefinition())
         return;
 
-    //This is a primary track
+    G4StepPoint *thePrePoint = aStep->GetPreStepPoint();
+    G4StepPoint *thePostPoint = aStep->GetPostStepPoint();
+    G4VPhysicalVolume *thePrePV = thePrePoint->GetPhysicalVolume();
+    G4VPhysicalVolume *thePostPV = thePostPoint->GetPhysicalVolume();
 
-    G4TrackVector *fSecondary = fpSteppingManager->GetfSecondary();
-    G4int tN2ndariesTot =
-        fpSteppingManager->GetfN2ndariesAtRestDoIt() + fpSteppingManager->GetfN2ndariesAlongStepDoIt() + fpSteppingManager->GetfN2ndariesPostStepDoIt();
-    if (tN2ndariesTot == 0)
-        return;
+    if (thePrePV && thePostPV &&
+        thePrePV->GetName() == "Detector_PV" &&
+        thePostPV->GetName() == "Fiber_PV")
+    {
 
-    G4AnalysisManager *rootData = G4AnalysisManager::Instance();
-    
-    G4cout << "[+] INFO - Primary Track Scintillation "
-           << "- 2ndaries Total Count : " << tN2ndariesTot
-           << " - by StepAction." << G4endl;
-    G4cout << "[+] INFO - Scintillation Optical Photon " << G4endl;
+        nScintToFiber++;
+        
+        G4cout << "[X] DEBUG - OpPhoton from Scint. to Fiber "
+               << G4endl
+               << "\t- ParentTrackID : " << theTrack->GetParentID()
+               << "\t- TrackID : " << theTrack->GetTrackID()
+               << G4endl;
+        theTrack->SetTrackStatus(G4TrackStatus::fStopAndKill);
+        /*
+        G4cout << theTrack->GetTotalEnergy() / eV << " eV "
+            << "Direction : " << theTrack->GetMomentumDirection()
+            << G4endl;*/
+    }
+
+    /*  G4AnalysisManager *rootData = G4AnalysisManager::Instance();
     for (size_t i = (*fSecondary).size() - tN2ndariesTot;
          i < (*fSecondary).size(); i++)
     {
@@ -64,15 +104,5 @@ void StepAction::UserSteppingAction(const G4Step *aStep)
             rootData->FillNtupleDColumn(13, photonV[2]);
             rootData->AddNtupleRow();
         }
-    }
-    G4cout << " - by StepAction." << G4endl;
-    // DEBUG
-    /*
-    
-
-        G4cout << "[+] INFO - Scintillation Optical Photon "
-               << "- GetTotalEnergy : " << thePostPoint->GetTotalEnergy() / eV
-               << " - by StepAction." << G4endl;
-        rootData->FillNtupleDColumn(10, thePostPoint->GetTotalEnergy() / eV);
-        */
+    }*/
 }

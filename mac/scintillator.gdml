@@ -10,8 +10,8 @@
 	<position name="fiberPos" unit="mm" x="5" y="0" z="-4" />
 	<rotation name="fiberRot" x="90" unit="deg" />
 	<matrix name="AIR_RINDEX" coldim="2" values="2.91*eV 1.00" />
-  <matrix name="PS_RINDEX" coldim="2" values="2.91*eV 1.58" />
-  <matrix name="PS_FAST" coldim="2" values="3.1344*eV	0.00
+  <matrix name="PVT_RINDEX" coldim="2" values="2.91*eV 1.58" />
+  <matrix name="PVT_FAST" coldim="2" values="3.1344*eV	0.00
                                             3.10754*eV	0.0087
                                             3.0839*eV	0.02435
                                             3.06512*eV	0.06609
@@ -47,10 +47,10 @@
                                             2.53596*eV	0.10609
                                             2.50728*eV	0.07652
                                             2.48165*eV	0.05391" />
-  <matrix name="PS_ABSL" coldim="2" values="2.91*eV 380.*cm" />
-  <matrix name="PS_YIELD" coldim="1" values="10000/MeV" />
-  <matrix name="PS_FASTTAU" coldim="1" values="2.1*ns" />
-  <matrix name="PS_SCALE" coldim="1" values="1." />
+  <matrix name="PVT_ABSL" coldim="2" values="2.91*eV 380.*cm" />
+  <matrix name="PVT_YIELD" coldim="1" values="10/MeV" />
+  <matrix name="PVT_FASTTAU" coldim="1" values="2.1*ns" />
+  <matrix name="PVT_SCALE" coldim="1" values="1." />
 </define>
 
 <materials>
@@ -72,16 +72,16 @@
 		<fraction n="0.3" ref="Oxygen" />
 		<property name="RINDEX" ref="AIR_RINDEX"/>
   </material>
-  <material formula="PS" name="POLYSTYRENE" >
+  <material formula=" " name="PVT" >
     <D value="1.023" />
     <fraction n="0.085" ref="Hydrogen" />
     <fraction n="0.915" ref="Carbon" />
-		<property name="RINDEX" ref="PS_RINDEX"/>
-    <property name="SCINTILLATIONYIELD" ref="PS_YIELD"/>
-    <property name="FASTCOMPONENT" ref="PS_FAST"/>
-    <property name="FASTTIMECONSTANT" ref="PS_FASTTAU"/>
-    <property name="ABSLENGTH" ref="PS_ABSL"/>
-    <property name="RESOLUTIONSCALE" ref="PS_SCALE"/>
+		<property name="RINDEX" ref="PVT_RINDEX"/>
+    <property name="SCINTILLATIONYIELD" ref="PVT_YIELD"/>
+    <property name="FASTCOMPONENT" ref="PVT_FAST"/>
+    <property name="FASTTIMECONSTANT" ref="PVT_FASTTAU"/>
+    <property name="ABSLENGTH" ref="PVT_ABSL"/>
+    <property name="RESOLUTIONSCALE" ref="PVT_SCALE"/>
   </material>
 </materials>
 
@@ -90,6 +90,7 @@
   <box aunit="radian" lunit="cm" name="detectorS" x="5" y="5" z="1" />
   <box aunit="radian" lunit="cm" name="worldS" x="6" y="6" z="2" />
 	<eltube aunit="radian" lunit="mm" name="fiberS" dx="0.5" dy="0.5" dz="30" />
+  <opticalsurface name="scint_surf" model="glisur" finish="ground" type="dielectric_dielectric" value="0.01"/>
 </solids>
 
 <structure>
@@ -102,7 +103,7 @@
     <solidref ref="fiberS" />
   </volume>
   <volume name="Detector">
-    <materialref ref="POLYSTYRENE" />
+    <materialref ref="PVT" />
     <solidref ref="detectorS" />
 		<loop for="fiberX" to="9" step="1">
 		<physvol copynumber="fiberX">
@@ -112,6 +113,11 @@
 		</physvol>
 		</loop>
   </volume>
+
+  <skinsurface name="skinsrf1" surfaceproperty="scint_surf" >
+    <volumeref ref="Detector"/>
+  </skinsurface> 
+
   <volume name="World">
     <materialref ref="AIR" />
     <solidref ref="worldS" />
@@ -126,7 +132,7 @@
   </volume>
 </structure>
 
-<setup name="Default" version="1.0" >
+<setup name="Slab" version="1.1" >
   <world ref="World" />
 </setup>
 
