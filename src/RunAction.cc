@@ -29,10 +29,7 @@ RunAction::RunAction()
     rootData->CreateNtupleDColumn("pri.py");
     rootData->CreateNtupleDColumn("pri.pz");
     rootData->CreateNtupleDColumn("pri.E");
-    rootData->CreateNtupleDColumn("scint.E");
-    rootData->CreateNtupleDColumn("scint.px");
-    rootData->CreateNtupleDColumn("scint.py");
-    rootData->CreateNtupleDColumn("scint.pz");
+    rootData->CreateNtupleIColumn("scint.N");
     rootData->FinishNtuple();
 
 }
@@ -44,9 +41,6 @@ RunAction::~RunAction()
 
 void RunAction::BeginOfRunAction(const G4Run* aRun)
 {
-    G4cout << "[-] INFO - Run " << aRun->GetRunID()
-        << " begin. - by RunAction" << G4endl;
-    
     // Initialize .root file
     G4AnalysisManager* rootData = G4AnalysisManager::Instance();
 
@@ -55,9 +49,6 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
 void RunAction::EndOfRunAction(const G4Run* aRun)
 {
-    G4cout << "[-] INFO - Run " << aRun->GetRunID()
-        << " end. - by RunAction" << G4endl;
-
     // Write data to file
     G4AnalysisManager* rootData = G4AnalysisManager::Instance();
     rootData->Write();

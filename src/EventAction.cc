@@ -26,20 +26,10 @@ EventAction::~EventAction()
 
 void EventAction::BeginOfEventAction(const G4Event *anEvent)
 {
-    G4cout << "[-] INFO - Event "
-           << anEvent->GetEventID()
-           << " begin."
-           << " - by EventAction"
-           << G4endl;
 }
 
 void EventAction::EndOfEventAction(const G4Event *anEvent)
 {
-    G4cout << "[-] INFO - Event "
-           << anEvent->GetEventID()
-           << " end."
-           << " - by EventAction"
-           << G4endl;
     
     // Covert Hits info. into data
     G4int hcID = G4SDManager::GetSDMpointer()
