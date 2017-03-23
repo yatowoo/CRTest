@@ -79,6 +79,7 @@ void EventAction::EndOfEventAction(const G4Event *anEvent)
     rootData->FillNtupleDColumn(7, priP->GetPy() / MeV);
     rootData->FillNtupleDColumn(8, priP->GetPz() / MeV);
     rootData->FillNtupleDColumn(9, priP->GetTotalEnergy() / MeV);
-
+    rootData->FillNtupleIColumn(10, Recoder->nScintTotal);
+    rootData->FillNtupleIColumn(15, Recoder->nScintToFiber);
     rootData->AddNtupleRow();
 }

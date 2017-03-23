@@ -48,7 +48,7 @@
                                             2.50728*eV	0.07652
                                             2.48165*eV	0.05391" />
   <matrix name="PVT_ABSL" coldim="2" values="2.91*eV 380.*cm" />
-  <matrix name="PVT_YIELD" coldim="1" values="10/MeV" />
+  <matrix name="PVT_YIELD" coldim="1" values="10000/MeV" />
   <matrix name="PVT_FASTTAU" coldim="1" values="2.1*ns" />
   <matrix name="PVT_SCALE" coldim="1" values="1." />
 </define>
