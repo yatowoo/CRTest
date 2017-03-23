@@ -24,7 +24,6 @@ set(CMAKE_INCLUDE_DIRECTORIES_BEFORE ON)
 target_link_libraries(${PROJECT_NAME}
     ${Geant4_LIBRARIES}
 		$ENV{ROOTSYS}/lib/libCore.so
-		$ENV{ROOTSYS}/lib/libGdml.so
 		$ENV{ROOTSYS}/lib/libGeom.so
 		$ENV{ROOTSYS}/lib/libGpad.so
 		$ENV{ROOTSYS}/lib/libGraf3d.so
