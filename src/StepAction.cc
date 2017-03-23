@@ -64,15 +64,5 @@ void StepAction::UserSteppingAction(const G4Step *aStep)
         Recoder->nScintToFiber += 1;
 
         theTrack->SetTrackStatus(G4TrackStatus::fStopAndKill);
-
-        G4AnalysisManager *rootData = G4AnalysisManager::Instance();
-        G4ThreeVector photonV =
-            theTrack->GetMomentumDirection();
-        rootData->FillNtupleDColumn(16,
-                                    theTrack->GetTotalEnergy() / eV);
-        rootData->FillNtupleDColumn(17, photonV[0]);
-        rootData->FillNtupleDColumn(18, photonV[1]);
-        rootData->FillNtupleDColumn(19, photonV[2]);
-        rootData->AddNtupleRow();
     }
 }

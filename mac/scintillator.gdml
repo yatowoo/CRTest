@@ -51,6 +51,54 @@
   <matrix name="PVT_YIELD" coldim="1" values="10000/MeV" />
   <matrix name="PVT_FASTTAU" coldim="1" values="2.1*ns" />
   <matrix name="PVT_SCALE" coldim="1" values="1." />
+  <matrix name="WLS_RINDEX" coldim="2" values="2.91*eV 1.60" />
+  <matrix name="WLS_TAU" coldim="1" values="0.5*ns" />
+  <matrix name="WLS_ABSL" coldim="2" values="2.91*eV 350.*cm" />
+  <matrix name="WLS_EMISSION" coldim="2" values="2.875*eV	0.0017
+                                          2.774*eV	0.00482
+                                          2.733*eV	0.05421
+                                          2.682*eV	0.26252
+                                          2.656*eV	0.48937
+                                          2.63*eV		0.71623
+                                          2.605*eV	0.93399
+                                          2.587*eV	1.01097
+                                          2.574*eV	0.99711
+                                          2.546*eV	0.89663
+                                          2.536*eV	0.80101
+                                          2.491*eV	0.70475
+                                          2.451*eV	0.77673
+                                          2.429*eV	0.77177
+                                          2.391*eV	0.61193
+                                          2.352*eV	0.40207
+                                          2.335*eV	0.30627
+                                          2.284*eV	0.237
+                                          2.207*eV	0.09892
+                                          2.168*eV	0.04347
+                                          2.12*eV		0.0241
+                                          2.034*eV	0.00"/>
+  <matrix name="WLS_ABSORB" coldim="2" values="3.472*eV	2724.*mm
+                                          3.334*eV	1390.*mm
+                                          3.236*eV	527.3*mm
+                                          3.133*eV	184.2*mm
+                                          3.036*eV	83.75*mm
+                                          3.009*eV	65.18*mm
+                                          2.972*eV	58.25*mm
+                                          2.938*eV	37.36*mm
+                                          2.88*eV	7.672*mm
+                                          2.859*eV	1.916*mm
+                                          2.814*eV	12.85*mm
+                                          2.778*eV	29.27*mm
+                                          2.718*eV	14.36*mm
+                                          2.695*eV	19.66*mm
+                                          2.68*eV	24.83*mm
+                                          2.668*eV	50.04*mm
+                                          2.655*eV	71.2*mm
+                                          2.65*eV	102.9*mm
+                                          2.635*eV	166.2*mm
+                                          2.628*eV	280.6*mm
+                                          2.61*eV	530.1*mm
+                                          2.589*eV	2074.*mm
+                                          2.536*eV	8178.*mm"/>
 </define>
 
 <materials>
@@ -76,6 +124,16 @@
     <D value="1.023" />
     <fraction n="0.085" ref="Hydrogen" />
     <fraction n="0.915" ref="Carbon" />
+		<property name="RINDEX" ref="WLS_RINDEX"/>
+    <property name="WLSABSLENGTH" ref="WLS_ABSORB"/>
+    <property name="WLSCOMPONENT" ref="WLS_EMISSION"/>
+    <property name="WLSTIMECONSTANT" ref="WLS_TAU"/>
+    <property name="ABSLENGTH" ref="WLS_ABSL"/>
+  </material>
+  <material formula=" " name="Y11_PS" >
+    <D value="1.05" />
+    <fraction n="0.077418" ref="Hydrogen" />
+    <fraction n="0.922582" ref="Carbon" />
 		<property name="RINDEX" ref="PVT_RINDEX"/>
     <property name="SCINTILLATIONYIELD" ref="PVT_YIELD"/>
     <property name="FASTCOMPONENT" ref="PVT_FAST"/>
@@ -90,7 +148,8 @@
   <box aunit="radian" lunit="cm" name="detectorS" x="5" y="5" z="1" />
   <box aunit="radian" lunit="cm" name="worldS" x="6" y="6" z="2" />
 	<eltube aunit="radian" lunit="mm" name="fiberS" dx="0.5" dy="0.5" dz="30" />
-  <opticalsurface name="scint_surf" model="glisur" finish="ground" type="dielectric_dielectric" value="0.01"/>
+	<eltube aunit="radian" lunit="mm" name="coreS" dx="0.48" dy="0.48" dz="30" />
+  <opticalsurface name="scint_surf" model="glisur" finish="ground" type="dielectric_dielectric" value="0.1"/>
 </solids>
 
 <structure>
@@ -98,9 +157,17 @@
     <materialref ref="G4_AIR" />
     <solidref ref="targetS" />
   </volume>
+  <volume name="Core">
+    <materialref ref="Y11_PS" />
+    <solidref ref="coreS" />
+  </volume>
   <volume name="Fiber">
     <materialref ref="AIR" />
     <solidref ref="fiberS" />
+    <physvol>
+      <volumeref ref="Core"/>
+      <position />
+    </physvol>
   </volume>
   <volume name="Detector">
     <materialref ref="PVT" />
@@ -132,7 +199,7 @@
   </volume>
 </structure>
 
-<setup name="Slab" version="1.1" >
+<setup name="Slab" version="2.0" >
   <world ref="World" />
 </setup>
 
