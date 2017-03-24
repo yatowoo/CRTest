@@ -47,7 +47,7 @@ void StepAction::UserSteppingAction(const G4Step *aStep)
         return;
     }
 
-    if (theTrack->GetParticleDefinition() != 
+    if (theTrack->GetParticleDefinition() !=
         G4OpticalPhoton::OpticalPhotonDefinition())
         return;
 
@@ -56,18 +56,33 @@ void StepAction::UserSteppingAction(const G4Step *aStep)
     G4VPhysicalVolume *thePrePV = thePrePoint->GetPhysicalVolume();
     G4VPhysicalVolume *thePostPV = thePostPoint->GetPhysicalVolume();
 
-    if (thePrePV && thePostPV &&
-        thePrePV->GetName() == "Fiber_PV" &&
-        thePostPV->GetName() == "Core_PV")
+    if (thePrePV && thePostPV)
     {
-        Recorder->nScintToFiber += 1;
+        if (thePrePV->GetName() == "Detector_PV" &&
+            thePostPV->GetName() == "Fiber_PV")
+        {
+            Recorder->nScintToFiber += 1;
+            return;
+        }
+        if (thePrePV->GetName() == "Fiber_PV" &&
+            thePostPV->GetName() == "Core_PV")
+        {
+            Recorder->nFiberToCore += 1;
+            return;
+        }
+        if (thePrePV->GetName() == "Core_PV" &&
+            thePostPV->GetName() == "World_PV")
+        {
+            Recorder->nCoreToPMT += 1;
+            return;
+        }
+    }
+
+    const G4VProcess *creator = theTrack->GetCreatorProcess();
+    if (creator && creator->GetProcessName() == "OpWLS")
+    {
+        Recorder->nWlsEmit++;
+        //theTrack->SetTrackStatus(G4TrackStatus::fStopAndKill);
         return;
     }
-    
-    const G4VProcess* creator = theTrack->GetCreatorProcess();
-    if(creator && creator->GetProcessName()=="OpWLS"){
-        Recorder->nWlsEmit ++;
-        theTrack->SetTrackStatus(G4TrackStatus::fStopAndKill);
-        return;
-    }    
 }

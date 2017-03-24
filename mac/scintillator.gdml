@@ -149,7 +149,7 @@
   <box aunit="radian" lunit="cm" name="worldS" x="6" y="6" z="2" />
 	<eltube aunit="radian" lunit="mm" name="fiberS" dx="0.5" dy="0.5" dz="30" />
 	<eltube aunit="radian" lunit="mm" name="coreS" dx="0.48" dy="0.48" dz="30" />
-  <opticalsurface name="scint_surf" model="glisur" finish="ground" type="dielectric_dielectric" value="0.1"/>
+  <opticalsurface name="scint_surf" model="unified" finish="groundtyvekair" type="dielectric_dielectric" value="0.01"/>
 </solids>
 
 <structure>

@@ -21,6 +21,8 @@ public:
     G4int nScintTotal;
     G4int nScintToFiber;
     G4int nWlsEmit;
+    G4int nFiberToCore;
+    G4int nCoreToPMT;
 private:
     static OpRecorder* fgInstance;
 };

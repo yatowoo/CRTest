@@ -51,7 +51,11 @@ void EventAction::EndOfEventAction(const G4Event *anEvent)
            << G4endl
            << "    - OpPhotons Scint. To Fiber : " << Recorder->nScintToFiber
            << G4endl
+           << "    - OpPhotons Fiber To Core : " << Recorder->nFiberToCore
+           << G4endl
            << "    - OpPhotons Create by OpWLS : " << Recorder->nWlsEmit
+           << G4endl
+           << "    - OpPhotons Detected by PMT : " << Recorder->nCoreToPMT
            << G4endl;
     // Covert Hits info. into data
     G4int hcID = G4SDManager::GetSDMpointer()

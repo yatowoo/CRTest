@@ -1,4 +1,4 @@
 # Geant4 Macro file for batch mode
 
 /run/initialize
-/run/beamOn 1
+/run/beamOn 5
