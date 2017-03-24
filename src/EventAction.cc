@@ -32,9 +32,8 @@ void EventAction::BeginOfEventAction(const G4Event *anEvent)
            << " begin."
            << " - by EventAction"
            << G4endl;
-    OpRecorder* Recoder = OpRecorder::Instance();
-    Recoder->nScintTotal = 0;
-    Recoder->nScintToFiber = 0;
+    OpRecorder* Recorder = OpRecorder::Instance();
+    Recorder->Reset();
 }
 
 void EventAction::EndOfEventAction(const G4Event *anEvent)
@@ -45,12 +44,15 @@ void EventAction::EndOfEventAction(const G4Event *anEvent)
            << " end."
            << " - by EventAction"
            << G4endl;
-    OpRecorder* Recoder = OpRecorder::Instance();
-    G4cout << "[+] INFO - Primary Track Scintillation "
-           << "- OpPhotons Total Count : " << Recoder->nScintTotal
+    OpRecorder* Recorder = OpRecorder::Instance();
+    G4cout << "[+] INFO - Optical Process Track & Record - by EventAction."
            << G4endl
-           << "- OpPhotons Scint. To Fiber : " << Recoder->nScintToFiber
-           << " - by EventAction." << G4endl;
+           << "    - OpPhotons Total Count : " << Recorder->nScintTotal
+           << G4endl
+           << "    - OpPhotons Scint. To Fiber : " << Recorder->nScintToFiber
+           << G4endl
+           << "    - OpPhotons Create by OpWLS : " << Recorder->nWlsEmit
+           << G4endl;
     // Covert Hits info. into data
     G4int hcID = G4SDManager::GetSDMpointer()
                      ->GetCollectionID("CryPostionSD/CryHC");
@@ -79,7 +81,7 @@ void EventAction::EndOfEventAction(const G4Event *anEvent)
     rootData->FillNtupleDColumn(7, priP->GetPy() / MeV);
     rootData->FillNtupleDColumn(8, priP->GetPz() / MeV);
     rootData->FillNtupleDColumn(9, priP->GetTotalEnergy() / MeV);
-    rootData->FillNtupleIColumn(10, Recoder->nScintTotal);
-    rootData->FillNtupleIColumn(15, Recoder->nScintToFiber);
+    rootData->FillNtupleIColumn(10, Recorder->nScintTotal);
+    rootData->FillNtupleIColumn(15, Recorder->nScintToFiber);
     rootData->AddNtupleRow();
 }

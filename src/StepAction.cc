@@ -32,7 +32,7 @@ StepAction::~StepAction()
 void StepAction::UserSteppingAction(const G4Step *aStep)
 {
 
-    OpRecorder *Recoder = OpRecorder::Instance();
+    OpRecorder *Recorder = OpRecorder::Instance();
 
     G4Track *theTrack = aStep->GetTrack();
 
@@ -42,7 +42,7 @@ void StepAction::UserSteppingAction(const G4Step *aStep)
         G4int tN2ndariesTot =
             fpSteppingManager->GetfN2ndariesAtRestDoIt() + fpSteppingManager->GetfN2ndariesAlongStepDoIt() + fpSteppingManager->GetfN2ndariesPostStepDoIt();
         if (tN2ndariesTot > 0)
-            Recoder->nScintTotal += tN2ndariesTot;
+            Recorder->nScintTotal += tN2ndariesTot;
 
         return;
     }
@@ -57,12 +57,17 @@ void StepAction::UserSteppingAction(const G4Step *aStep)
     G4VPhysicalVolume *thePostPV = thePostPoint->GetPhysicalVolume();
 
     if (thePrePV && thePostPV &&
-        thePrePV->GetName() == "Detector_PV" &&
-        thePostPV->GetName() == "Fiber_PV")
+        thePrePV->GetName() == "Fiber_PV" &&
+        thePostPV->GetName() == "Core_PV")
     {
-
-        Recoder->nScintToFiber += 1;
-
-        theTrack->SetTrackStatus(G4TrackStatus::fStopAndKill);
+        Recorder->nScintToFiber += 1;
+        return;
     }
+    
+    const G4VProcess* creator = theTrack->GetCreatorProcess();
+    if(creator && creator->GetProcessName()=="OpWLS"){
+        Recorder->nWlsEmit ++;
+        theTrack->SetTrackStatus(G4TrackStatus::fStopAndKill);
+        return;
+    }    
 }

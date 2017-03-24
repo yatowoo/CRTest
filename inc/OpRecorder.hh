@@ -16,9 +16,11 @@ public:
     OpRecorder();
     ~OpRecorder();
     static OpRecorder* Instance();
+    void Reset();
 public:
     G4int nScintTotal;
     G4int nScintToFiber;
+    G4int nWlsEmit;
 private:
     static OpRecorder* fgInstance;
 };

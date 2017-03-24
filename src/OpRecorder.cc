@@ -8,7 +8,7 @@
 OpRecorder* OpRecorder::fgInstance = 0;
 
 OpRecorder::OpRecorder()
-    : nScintTotal(0), nScintToFiber(0)
+    : nScintTotal(0), nScintToFiber(0), nWlsEmit(0)
 {
 
 }
@@ -20,4 +20,10 @@ OpRecorder *OpRecorder::Instance()
     if (fgInstance == NULL)
         fgInstance = new OpRecorder();
     return fgInstance;
+}
+
+void OpRecorder::Reset(){
+    nScintTotal = 0;
+    nScintToFiber = 0;
+    nWlsEmit = 0;
 }
