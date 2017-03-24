@@ -120,7 +120,7 @@
 		<fraction n="0.3" ref="Oxygen" />
 		<property name="RINDEX" ref="AIR_RINDEX"/>
   </material>
-  <material formula=" " name="PVT" >
+  <material formula=" " name="Y11_PS" >
     <D value="1.023" />
     <fraction n="0.085" ref="Hydrogen" />
     <fraction n="0.915" ref="Carbon" />
@@ -130,7 +130,7 @@
     <property name="WLSTIMECONSTANT" ref="WLS_TAU"/>
     <property name="ABSLENGTH" ref="WLS_ABSL"/>
   </material>
-  <material formula=" " name="Y11_PS" >
+  <material formula=" " name="PVT" >
     <D value="1.05" />
     <fraction n="0.077418" ref="Hydrogen" />
     <fraction n="0.922582" ref="Carbon" />
@@ -165,7 +165,7 @@
     <materialref ref="AIR" />
     <solidref ref="fiberS" />
     <physvol>
-      <volumeref ref="Core"/>
+      <volumeref ref="Core" />
       <position />
     </physvol>
   </volume>
@@ -199,7 +199,7 @@
   </volume>
 </structure>
 
-<setup name="Slab" version="2.0" >
+<setup name="Slab" version="2.1" >
   <world ref="World" />
 </setup>
 
