@@ -78,8 +78,8 @@ void StepAction::UserSteppingAction(const G4Step *aStep)
         }
     }
 
-    const G4VProcess *creator = theTrack->GetCreatorProcess();
-    if (creator && creator->GetProcessName() == "OpWLS")
+    const G4VProcess *theProcess = thePostPoint->GetProcessDefinedStep();
+    if (theProcess && theProcess->GetProcessName() == "OpWLS")
     {
         Recorder->nWlsEmit++;
         //theTrack->SetTrackStatus(G4TrackStatus::fStopAndKill);
