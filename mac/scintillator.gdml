@@ -161,6 +161,7 @@
     <materialref ref="Y11_PS" />
     <solidref ref="coreS" />
   </volume>
+  
   <volume name="Fiber">
     <materialref ref="AIR" />
     <solidref ref="fiberS" />
@@ -169,6 +170,7 @@
       <position />
     </physvol>
   </volume>
+
   <volume name="Detector">
     <materialref ref="PVT" />
     <solidref ref="detectorS" />
@@ -180,10 +182,6 @@
 		</physvol>
 		</loop>
   </volume>
-
-  <skinsurface name="skinsrf1" surfaceproperty="scint_surf" >
-    <volumeref ref="Detector"/>
-  </skinsurface> 
 
   <volume name="World">
     <materialref ref="AIR" />
@@ -197,9 +195,17 @@
         <positionref ref="targetPos" />
     </physvol>
   </volume>
+
+  <skinsurface name="skin" surfaceproperty="scint_surf" >
+    <volumeref ref="Detector"/>
+  </skinsurface>
+  <bordersurface name="border" surfaceproperty="scint_surf" >
+    <physvolref ref="Detector_PV"/>
+    <physvolref ref="Fiber_PV"/>
+  </bordersurface> 
 </structure>
 
-<setup name="Slab" version="2.1" >
+<setup name="Slab" version="2.2" >
   <world ref="World" />
 </setup>
 

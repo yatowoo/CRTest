@@ -45,18 +45,9 @@ void EventAction::EndOfEventAction(const G4Event *anEvent)
            << " - by EventAction"
            << G4endl;
     OpRecorder* Recorder = OpRecorder::Instance();
-    G4cout << "[+] INFO - Optical Process Track & Record - by EventAction."
-           << G4endl
-           << "    - OpPhotons Total Count : " << Recorder->nScintTotal
-           << G4endl
-           << "    - OpPhotons Scint. To Fiber : " << Recorder->nScintToFiber
-           << G4endl
-           << "    - OpPhotons Fiber To Core : " << Recorder->nFiberToCore
-           << G4endl
-           << "    - OpPhotons Create by OpWLS : " << Recorder->nWlsEmit
-           << G4endl
-           << "    - OpPhotons Detected by PMT : " << Recorder->nCoreToPMT
-           << G4endl;
+    G4cout << "[+] INFO - Optical Process Track & Record - by EventAction." << G4endl;
+    Recorder->Print();
+
     // Covert Hits info. into data
     G4int hcID = G4SDManager::GetSDMpointer()
                      ->GetCollectionID("CryPostionSD/CryHC");
