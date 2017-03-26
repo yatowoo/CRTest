@@ -5,10 +5,11 @@
 
 #include "ActionRegister.hh"
 
-#include "EventAction.hh"
 #include "Generator.hh"
 #include "CryGenerator.hh"
 #include "RunAction.hh"
+#include "EventAction.hh"
+#include "StackAction.hh"
 #include "StepAction.hh"
 
 ActionRegister::ActionRegister()
@@ -29,4 +30,5 @@ void ActionRegister::Build() const
     SetUserAction(new RunAction);
     SetUserAction(new EventAction);
     SetUserAction(new StepAction);
+    SetUserAction(new StackAction);
 }
