@@ -27,6 +27,8 @@ public:
     G4int nBoundaryReflection;
     G4int nBoundaryAbsorption;
     G4int nBoundaryTransmission;
+    G4int nBoundaryUndefined;
+    G4int nBoundaryWARNNING;
     G4int nDebug; // use for debug
 private:
     static OpRecorder* fgInstance;

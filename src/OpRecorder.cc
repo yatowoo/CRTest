@@ -34,6 +34,8 @@ void OpRecorder::Reset()
     nBoundaryReflection = 0;
     nBoundaryAbsorption = 0;
     nBoundaryTransmission = 0;
+    nBoundaryUndefined = 0;
+    nBoundaryWARNNING = 0;
 
     nDebug = 0;
 }
@@ -45,6 +47,8 @@ void OpRecorder::Print()
            << "    - - Boundary Reflection\t: " << nBoundaryReflection << G4endl
            << "    - - Boundary Absorption\t: " << nBoundaryAbsorption << G4endl
            << "    - - Boundary Transmission\t: " << nBoundaryTransmission << G4endl
+           << "    - - Boundary Undefined\t: " << nBoundaryUndefined << G4endl
+           << "    - - Boundary WARNNING\t: " << nBoundaryWARNNING << G4endl
            << "    - Fiber to Core\t\t: " << nFiberToCore << G4endl
            << "    - Emitted by OpWLS\t\t: " << nWlsEmit << G4endl
            << "    - Detected by PMT\t\t: " << nCoreToPMT << G4endl

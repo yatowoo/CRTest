@@ -42,6 +42,8 @@ void StepAction::UserSteppingAction(const G4Step *aStep)
     G4VPhysicalVolume *thePrePV = thePrePoint->GetPhysicalVolume();
     G4VPhysicalVolume *thePostPV = thePostPoint->GetPhysicalVolume();
 
+    const G4VProcess *theProcess = fpSteppingManager->GetfCurrentProcess();
+
     //  for Optical
     if (theTrack->GetParticleDefinition() !=
         G4OpticalPhoton::OpticalPhotonDefinition())
@@ -53,31 +55,11 @@ void StepAction::UserSteppingAction(const G4Step *aStep)
     if (thePostPoint->GetStepStatus() == fGeomBoundary)
     {
         assert(theProcess->GetProcessName() == "OpBoundary");
-        G4OpBoundaryProcess *boundary = (G4OpBoundaryProcess*)theProcess;
+        G4OpBoundaryProcess *boundary = (G4OpBoundaryProcess *)theProcess;
         if (thePrePV->GetName() == "Detector_PV" &&
             thePostPV->GetName() == "Fiber_PV")
         {
             Recorder->nScintToFiber += 1;
-            switch (boundary->GetStatus())
-            {
-            case Transmission:
-                Recorder->nBoundaryTransmission++;
-                break;
-            case Absorption:;
-            case Detection:
-                Recorder->nBoundaryAbsorption++;
-                break;
-            case FresnelRefraction:;
-            case FresnelReflection:;
-            case TotalInternalReflection:;
-            case LambertianReflection:;
-            case LobeReflection:;
-            case SpikeReflection:;
-            case BackScattering:
-                Recorder->nBoundaryReflection++;
-                break;
-            default:;
-            }
             return;
         }
         else if (thePrePV->GetName() == "Fiber_PV" &&
@@ -92,5 +74,49 @@ void StepAction::UserSteppingAction(const G4Step *aStep)
             Recorder->nCoreToPMT += 1;
             return;
         }
+        else if (thePrePV->GetName() == "Core_PV" &&
+                 thePostPV->GetName() == "Fiber_PV")
+        {
+            Recorder->nDebug += 1;
+            BoundaryStats(boundary);
+            //theTrack->SetTrackStatus(G4TrackStatus::fStopAndKill);
+            return;
+        }
     }
+}
+
+G4bool StepAction::BoundaryStats(G4OpBoundaryProcess *boundary)
+{
+    OpRecorder *Recorder = OpRecorder::Instance();
+    switch (boundary->GetStatus())
+    {
+    case FresnelRefraction:;
+    case Transmission:
+        Recorder->nBoundaryTransmission++;
+        break;
+    case Absorption:;
+    case Detection:
+        Recorder->nBoundaryAbsorption++;
+        break;
+    case FresnelReflection:;
+    case TotalInternalReflection:;
+    case LambertianReflection:;
+    case LobeReflection:;
+    case SpikeReflection:;
+    case BackScattering:
+        Recorder->nBoundaryReflection++;
+        break;
+    case Undefined:
+        Recorder->nBoundaryUndefined++;
+        break;
+    case NotAtBoundary:;
+    case SameMaterial:;
+    case StepTooSmall:;
+    case NoRINDEX:;
+        Recorder->nBoundaryWARNNING++;
+        break;
+    default:
+        return false;
+    }
+    return true;
 }
