@@ -7,6 +7,7 @@
 
 #include "Generator.hh"
 #include "CryGenerator.hh"
+#include "PduGenerator.hh"
 #include "RunAction.hh"
 #include "EventAction.hh"
 #include "StackAction.hh"
@@ -26,7 +27,7 @@ void ActionRegister::BuildForMaster() const
 
 void ActionRegister::Build() const
 {
-    SetUserAction(new Generator);
+    SetUserAction(new PduGenerator);
     SetUserAction(new RunAction);
     SetUserAction(new EventAction);
     SetUserAction(new StepAction);
