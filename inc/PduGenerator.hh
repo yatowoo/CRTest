@@ -30,7 +30,7 @@ public:
   virtual void GeneratePrimaries(G4Event *anEvent);
 
 private:
-  G4double PduModel(G4double*,G4double*);
+  static G4double PduModel(G4double*,G4double*);
   G4double GetTheta(); // muon zenith angle
   G4ThreeVector GetDirection(); // muon momentim direction
 
