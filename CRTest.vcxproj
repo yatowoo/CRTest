@@ -50,6 +50,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)\inc;$(G4INSTALL)\include\Geant4;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -74,6 +75,50 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CRTest.cxx" />
+    <ClCompile Include="src\ActionRegister.cc" />
+    <ClCompile Include="src\CryDetector.cc" />
+    <ClCompile Include="src\CryGenerator.cc" />
+    <ClCompile Include="src\CryHit.cc" />
+    <ClCompile Include="src\CryPositionSD.cc" />
+    <ClCompile Include="src\EventAction.cc" />
+    <ClCompile Include="src\GdmlConstruction.cc" />
+    <ClCompile Include="src\Generator.cc" />
+    <ClCompile Include="src\OpRecorder.cc" />
+    <ClCompile Include="src\PhysicsList.cc" />
+    <ClCompile Include="src\RunAction.cc" />
+    <ClCompile Include="src\StackAction.cc" />
+    <ClCompile Include="src\StepAction.cc" />
+    <ClCompile Include="src\SysConstruction.cc" />
+    <ClCompile Include="src\SysMessenger.cc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="inc\ActionRegister.hh" />
+    <None Include="inc\Analysis.hh" />
+    <None Include="inc\CryDetector.hh" />
+    <None Include="inc\CryGenerator.hh" />
+    <None Include="inc\CryHit.hh" />
+    <None Include="inc\CryPositionSD.hh" />
+    <None Include="inc\EventAction.hh" />
+    <None Include="inc\GdmlConstruction.hh" />
+    <None Include="inc\Generator.hh" />
+    <None Include="inc\OpRecorder.hh" />
+    <None Include="inc\PhysicsList.hh" />
+    <None Include="inc\RNGWrapper.hh" />
+    <None Include="inc\RunAction.hh" />
+    <None Include="inc\StackAction.hh" />
+    <None Include="inc\StepAction.hh" />
+    <None Include="inc\SysConstruction.hh" />
+    <None Include="inc\SysMessenger.hh" />
+    <None Include="mac\default.gdml" />
+    <None Include="mac\gui.mac" />
+    <None Include="mac\icons.mac" />
+    <None Include="mac\init.mac" />
+    <None Include="mac\opticalsurfaces.gdml" />
+    <None Include="mac\run.mac" />
+    <None Include="mac\scintillator.gdml" />
+    <None Include="mac\setup.file" />
+    <None Include="mac\vis.mac" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
