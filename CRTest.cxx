@@ -92,17 +92,23 @@ int main (int argc, char** argv){
     else{
         // Execute Initialization Macro by UIManager
         uiManager->ApplyCommand("/control/execute ./mac/init.mac");
+#ifdef G4UI_USE
         if(ui->IsGUI())
             uiManager->ApplyCommand("/control/execute ./mac/gui.mac");
         // Start Session
         ui->SessionStart();
+#endif
     }// mode case
     
     // delete
+#ifdef G4UI_USE
     delete ui;
+#endif
     delete gdml;
-    delete messenger; 
+    delete messenger;
+#ifdef G4VIS_USE
     delete visManager;
+#endif
     delete runManager;
 
     return 0;
