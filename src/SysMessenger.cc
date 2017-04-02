@@ -8,6 +8,7 @@
 #include "SysConstruction.hh"
 #include "Generator.hh"
 #include "CryGenerator.hh"
+#include "PduGenerator.hh"
 
 #include "G4UIdirectory.hh"
 #include "G4UIcommand.hh"
@@ -37,8 +38,8 @@ SysMessenger::SysMessenger(G4RunManager* runManager)
     fGeneratorDir->SetGuidance("Set Generator");
 
     fGeneratorType = new G4UIcmdWithAString("/CRTest/generator/set", this);
-    fGeneratorType->SetGuidance("Types: beam, CRY");
-    fGeneratorType->SetCandidates("beam CRY");
+    fGeneratorType->SetGuidance("Types: beam, CRY, Pdu");
+    fGeneratorType->SetCandidates("beam CRY Pdu");
     fGeneratorType->SetParameterName("type",true);
     fGeneratorType->SetDefaultValue("beam");
     fGeneratorType->AvailableForStates(G4State_Idle);
@@ -78,6 +79,8 @@ void SysMessenger::SetNewValue(G4UIcommand* cmd, G4String val)
                 runManager->SetUserAction(new Generator);
             else if(val == "CRY")
                 runManager->SetUserAction(new CryGenerator("./mac/setup.file"));
+			else if(val == "Pdu")
+				runManager->SetUserAction(new PduGenerator);
         }            
         G4cout << "[+] CMD - Current Type : "
             << fGeneratorType->GetCurrentValue()

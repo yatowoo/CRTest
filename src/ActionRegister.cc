@@ -27,7 +27,7 @@ void ActionRegister::BuildForMaster() const
 
 void ActionRegister::Build() const
 {
-    SetUserAction(new PduGenerator);
+    SetUserAction(new Generator);
     SetUserAction(new RunAction);
     SetUserAction(new EventAction);
     SetUserAction(new StepAction);
