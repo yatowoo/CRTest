@@ -11,6 +11,7 @@
 #include "SysConstruction.hh"
 
 #include "G4GDMLParser.hh"
+#include "G4GDMLAuxStructType.hh"
 
 #include "G4VPhysicalVolume.hh"
 
@@ -21,6 +22,10 @@ public:
     virtual ~GdmlConstruction();
 
     virtual G4VPhysicalVolume* Construct();
+
+private:
+	void ReadAuxiliary(G4GDMLParser*);
+	void PrintAuxiliary(const G4GDMLAuxListType*,G4String);
 
 private:
     G4VPhysicalVolume* fWorldPV;

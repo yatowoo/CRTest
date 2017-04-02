@@ -205,7 +205,14 @@
   </bordersurface> 
 </structure>
 
-<setup name="Slab" version="2.2" >
+  <userinfo>
+    <auxiliary auxtype="Region" auxvalue="sensitive">
+      <auxiliary auxtype="RootLogicalVolume" auxvalue="Detector"/>
+      <auxiliary auxtype="proton_cut_legth" auxvalue="2" auxunit="mm"/>
+    </auxiliary>
+  </userinfo>
+  
+<setup name="Slab" version="3.2" >
   <world ref="World" />
 </setup>
 
