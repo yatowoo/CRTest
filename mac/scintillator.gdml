@@ -99,6 +99,7 @@
                                           2.61*eV	530.1*mm
                                           2.589*eV	2074.*mm
                                           2.536*eV	8178.*mm"/>
+  <matrix name="OpWrapper_Scint_ROUGHNESS" coldim="1" values="0.5"/>
 </define>
 
 <materials>
@@ -140,6 +141,12 @@
     <property name="FASTTIMECONSTANT" ref="PVT_FASTTAU"/>
     <property name="ABSLENGTH" ref="PVT_ABSL"/>
     <property name="RESOLUTIONSCALE" ref="PVT_SCALE"/>
+  </material>
+  <material name="OpWrapper_Scint">
+    <D value="0.00129" />
+    <fraction n="0.7" ref="Nitrogen" />
+    <fraction n="0.3" ref="Oxygen" />
+    <property name="SURFACEROUGHNESS" ref="OpWrapper_Scint_ROUGHNESS" />
   </material>
 </materials>
 
@@ -206,13 +213,26 @@
 </structure>
 
   <userinfo>
+    <auxiliary auxtype="Property">
+      <auxiliary auxtype="Skin" auxvalue="ScintWrapper">
+        <auxiliary auxtype="SurfaceName" auxvalue="scint_surf" />
+        <auxiliary auxtype="LVname" auxvalue="Detector" />
+        <auxiliary auxtype="Material" auxvalue="OpWrapper_Scint" />
+      </auxiliary>
+      <auxiliary auxtype="Border" auxvalue="ScintFiber">
+        <auxiliary auxtype="SurfaceName" auxvalue="scint_surf"/>
+        <auxiliary auxtype="PVname" auxvalue="Detector_PV" />
+        <auxiliary auxtype="PVname" auxvalue="Fiber_PV" />
+        <auxiliary auxtype="Material" auxvalue="OpWrapper_Scint"/>
+      </auxiliary>
+    </auxiliary>
     <auxiliary auxtype="Region" auxvalue="sensitive">
       <auxiliary auxtype="RootLogicalVolume" auxvalue="Detector"/>
       <auxiliary auxtype="proton_cut_legth" auxvalue="2" auxunit="mm"/>
     </auxiliary>
   </userinfo>
   
-<setup name="Slab" version="3.2" >
+<setup name="Slab" version="3.3" >
   <world ref="World" />
 </setup>
 

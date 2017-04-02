@@ -26,6 +26,9 @@ public:
 private:
 	void ReadAuxiliary(G4GDMLParser*);
 	void PrintAuxiliary(const G4GDMLAuxListType*,G4String);
+	void ReadProperty(const G4GDMLAuxListType*,G4String);
+	G4bool ReadBorderProperty(const G4GDMLAuxListType*,G4String);
+	G4bool ReadSkinProperty(const G4GDMLAuxListType*,G4String);
 
 private:
     G4VPhysicalVolume* fWorldPV;
