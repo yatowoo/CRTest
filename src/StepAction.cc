@@ -6,17 +6,20 @@
 #include "StepAction.hh"
 
 #include "Analysis.hh"
+#include "OpRecorder.hh"
 
 #include "G4Step.hh"
 #include "G4StepPoint.hh"
 #include "G4Track.hh"
 #include "G4SteppingManager.hh"
+#include "G4VPhysicalVolume.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4OpticalPhoton.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4Scintillation.hh"
+
 #include "G4ProcessManager.hh"
+#include "G4Scintillation.hh"
+#include "G4OpBoundaryProcess.hh"
 
 #include "G4SystemOfUnits.hh"
 
@@ -30,49 +33,90 @@ StepAction::~StepAction()
 
 void StepAction::UserSteppingAction(const G4Step *aStep)
 {
+
+    OpRecorder *Recorder = OpRecorder::Instance();
+
     G4Track *theTrack = aStep->GetTrack();
+    G4StepPoint *thePrePoint = aStep->GetPreStepPoint();
+    G4StepPoint *thePostPoint = aStep->GetPostStepPoint();
+    G4VPhysicalVolume *thePrePV = thePrePoint->GetPhysicalVolume();
+    G4VPhysicalVolume *thePostPV = thePostPoint->GetPhysicalVolume();
 
-    if (theTrack->GetParentID() != 0)
+    const G4VProcess *theProcess = fpSteppingManager->GetfCurrentProcess();
+
+    //  for Optical
+    if (theTrack->GetParticleDefinition() !=
+        G4OpticalPhoton::OpticalPhotonDefinition())
         return;
 
-    //This is a primary track
-
-    G4TrackVector *fSecondary = fpSteppingManager->GetfSecondary();
-    G4int tN2ndariesTot =
-        fpSteppingManager->GetfN2ndariesAtRestDoIt() + fpSteppingManager->GetfN2ndariesAlongStepDoIt() + fpSteppingManager->GetfN2ndariesPostStepDoIt();
-    if (tN2ndariesTot == 0)
-        return;
-
-    G4AnalysisManager *rootData = G4AnalysisManager::Instance();
-    
-    G4cout << "[+] INFO - Primary Track Scintillation "
-           << "- 2ndaries Total Count : " << tN2ndariesTot
-           << " - by StepAction." << G4endl;
-    G4cout << "[+] INFO - Scintillation Optical Photon " << G4endl;
-    for (size_t i = (*fSecondary).size() - tN2ndariesTot;
-         i < (*fSecondary).size(); i++)
+    //
+    // Boundary Check
+    //
+    if (thePostPoint->GetStepStatus() == fGeomBoundary)
     {
-        G4Track *newTrack = (*fSecondary)[i];
-        if (newTrack->GetCreatorProcess()->GetProcessName() 
-            == "Scintillation")
+        assert(theProcess->GetProcessName() == "OpBoundary");
+        G4OpBoundaryProcess *boundary = (G4OpBoundaryProcess *)theProcess;
+        if (thePrePV->GetName() == "Detector_PV" &&
+            thePostPV->GetName() == "Fiber_PV")
         {
-            G4ThreeVector photonV = newTrack->GetMomentumDirection();
-            rootData->FillNtupleDColumn(10,
-                newTrack->GetTotalEnergy() / eV);
-            rootData->FillNtupleDColumn(11, photonV[0]);
-            rootData->FillNtupleDColumn(12, photonV[1]);
-            rootData->FillNtupleDColumn(13, photonV[2]);
-            rootData->AddNtupleRow();
+            Recorder->nScintToFiber += 1;
+            return;
+        }
+        else if (thePrePV->GetName() == "Fiber_PV" &&
+                 thePostPV->GetName() == "Core_PV")
+        {
+            Recorder->nFiberToCore += 1;
+            return;
+        }
+        else if (thePrePV->GetName() == "Core_PV" &&
+                 thePostPV->GetName() == "World_PV")
+        {
+            Recorder->nCoreToPMT += 1;
+            return;
+        }
+        else if (thePrePV->GetName() == "Core_PV" &&
+                 thePostPV->GetName() == "Fiber_PV")
+        {
+            Recorder->nDebug += 1;
+            BoundaryStats(boundary);
+            //theTrack->SetTrackStatus(G4TrackStatus::fStopAndKill);
+            return;
         }
     }
-    G4cout << " - by StepAction." << G4endl;
-    // DEBUG
-    /*
-    
+}
 
-        G4cout << "[+] INFO - Scintillation Optical Photon "
-               << "- GetTotalEnergy : " << thePostPoint->GetTotalEnergy() / eV
-               << " - by StepAction." << G4endl;
-        rootData->FillNtupleDColumn(10, thePostPoint->GetTotalEnergy() / eV);
-        */
+G4bool StepAction::BoundaryStats(G4OpBoundaryProcess *boundary)
+{
+    OpRecorder *Recorder = OpRecorder::Instance();
+    switch (boundary->GetStatus())
+    {
+    case FresnelRefraction:;
+    case Transmission:
+        Recorder->nBoundaryTransmission++;
+        break;
+    case Absorption:;
+    case Detection:
+        Recorder->nBoundaryAbsorption++;
+        break;
+    case FresnelReflection:;
+    case TotalInternalReflection:;
+    case LambertianReflection:;
+    case LobeReflection:;
+    case SpikeReflection:;
+    case BackScattering:
+        Recorder->nBoundaryReflection++;
+        break;
+    case Undefined:
+        Recorder->nBoundaryUndefined++;
+        break;
+    case NotAtBoundary:;
+    case SameMaterial:;
+    case StepTooSmall:;
+    case NoRINDEX:;
+        Recorder->nBoundaryWARNNING++;
+        break;
+    default:
+        return false;
+    }
+    return true;
 }
