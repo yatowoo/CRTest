@@ -55,15 +55,28 @@ G4bool Argument::Build(int argc, char* argv[])
 }
 
 void Argument::Usage(){
-	G4cout << " Usage : ./CRTest [gdml] [mac] [output] [seed]"
+	G4cout << " Usage : ./CRTest [.gdml] [.mac] [output] [seed]"
 		<< G4endl;
 }
 
 G4bool Argument::Validate(){
 	// TODO : check arguments / data member effective
+	if(!gdmlFileName.contains(".gdml"))
+		return false;
+	if(!macroFileName.contains(".mac"))
+		return false;
+	if(!rootFileName.contains(".root"))
+		rootFileName.append(".root");
 	return true;
 }
 
 void Argument::Print(){
-	// TODO : print arguments info.
+	G4cout << "[-] CONFIG - Arguments set by user : " << G4endl
+		<< " | + GDML File : " << gdmlFileName << G4endl
+		<< " | + Execute File : " << macroFileName << G4endl
+		<< " | + ROOT File : " << rootFileName << G4endl
+		<< " | + Random Seed Factor : " << rndFactor << G4endl
+		<< " | + Enable UI : " << (uiUse?"True":"False") << G4endl
+		<< " | + Enable Visualization : " << (visUse?"True":"False") << G4endl
+		<< G4endl;
 }

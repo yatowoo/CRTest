@@ -32,51 +32,46 @@
 #include<cstdlib>
 
 int main (int argc, char** argv){
-       
+    // Handle Arguments
 	Argument args;
 	if(!args.Build(argc, argv)){
 		args.Usage();
 		return -1;
 	}
-	args.Print();
-
     // UI Session
     G4UIExecutive* ui = NULL;
     if (args.Ui())
         ui = new G4UIExecutive(argc, argv);
-
     // Random
     G4Random::setTheEngine(new CLHEP::RanecuEngine);
 	G4Random::setTheSeed(time(NULL)*args.RndFactor(),3);
-
     // Run manager
     G4RunManager* runManager = new G4RunManager;
-    
+    // Welcome info.
     G4cout << G4endl << "[***] WELCOME - CRTest Start!" << G4endl << G4endl;
-	
+	// Print Arguments & Configuration Info.
+	args.Print();
 	// User defined classes 
         // Detector Construction
-    runManager->SetUserInitialization(
-		new GdmlConstruction(args.Gdml()));
-    
-    G4VModularPhysicsList* physicsList = new PhysicsList;
-    runManager->SetUserInitialization(physicsList);
-    
+    runManager->SetUserInitialization(new GdmlConstruction(args.Gdml()));
+		// Physics List
+    runManager->SetUserInitialization(new PhysicsList);
+		// User Actions
     runManager->SetUserInitialization(new ActionRegister);
-    
+		// User Messenger
     SysMessenger* messenger = new SysMessenger(runManager);
-    // Visualization Manager
+    
+	// Visualization Manager
 		// TODO : ADD verbosiry option and if/else by arg. mode
     G4VisManager* visManager = NULL;
 	if(args.Vis()){
 		visManager = new G4VisExecutive("error");
 		visManager->Initialize();
 	}
-
     // UIManager
     G4UImanager* uiManager = G4UImanager::GetUIpointer();
-    if( argc > 2){
-        // Set outpu .root file name from argument
+	if( !args.Vis()){
+        // Set output .root file name from argument
         G4String command = "/analysis/setFileName ";
 		uiManager->ApplyCommand(command+args.Root());
         // Execute macro from argument
@@ -92,7 +87,6 @@ int main (int argc, char** argv){
 			// Start Session
 			ui->SessionStart();
 		}
-
 	}// mode case
     
     // delete
@@ -100,6 +94,9 @@ int main (int argc, char** argv){
 	if(visManager)	delete visManager;
 	delete messenger;
     delete runManager;
-
-    return 0;
+    
+	// Exit info.
+    G4cout << G4endl << "[***] All is well - CRTest Exit." << G4endl << G4endl;
+    
+	return 0;
 }
