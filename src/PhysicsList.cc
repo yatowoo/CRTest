@@ -6,23 +6,51 @@
 #include "PhysicsList.hh"
 
 #include "G4EmStandardPhysics.hh"
-#include "G4EmLivermorePhysics.hh"
+#include "G4EmStandardPhysics_option1.hh"
+#include "G4EmStandardPhysics_option2.hh"
+#include "G4EmStandardPhysics_option3.hh"
+#include "G4EmStandardPhysics_option4.hh"
 #include "G4OpticalPhysics.hh"
+#include "G4DecayPhysics.hh"
 #include "G4StepLimiterPhysics.hh"
 
 #include "G4SystemOfUnits.hh"
 
 PhysicsList::PhysicsList()
-    : G4VModularPhysicsList()
+    : G4VModularPhysicsList(), 
+	fEmPhys(NULL), fOpPhys(NULL), fLimiterPhys(NULL)
 {
-    RegisterPhysics(new G4EmStandardPhysics());
-    RegisterPhysics(new G4EmLivermorePhysics());
-    RegisterPhysics(new G4OpticalPhysics());
+	// Similar with CMS
+	fEmPhys = new G4EmStandardPhysics_option1;
+	RegisterPhysics(fEmPhys);
 
-    RegisterPhysics(new G4StepLimiterPhysics());
+	fOpPhys = new G4OpticalPhysics;
+	RegisterPhysics(fOpPhys);
+
+	fDecayPhys = new G4DecayPhysics;
+	RegisterPhysics(fDecayPhys);
+
+	fLimiterPhys = new G4StepLimiterPhysics;
+	RegisterPhysics(fLimiterPhys);
     
     SetDefaultCutValue(0.7*mm);
+
+	Print();
 }
 
 PhysicsList::~PhysicsList()
-{}
+{
+	G4cout << "[-] INFO - PhysicsList deleted. " << G4endl;
+}
+
+void PhysicsList::Print(){
+	G4cout << "[-] INFO - Physics List Registered : " << G4endl;
+	if(fEmPhys)
+		G4cout << " |  + " << fEmPhys->GetPhysicsName() << G4endl;
+	if(fOpPhys)
+		G4cout << " |  + " << fOpPhys->GetPhysicsName() << G4endl;
+	if(fDecayPhys)
+		G4cout << " |  + " << fDecayPhys->GetPhysicsName() << G4endl;
+	if(fLimiterPhys)
+		G4cout << " |  + " << fLimiterPhys->GetPhysicsName() << G4endl;
+}
