@@ -12,6 +12,7 @@
 ** desc.: Main Program for CRTest
 */
 
+#include "Argument.hh"
 #include "SysConstruction.hh"
 #include "GdmlConstruction.hh"
 #include "ActionRegister.hh"
@@ -30,52 +31,23 @@
 #include "G4ios.hh"
 #include<cstdlib>
 
-void Usage(){
-	G4cout << " Usage : ./CRTest [gdml] [mac] [output] [seed]"
-		<< G4endl;
-}
-
 int main (int argc, char** argv){
        
-    G4String gdmlFileName = "./mac/default.gdml";
-    G4String macroFileName = "./mac/run.mac";
-	G4String rootFileName = "CRTest";
-	G4int rndFactor = 1;
-	G4bool uiUse = true;
-	G4bool visUse = true;
-
-	// Handle Arguments
-	switch(argc){
-	case 5:
-		rndFactor = std::atoi(argv[4]) + 1;
-	case 4:
-		rootFileName = argv[3];
-	case 3:
-		macroFileName = argv[2];
-		visUse = false;
-		uiUse = false;
-	case 2:
-		gdmlFileName = argv[1];
-	case 1:break;
-	default:
-		Usage();
-		exit(1);
+	Argument args;
+	if(!args.Build(argc, argv)){
+		args.Usage();
+		return -1;
 	}
-#ifndef G4UI_USE
-	uiUse = false;
-#endif
-#ifndef G4UI_USE
-	visUse = false;
-#endif
+	args.Print();
 
     // UI Session
     G4UIExecutive* ui = NULL;
-    if (uiUse)
+    if (args.Ui())
         ui = new G4UIExecutive(argc, argv);
 
     // Random
     G4Random::setTheEngine(new CLHEP::RanecuEngine);
-	G4Random::setTheSeed(time(NULL)*rndFactor,3);
+	G4Random::setTheSeed(time(NULL)*args.RndFactor(),3);
 
     // Run manager
     G4RunManager* runManager = new G4RunManager;
@@ -85,7 +57,7 @@ int main (int argc, char** argv){
 	// User defined classes 
         // Detector Construction
     runManager->SetUserInitialization(
-        new GdmlConstruction(gdmlFileName));
+		new GdmlConstruction(args.Gdml()));
     
     G4VModularPhysicsList* physicsList = new PhysicsList;
     runManager->SetUserInitialization(physicsList);
@@ -96,7 +68,7 @@ int main (int argc, char** argv){
     // Visualization Manager
 		// TODO : ADD verbosiry option and if/else by arg. mode
     G4VisManager* visManager = NULL;
-	if(visUse){
+	if(args.Vis()){
 		visManager = new G4VisExecutive("error");
 		visManager->Initialize();
 	}
@@ -106,17 +78,15 @@ int main (int argc, char** argv){
     if( argc > 2){
         // Set outpu .root file name from argument
         G4String command = "/analysis/setFileName ";
-		G4String fileName = rootFileName;
-        uiManager->ApplyCommand(command+fileName);
+		uiManager->ApplyCommand(command+args.Root());
         // Execute macro from argument
         command = "/control/execute ";
-		fileName = macroFileName;
-        uiManager->ApplyCommand(command+fileName);
+		uiManager->ApplyCommand(command+args.Macro());
     }
 	else{
 		// Execute Initialization Macro by UIManager
 		uiManager->ApplyCommand("/control/execute ./mac/init.mac");
-		if(uiUse){
+		if(args.Ui()){
 			if(ui && ui->IsGUI())
 				uiManager->ApplyCommand("/control/execute ./mac/gui.mac");
 			// Start Session
@@ -126,8 +96,8 @@ int main (int argc, char** argv){
 	}// mode case
     
     // delete
-	if(uiUse) delete ui;
-	if(visUse)	delete visManager;
+	if(ui) delete ui;
+	if(visManager)	delete visManager;
 	delete messenger;
     delete runManager;
 
