@@ -19,12 +19,14 @@ class GdmlConstruction : public SysConstruction
 {
 public:
     GdmlConstruction(G4GDMLParser* gdml);
+	GdmlConstruction(G4String gdmlFileName);
     virtual ~GdmlConstruction();
 
     virtual G4VPhysicalVolume* Construct();
 
 private:
-	void ReadAuxiliary(G4GDMLParser*);
+	void Init();
+	void ReadAuxiliary();
 	void PrintAuxiliary(const G4GDMLAuxListType*,G4String);
 	void ReadProperty(const G4GDMLAuxListType*,G4String);
 	G4bool ReadBorderProperty(const G4GDMLAuxListType*,G4String);
@@ -32,6 +34,7 @@ private:
 
 private:
     G4VPhysicalVolume* fWorldPV;
+	G4GDMLParser* fGdml;
 };
 
 #endif // CRTest_GdmlConstruction_h

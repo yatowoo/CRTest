@@ -5,6 +5,7 @@
 
 #include "GdmlConstruction.hh"
 
+#include "G4GDMLParser.hh"
 #include "G4GDMLAuxStructType.hh"
 
 #include "G4LogicalVolume.hh"
@@ -20,17 +21,38 @@
 #include<vector>
 
 GdmlConstruction::GdmlConstruction(G4GDMLParser *gdml)
-    : SysConstruction()
+	: SysConstruction(), fWorldPV(NULL), fGdml(gdml)
 {
-  assert(gdml != NULL);
-  fWorldPV = gdml->GetWorldVolume();
-  fWorld = gdml->GetVolume("World");
-  fDetector = gdml->GetVolume("Detector");
-  fTarget = gdml->GetVolume("Target");
-  ReadAuxiliary(gdml);
+	Init();
 }
+
+GdmlConstruction::GdmlConstruction(G4String gdmlFileName)
+	: SysConstruction(), fWorldPV(NULL), fGdml(NULL)
+{
+	fGdml = new G4GDMLParser;
+	fGdml->Read(gdmlFileName, false);
+
+	this->Init();
+}
+
 GdmlConstruction::~GdmlConstruction()
 {
+	G4cout << "[-] INFO - GdmlConstruction deleted. " << G4endl;
+	delete fGdml;fGdml = NULL;
+}
+
+void GdmlConstruction::Init(){
+  assert(fGdml != NULL);
+  fWorldPV = fGdml->GetWorldVolume();
+  if(!fWorldPV){
+	  G4cout << "[#] ERROR - CAN NOT FOUND WORLD SETUP - "
+		  << __FILE__ << " " << __func__ << G4endl;
+	  exit(1);
+  }
+  fWorld = fGdml->GetVolume("World");
+  fDetector = fGdml->GetVolume("Detector");
+  fTarget = fGdml->GetVolume("Target");
+  ReadAuxiliary();
 }
 
 G4VPhysicalVolume *GdmlConstruction::Construct()
@@ -39,22 +61,22 @@ G4VPhysicalVolume *GdmlConstruction::Construct()
 }
 
 // TODO : ADD format check, exception handle and output
-void GdmlConstruction::ReadAuxiliary(G4GDMLParser* gdml){
+void GdmlConstruction::ReadAuxiliary(){
 	// Volume Auxiliary
 	const G4LogicalVolumeStore* LVstore = G4LogicalVolumeStore::GetInstance();
-	G4cout << " [+] INFO - Auxiliary Info. for Logical Volumes" << G4endl;
+	G4cout << "[-] INFO - Auxiliary Info. for Logical Volumes" << G4endl;
 	std::vector<G4LogicalVolume*>::const_iterator LViter;
 	for(LViter = LVstore->begin(); LViter != LVstore->end() ; LViter++)
 	{
-		G4GDMLAuxListType auxList = gdml->GetVolumeAuxiliaryInformation(*LViter);
+		G4GDMLAuxListType auxList = fGdml->GetVolumeAuxiliaryInformation(*LViter);
 		if(auxList.size() == 0 ) continue;
 		G4cout << " - Logical Volume : "
 			<< (*LViter)->GetName() << G4endl;
 		PrintAuxiliary(&auxList," | ");
 	}
 	// Userinfo Auxiliary
-	G4cout << " [+] INFO - Auxiliary Info. for Global/Userinfo " << G4endl;
-	PrintAuxiliary(gdml->GetAuxList()," | ");
+	G4cout << "[-] INFO - Auxiliary Info. for Global/Userinfo " << G4endl;
+	PrintAuxiliary(fGdml->GetAuxList()," | ");
 
 	return;
 }
@@ -98,7 +120,7 @@ void GdmlConstruction::ReadProperty(
 				ReadBorderProperty(auxIter->auxList,prefix + " + ");
 		}
 		else{
-			G4cout << " [##] - ERROR - WRONG AUXTYPE for Property - "
+			G4cout << "[#] - ERROR - WRONG AUXTYPE for Property - "
 				<< " Support 'Skin' and 'Border' ONLY " << G4endl;
 		}
 	}
@@ -137,7 +159,7 @@ G4bool GdmlConstruction::ReadSkinProperty(
 				return false;
 			}
 		}else{
-			G4cout << " [##] - ERROR - WRONG AUXTYPE for Skin - "
+			G4cout << "[#] - ERROR - WRONG AUXTYPE for Skin - "
 				<< " NEEDED 'LVname' and 'Material' " << G4endl;		
 		}
 	}
@@ -196,7 +218,7 @@ G4bool GdmlConstruction::ReadBorderProperty(
 				return false;
 			}
 		}else{
-			G4cout << " [##] - ERROR - WRONG AUXTYPE for Skin - "
+			G4cout << "[-] - ERROR - WRONG AUXTYPE for Skin - "
 				<< " NEEDED 'PVname' and 'Material' " << G4endl;		
 		}
 	}

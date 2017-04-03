@@ -61,10 +61,8 @@ int main (int argc, char** argv){
     G4RunManager* runManager = new G4RunManager;
     // User defined classes 
         // Detector Construction
-    G4GDMLParser* gdml = new G4GDMLParser;
-    gdml->Read(gdmlFileName,false);
     runManager->SetUserInitialization(
-        new GdmlConstruction(gdml));
+        new GdmlConstruction(gdmlFileName));
     //runManager->SetUserInitialization(new SysConstruction());
     
     //G4VModularPhysicsList* physicsList = new FTFP_BERT;
@@ -104,7 +102,6 @@ int main (int argc, char** argv){
 #ifdef G4UI_USE
     delete ui;
 #endif
-    delete gdml;
     delete messenger;
 #ifdef G4VIS_USE
     delete visManager;
