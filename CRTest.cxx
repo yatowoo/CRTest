@@ -74,8 +74,9 @@ int main (int argc, char** argv){
     
     SysMessenger* messenger = new SysMessenger(runManager);
     // Visualization Manager
+		// TODO : ADD verbosiry option and if/else by arg. mode
 #ifdef G4VIS_USE
-    G4VisManager* visManager = new G4VisExecutive;
+    G4VisManager* visManager = new G4VisExecutive("error");
     visManager->Initialize();
 #endif
 
