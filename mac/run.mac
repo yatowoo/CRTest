@@ -1,5 +1,6 @@
 # Geant4 Macro file for batch mode
 
 /process/em/verbose 0
+/run/verbose 2
 /run/initialize
 /run/beamOn 5
