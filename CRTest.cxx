@@ -90,6 +90,7 @@ int main (int argc, char** argv){
 	}// mode case
     
     // delete
+	G4cout << G4endl << "[-] INFO - CRTest come to QUIT state." << G4endl;
 	if(ui) delete ui;
 	if(visManager)	delete visManager;
 	delete messenger;

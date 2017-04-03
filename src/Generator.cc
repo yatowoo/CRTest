@@ -34,6 +34,7 @@ Generator::Generator()
 Generator::~Generator()
 {
     delete fParticleGun;
+	G4cout << "[-] INFO - Generator deleted. " << G4endl;
 }
 
 void Generator::GeneratePrimaries(G4Event *anEvent)

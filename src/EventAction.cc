@@ -23,27 +23,19 @@ EventAction::EventAction() : G4UserEventAction()
 
 EventAction::~EventAction()
 {
+	G4cout << "[-] INFO - EventAction deleted. " << G4endl;
 }
 
 void EventAction::BeginOfEventAction(const G4Event *anEvent)
 {
-    G4cout << "[-] INFO - Event "
-           << anEvent->GetEventID()
-           << " begin."
-           << " - by EventAction"
-           << G4endl;
+    G4cout << "[-] INFO - Event " << anEvent->GetEventID()
+           << " begins. - by EventAction" << G4endl;
     OpRecorder* Recorder = OpRecorder::Instance();
     Recorder->Reset();
 }
 
 void EventAction::EndOfEventAction(const G4Event *anEvent)
 {
-
-    G4cout << "[-] INFO - Event "
-           << anEvent->GetEventID()
-           << " end."
-           << " - by EventAction"
-           << G4endl;
     OpRecorder* Recorder = OpRecorder::Instance();
     G4cout << "[+] INFO - Optical Process Track & Record - by EventAction." << G4endl;
     Recorder->Print();
@@ -79,4 +71,7 @@ void EventAction::EndOfEventAction(const G4Event *anEvent)
     rootData->FillNtupleIColumn(10, Recorder->nScintTotal);
     rootData->FillNtupleIColumn(15, Recorder->nScintToFiber);
     rootData->AddNtupleRow();
+
+    G4cout << "[-] INFO - Event " << anEvent->GetEventID()
+           << " ends. - by EventAction" << G4endl;
 }

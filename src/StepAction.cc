@@ -29,6 +29,7 @@ StepAction::StepAction()
 
 StepAction::~StepAction()
 {
+	G4cout << "[-] INFO - StepAction deleted. " << G4endl;
 }
 
 void StepAction::UserSteppingAction(const G4Step *aStep)

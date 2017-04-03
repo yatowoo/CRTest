@@ -22,7 +22,7 @@ SysConstruction::SysConstruction()
       fStepLimit(NULL),
       fPosZTarget(0), fPosZDetector(0)
 {
-    G4cout << " [-] CRTest Detector System Construction Start"
+    G4cout << "[-] CRTest Detector System Construction Start"
            << G4endl;
 }
 

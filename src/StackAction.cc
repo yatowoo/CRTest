@@ -19,6 +19,7 @@ StackAction::StackAction()
 
 StackAction::~StackAction()
 {
+	G4cout << "[-] INFO - StackAction deleted. " << G4endl;
 }
 
 G4ClassificationOfNewTrack

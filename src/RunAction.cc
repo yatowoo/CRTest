@@ -45,13 +45,14 @@ RunAction::RunAction()
 
 RunAction::~RunAction()
 {
-    delete G4AnalysisManager::Instance();    
+    delete G4AnalysisManager::Instance();
+	G4cout << "[-] INFO - RunAction deleted. " << G4endl;
 }
 
 void RunAction::BeginOfRunAction(const G4Run* aRun)
 {
-    G4cout << "[-] INFO - Run " << aRun->GetRunID()
-        << " begin. - by RunAction" << G4endl;
+    G4cout << G4endl << "[-] INFO - Run " << aRun->GetRunID()
+        << " begins. - by RunAction" << G4endl;
     
     // Initialize .root file
     G4AnalysisManager* rootData = G4AnalysisManager::Instance();
@@ -61,11 +62,11 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
 void RunAction::EndOfRunAction(const G4Run* aRun)
 {
-    G4cout << "[-] INFO - Run " << aRun->GetRunID()
-        << " end. - by RunAction" << G4endl;
-
     // Write data to file
     G4AnalysisManager* rootData = G4AnalysisManager::Instance();
     rootData->Write();
     rootData->CloseFile();
+
+    G4cout << "[-] INFO - Run " << aRun->GetRunID()
+        << " ends. - by RunAction" << G4endl;
 }

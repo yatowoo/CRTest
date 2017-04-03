@@ -44,7 +44,8 @@ PhysicsList::~PhysicsList()
 }
 
 void PhysicsList::Print(){
-	G4cout << "[-] INFO - Physics List Registered : " << G4endl;
+	G4cout << G4endl
+		<< "[-] INFO - Physics List Registered : " << G4endl;
 	if(fEmPhys)
 		G4cout << " |  + " << fEmPhys->GetPhysicsName() << G4endl;
 	if(fOpPhys)
