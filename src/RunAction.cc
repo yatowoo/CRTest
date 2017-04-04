@@ -15,32 +15,7 @@ RunAction::RunAction()
     G4RunManager::GetRunManager()->SetPrintProgress(1);
 
     // Initialize .root file
-    G4AnalysisManager* rootData = G4AnalysisManager::Instance();
-
-    rootData->SetFileName("Cry.root");
-    rootData->CreateNtuple("Cry","Event");
-    rootData->CreateNtupleDColumn("Edep");  // id = 0
-    rootData->CreateNtupleIColumn("pri.num"); // id = 1
-    rootData->CreateNtupleIColumn("pri.id");
-    rootData->CreateNtupleDColumn("pri.x");
-    rootData->CreateNtupleDColumn("pri.y");
-    rootData->CreateNtupleDColumn("pri.z");
-    rootData->CreateNtupleDColumn("pri.px");
-    rootData->CreateNtupleDColumn("pri.py");
-    rootData->CreateNtupleDColumn("pri.pz");
-    rootData->CreateNtupleDColumn("pri.E");
-    rootData->CreateNtupleIColumn("scint.N"); // id = 10
-    rootData->CreateNtupleDColumn("scint.E"); 
-    rootData->CreateNtupleDColumn("scint.px");
-    rootData->CreateNtupleDColumn("scint.py");
-    rootData->CreateNtupleDColumn("scint.pz");
-    rootData->CreateNtupleIColumn("fiber.N"); // id = 15
-    rootData->CreateNtupleDColumn("fiber.E");
-    rootData->CreateNtupleDColumn("fiber.px");
-    rootData->CreateNtupleDColumn("fiber.py");
-    rootData->CreateNtupleDColumn("fiber.pz");
-    rootData->FinishNtuple();
-
+	ana::CreateNtupleForRun();
 }
 
 RunAction::~RunAction()
