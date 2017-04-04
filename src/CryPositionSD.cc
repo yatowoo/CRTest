@@ -33,7 +33,10 @@ void CryPositionSD::Initialize(G4HCofThisEvent *hce)
 
 G4bool CryPositionSD::ProcessHits(G4Step *aStep, G4TouchableHistory *roHist)
 {
-    /* For further : verbose > 1 
+	// Sensitive only for Primary track
+	if(aStep->GetTrack()->GetParentID() != 0)
+		return false;
+	/* For further : verbose > 1 
     G4cout << "[+] Hit - Processing by CryPositionSD"
            << G4endl;
     */

@@ -154,7 +154,7 @@
   <box aunit="radian" lunit="mm" name="targetS" x="1" y="1" z="1" />
   <box aunit="radian" lunit="cm" name="detectorS" x="5" y="5" z="1" />
   <box aunit="radian" lunit="cm" name="worldS" x="6" y="6" z="2" />
-	<eltube aunit="radian" lunit="mm" name="fiberS" dx="0.5" dy="0.5" dz="30" />
+	<eltube aunit="radian" lunit="mm" name="grooveS" dx="0.5" dy="0.5" dz="30" />
 	<eltube aunit="radian" lunit="mm" name="coreS" dx="0.48" dy="0.48" dz="30" />
   <opticalsurface name="scint_surf" model="unified" finish="groundtyvekair" type="dielectric_dielectric" value="0.01"/>
 </solids>
@@ -169,9 +169,9 @@
     <solidref ref="coreS" />
   </volume>
   
-  <volume name="Fiber">
+  <volume name="Groove">
     <materialref ref="AIR" />
-    <solidref ref="fiberS" />
+    <solidref ref="grooveS" />
     <physvol>
       <volumeref ref="Core" />
       <position />
@@ -183,7 +183,7 @@
     <solidref ref="detectorS" />
 		<loop for="fiberX" to="9" step="1">
 		<physvol copynumber="fiberX">
-			<volumeref ref="Fiber" />
+			<volumeref ref="Groove" />
 			<rotationref ref="fiberRot" />
 			<position unit="mm" x="fiberX*5-22.5" y="0" z="-4" />
 		</physvol>
@@ -208,7 +208,7 @@
   </skinsurface>
   <bordersurface name="border" surfaceproperty="scint_surf" >
     <physvolref ref="Detector_PV"/>
-    <physvolref ref="Fiber_PV"/>
+    <physvolref ref="Groove_PV"/>
   </bordersurface> 
 </structure>
 
@@ -222,7 +222,7 @@
       <auxiliary auxtype="Border" auxvalue="ScintFiber">
         <auxiliary auxtype="SurfaceName" auxvalue="scint_surf"/>
         <auxiliary auxtype="PVname" auxvalue="Detector_PV" />
-        <auxiliary auxtype="PVname" auxvalue="Fiber_PV" />
+        <auxiliary auxtype="PVname" auxvalue="Groove_PV" />
         <auxiliary auxtype="Material" auxvalue="OpWrapper_Scint"/>
       </auxiliary>
     </auxiliary>
