@@ -8,14 +8,17 @@
 OpRecorder *OpRecorder::fgInstance = 0;
 
 OpRecorder::OpRecorder()
-    : nScintTotal(0), nScintToFiber(0), nWlsEmit(0),
-      nFiberToCore(0), nCoreToPMT(0),
+    : nScintTotal(0), nScint2Groove(0), nGroove2Cladding(0),
+      nCladding2Core(0), nWlsEmit(0),nCore2PMT(0),nDetection(0),
       nBoundaryReflection(0), nBoundaryAbsorption(0), nBoundaryTransmission(0),
       nDebug(0)
 {
+	boundaryName = "NULL";
 }
 
-OpRecorder::~OpRecorder() {}
+OpRecorder::~OpRecorder() {
+	delete fgInstance;
+}
 
 OpRecorder *OpRecorder::Instance()
 {
@@ -27,10 +30,13 @@ OpRecorder *OpRecorder::Instance()
 void OpRecorder::Reset()
 {
     nScintTotal = 0;
-    nScintToFiber = 0;
-    nWlsEmit = 0;
-    nFiberToCore = 0;
-    nCoreToPMT = 0;
+    nScint2Groove = 0;
+    nGroove2Cladding = 0;
+    nCladding2Core = 0;
+	nWlsEmit = 0;
+	nCore2PMT = 0;
+	nDetection = 0;
+
     nBoundaryReflection = 0;
     nBoundaryAbsorption = 0;
     nBoundaryTransmission = 0;
@@ -40,17 +46,24 @@ void OpRecorder::Reset()
     nDebug = 0;
 }
 
+void OpRecorder::SetBoundaryName(G4String name){
+	boundaryName = name;
+}
+
 void OpRecorder::Print()
 {
-    G4cout << "    - Scintillation Total Count\t: " << nScintTotal << G4endl
-           << "    - Scint. to Fiber Boundary\t: " << nScintToFiber << G4endl
-           << "    - - Boundary Reflection\t: " << nBoundaryReflection << G4endl
-           << "    - - Boundary Absorption\t: " << nBoundaryAbsorption << G4endl
-           << "    - - Boundary Transmission\t: " << nBoundaryTransmission << G4endl
-           << "    - - Boundary Undefined\t: " << nBoundaryUndefined << G4endl
-           << "    - - Boundary WARNNING\t: " << nBoundaryWARNNING << G4endl
-           << "    - Fiber to Core\t\t: " << nFiberToCore << G4endl
-           << "    - Emitted by OpWLS\t\t: " << nWlsEmit << G4endl
-           << "    - Detected by PMT\t\t: " << nCoreToPMT << G4endl
-           << "    X Count for Debug\t\t: " << nDebug << G4endl;
+    G4cout << " | + Scintillation Total Count\t: " << nScintTotal << G4endl
+           << " | + Scint. to Groove Boundary\t: " << nScint2Groove << G4endl
+		   << " | + Groove to Cladding\t\t: " << nGroove2Cladding << G4endl
+           << " | + Cladding to Core\t\t: " << nCladding2Core << G4endl
+           << " | + Emitted by OpWLS\t\t: " << nWlsEmit << G4endl
+		   << " | + Core to PMT\t\t: " << nCore2PMT << G4endl
+           << " | + Detected by PMT\t\t: " << nDetection << G4endl
+		   << " | + Boundary Details for " << boundaryName <<G4endl
+           << " | + + Boundary Reflection\t: " << nBoundaryReflection << G4endl
+           << " | + + Boundary Absorption\t: " << nBoundaryAbsorption << G4endl
+           << " | + + Boundary Transmission\t: " << nBoundaryTransmission << G4endl
+           << " | + + Boundary Undefined\t: " << nBoundaryUndefined << G4endl
+           << " | + + Boundary WARNNING\t: " << nBoundaryWARNNING << G4endl
+           << " | + X Count for Debug\t\t: " << nDebug << G4endl;
 }

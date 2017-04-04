@@ -66,8 +66,8 @@ namespace ana {
 		Primary = 0,
 		Final = 1,
 		Scintillation = 2,
-		Scint2Gloove = 3,
-		Gloove2Cladding = 4,
+		Scint2Groove = 3,
+		Groove2Cladding = 4,
 		Cladding2Core = 5,
 		OpWLS = 6,
 		Fiber2Pmt = 7,
@@ -122,7 +122,7 @@ namespace ana {
 		OpRecorder* Recorder = OpRecorder::Instance();
 		rootData->FillNtupleIColumn(ntupleID, NUM_SCINT, Recorder->nScintTotal);
 		rootData->FillNtupleIColumn(ntupleID, NUM_WLS, Recorder->nWlsEmit);
-		rootData->FillNtupleIColumn(ntupleID, NUM_DETECTION, Recorder->nCoreToPMT);
+		rootData->FillNtupleIColumn(ntupleID, NUM_DETECTION, Recorder->nDetection);
 
 		// TODO : SD method
 		rootData->FillNtupleDColumn(ntupleID, EnergyDeposit, sdEdep / MeV);
@@ -134,8 +134,6 @@ namespace ana {
 		if(CURRENT_NTUPLE <= 0)
 			return false;
 		G4int ntupleID = CURRENT_NTUPLE;
-
-		G4cout << G4endl << "[X] DEBUG - Filling Ntuple " << ntupleID << G4endl << G4endl;
 
 		G4AnalysisManager* rootData = G4AnalysisManager::Instance();
 
