@@ -15,6 +15,7 @@
 #include "G4PrimaryVertex.hh"
 
 #include "G4ios.hh"
+#include "G4String.hh"
 #include "G4SystemOfUnits.hh"
 
 EventAction::EventAction() : G4UserEventAction()
@@ -32,6 +33,11 @@ void EventAction::BeginOfEventAction(const G4Event *anEvent)
            << " begins. - by EventAction" << G4endl;
     OpRecorder* Recorder = OpRecorder::Instance();
     Recorder->Reset();
+
+	G4AnalysisManager *rootData = G4AnalysisManager::Instance();
+	rootData->CreateNtuple(
+		"Event"+std::to_string(anEvent->GetEventID()),"Event Info.");
+	rootData->FinishNtuple();
 }
 
 void EventAction::EndOfEventAction(const G4Event *anEvent)
