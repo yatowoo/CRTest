@@ -102,7 +102,7 @@ void StepAction::UserSteppingAction(const G4Step *aStep)
         {
 			ana::FillVertexForEvent(theTrack, ana::VertexType::Fiber2Pmt);
             Recorder->nCore2PMT += 1;
-			Recorder->nDetection +=1;
+			//Recorder->nDetection +=1;
             return;
         }
         else if (thePrePV->GetName() == "Core_PV" &&

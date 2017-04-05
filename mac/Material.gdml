@@ -41,9 +41,20 @@
     <property name="ABSLENGTH" ref="PVT_ABSL"/>
     <property name="RESOLUTIONSCALE" ref="PVT_SCALE"/>
   </material>
+  
+  <!-- For OpticalSurface MPT-->
   <material name="OpWrapper_Scint">
     <D value="0.00129" />
     <fraction n="0.7" ref="Nitrogen" />
     <fraction n="0.3" ref="Oxygen" />
     <property name="SURFACEROUGHNESS" ref="OpWrapper_Scint_ROUGHNESS" />
+  </material>
+
+  <material name="OpBorder_PMT">
+    <D value="0.00129" />
+    <fraction n="0.7" ref="Nitrogen" />
+    <fraction n="0.3" ref="Oxygen" />
+    <property name="EFFICIENCY" ref="OpBorder_PMT_EFFICIENCY" />
+    <property name="REFLECTIVITY" ref="OpBorder_PMT_REFLECTIVITY" />
+    <property name="TRANSMITTANCE" ref="OpBorder_PMT_TRANSMITTANCE" />
   </material>

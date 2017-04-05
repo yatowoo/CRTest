@@ -26,6 +26,7 @@
 	<eltube aunit="radian" lunit="mm" name="grooveS" dx="0.5" dy="0.5" dz="30" />
 	<eltube aunit="radian" lunit="mm" name="coreS" dx="0.48" dy="0.48" dz="30" />
   <opticalsurface name="scint_surf" model="unified" finish="ground" type="dielectric_dielectric" value="0.01"/>
+  <opticalsurface name="photocathode" model="unified" finish="ground" type="dielectric_dielectric" value="0.01"/>
 </solids>
 
 <structure>
@@ -78,7 +79,13 @@
   <bordersurface name="border" surfaceproperty="scint_surf" >
     <physvolref ref="Detector_PV"/>
     <physvolref ref="Groove_PV"/>
-  </bordersurface> 
+  </bordersurface>
+
+  <bordersurface name="pmt_border" surfaceproperty="photocathode" >
+    <physvolref ref="Core_PV"/>
+    <physvolref ref="World_PV"/>
+  </bordersurface>
+
 </structure>
 
   <userinfo>
@@ -94,6 +101,14 @@
         <auxiliary auxtype="PVname" auxvalue="Groove_PV" />
         <auxiliary auxtype="Material" auxvalue="OpWrapper_Scint"/>
       </auxiliary>
+
+      <auxiliary auxtype="Border" auxvalue="Photocathode">
+        <auxiliary auxtype="SurfaceName" auxvalue="photocathode"/>
+        <auxiliary auxtype="PVname" auxvalue="Core_PV" />
+        <auxiliary auxtype="PVname" auxvalue="World_PV" />
+        <auxiliary auxtype="Material" auxvalue="OpBorder_PMT"/>
+      </auxiliary>
+
     </auxiliary>
     <auxiliary auxtype="Region" auxvalue="sensitive">
       <auxiliary auxtype="RootLogicalVolume" auxvalue="Detector"/>
