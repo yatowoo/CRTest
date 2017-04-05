@@ -27,8 +27,7 @@
 	<eltube aunit="radian" lunit="mm" name="coreS" dx="0.48" dy="0.48" dz="30" />
 	<eltube aunit="radian" lunit="mm" name="pmtS" dx="0.48" dy="0.48" dz="1" />  
   <opticalsurface name="scint_surf" model="unified" finish="ground" type="dielectric_dielectric" value="0.01"/>
-  <opticalsurface name="photocath" model="unified" finish="ground" type="die
-lectric_dielectric" value="0.01"/>
+  <opticalsurface name="photocath" model="unified" finish="ground" type="dielectric_dielectric" value="0.01"/>
 </solids>
 
 <structure>
@@ -46,11 +45,11 @@ lectric_dielectric" value="0.01"/>
     <solidref ref="coreS" />
     <physvol>
       <volumeref ref="PMT" />
-      <position lunit="mm" z="30.5"/>
+      <position lunit="mm" z="30"/>
     </physvol>
     <physvol>
       <volumeref ref="PMT" />
-      <position lunit="mm" z="-30.5"/>
+      <position lunit="mm" z="-30"/>
     </physvol>
   </volume>
   
