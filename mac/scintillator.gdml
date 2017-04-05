@@ -25,8 +25,10 @@
   <box aunit="radian" lunit="cm" name="worldS" x="6" y="6" z="2" />
 	<eltube aunit="radian" lunit="mm" name="grooveS" dx="0.5" dy="0.5" dz="30" />
 	<eltube aunit="radian" lunit="mm" name="coreS" dx="0.48" dy="0.48" dz="30" />
+	<eltube aunit="radian" lunit="mm" name="pmtS" dx="0.48" dy="0.48" dz="1" />  
   <opticalsurface name="scint_surf" model="unified" finish="ground" type="dielectric_dielectric" value="0.01"/>
-  <opticalsurface name="photocathode" model="unified" finish="ground" type="dielectric_dielectric" value="0.01"/>
+  <opticalsurface name="photocath" model="unified" finish="ground" type="die
+lectric_dielectric" value="0.01"/>
 </solids>
 
 <structure>
@@ -34,9 +36,22 @@
     <materialref ref="G4_AIR" />
     <solidref ref="targetS" />
   </volume>
+  <volume name="PMT">
+    <materialref ref="AIR" />
+    <solidref ref="pmtS" />
+  </volume>
+
   <volume name="Core">
     <materialref ref="Y11_PS" />
     <solidref ref="coreS" />
+    <physvol>
+      <volumeref ref="PMT" />
+      <position lunit="mm" z="30.5"/>
+    </physvol>
+    <physvol>
+      <volumeref ref="PMT" />
+      <position lunit="mm" z="-30.5"/>
+    </physvol>
   </volume>
   
   <volume name="Groove">
@@ -81,10 +96,11 @@
     <physvolref ref="Groove_PV"/>
   </bordersurface>
 
-  <bordersurface name="pmt_border" surfaceproperty="photocathode" >
+  <bordersurface name="pmt_border" surfaceproperty="photocath" >
     <physvolref ref="Core_PV"/>
-    <physvolref ref="World_PV"/>
+    <physvolref ref="PMT_PV"/>
   </bordersurface>
+
 
 </structure>
 
@@ -95,6 +111,7 @@
         <auxiliary auxtype="LVname" auxvalue="Detector" />
         <auxiliary auxtype="Material" auxvalue="OpWrapper_Scint" />
       </auxiliary>
+
       <auxiliary auxtype="Border" auxvalue="ScintFiber">
         <auxiliary auxtype="SurfaceName" auxvalue="scint_surf"/>
         <auxiliary auxtype="PVname" auxvalue="Detector_PV" />
@@ -103,13 +120,14 @@
       </auxiliary>
 
       <auxiliary auxtype="Border" auxvalue="Photocathode">
-        <auxiliary auxtype="SurfaceName" auxvalue="photocathode"/>
+        <auxiliary auxtype="SurfaceName" auxvalue="photocath"/>
         <auxiliary auxtype="PVname" auxvalue="Core_PV" />
-        <auxiliary auxtype="PVname" auxvalue="World_PV" />
+        <auxiliary auxtype="PVname" auxvalue="PMT_PV" />
         <auxiliary auxtype="Material" auxvalue="OpBorder_PMT"/>
       </auxiliary>
 
     </auxiliary>
+
     <auxiliary auxtype="Region" auxvalue="sensitive">
       <auxiliary auxtype="RootLogicalVolume" auxvalue="Detector"/>
       <auxiliary auxtype="proton_cut_legth" auxvalue="2" auxunit="mm"/>
