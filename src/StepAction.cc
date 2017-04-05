@@ -29,7 +29,7 @@ StepAction::StepAction()
 
 StepAction::~StepAction()
 {
-	G4cout << "[-] INFO - StepAction deleted. " << G4endl;
+    G4cout << "[-] INFO - StepAction deleted. " << G4endl;
 }
 
 void StepAction::UserSteppingAction(const G4Step *aStep)
@@ -60,56 +60,55 @@ void StepAction::UserSteppingAction(const G4Step *aStep)
         if (thePrePV->GetName() == "Detector_PV" &&
             thePostPV->GetName() == "Groove_PV")
         {
-			ana::FillVertexForEvent(theTrack, ana::VertexType::Scint2Groove);
+            ana::FillVertexForEvent(theTrack, ana::VertexType::Scint2Groove);
             Recorder->nScint2Groove += 1;
             return;
         }
         else if (thePrePV->GetName() == "Groove_PV" &&
                  thePostPV->GetName() == "Cladding_PV")
         {
-			ana::FillVertexForEvent(theTrack, ana::VertexType::Groove2Cladding);
+            ana::FillVertexForEvent(theTrack, ana::VertexType::Groove2Cladding);
             Recorder->nGroove2Cladding += 1;
             return;
         }
         else if (thePrePV->GetName() == "Cladding_PV" &&
                  thePostPV->GetName() == "Core_PV")
         {
-			ana::FillVertexForEvent(theTrack, ana::VertexType::Cladding2Core);
+            ana::FillVertexForEvent(theTrack, ana::VertexType::Cladding2Core);
             Recorder->nGroove2Cladding += 1;
             return;
         }
         else if (thePrePV->GetName() == "Core_PV" &&
                  thePostPV->GetName() == "PMT_PV")
         {
-			ana::FillVertexForEvent(theTrack, ana::VertexType::Fiber2Pmt);
+            ana::FillVertexForEvent(theTrack, ana::VertexType::Fiber2Pmt);
             Recorder->nCore2PMT += 1;
+            if (boundary->GetStatus() == Detection)
+                Recorder->nDetection += 1;
+
             return;
         }
-		else if(boundary->GetStatus() == Detection){
-			Recorder->nDetection +=1;
-			return;
-		}
-		// TODO : REMOVE after GDML setup completed
+        // TODO : REMOVE after GDML setup completed
         else if (thePrePV->GetName() == "Groove_PV" &&
                  thePostPV->GetName() == "Core_PV")
         {
-			ana::FillVertexForEvent(theTrack, ana::VertexType::Groove2Cladding);
-			Recorder->nGroove2Cladding += 1;
+            ana::FillVertexForEvent(theTrack, ana::VertexType::Groove2Cladding);
+            Recorder->nGroove2Cladding += 1;
             return;
         }
         else if (thePrePV->GetName() == "Core_PV" &&
                  thePostPV->GetName() == "World_PV")
         {
-			ana::FillVertexForEvent(theTrack, ana::VertexType::Fiber2Pmt);
+            ana::FillVertexForEvent(theTrack, ana::VertexType::Fiber2Pmt);
             Recorder->nCore2PMT += 1;
-			//Recorder->nDetection +=1;
+            //Recorder->nDetection +=1;
             return;
         }
         else if (thePrePV->GetName() == "Core_PV" &&
                  thePostPV->GetName() == "Groove_PV")
         {
             Recorder->nDebug += 1;
-			Recorder->SetBoundaryName("Core2Groove");
+            Recorder->SetBoundaryName("Core2Groove");
             BoundaryStats(boundary);
             //theTrack->SetTrackStatus(G4TrackStatus::fStopAndKill);
             return;
