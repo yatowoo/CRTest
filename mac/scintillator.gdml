@@ -1,105 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE gdml [ 
+<!ENTITY Config SYSTEM "Config.gdml">
+<!ENTITY Property SYSTEM "Property.gdml">
+]>
+
 <gdml xmlns:gdml="http://gdml.web.cern.ch/GDML/"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="file:///schema/gdml.xsd">
 
+<!-- ENTITY Reference -->
 <define>
-	<variable name="fiberX" value="0" />
-  <position name="targetPos" unit="cm" x="0" y="0" z="1" />
-  <position name="detectorPos" unit="cm" x="0" y="0" z="0" />
-	<position name="fiberPos" unit="mm" x="5" y="0" z="-4" />
-	<rotation name="fiberRot" x="90" unit="deg" />
-	<matrix name="AIR_RINDEX" coldim="2" values="2.91*eV 1.00" />
-  <matrix name="PVT_RINDEX" coldim="2" values="2.91*eV 1.58" />
-  <matrix name="PVT_FAST" coldim="2" values="3.1344*eV	0.00
-                                            3.10754*eV	0.0087
-                                            3.0839*eV	0.02435
-                                            3.06512*eV	0.06609
-                                            3.05289*eV	0.12174
-                                            3.04077*eV	0.17739
-                                            3.01857*eV	0.29565
-                                            3.00758*eV	0.35826
-                                            2.99744*eV	0.44696
-                                            2.98288*eV	0.55652
-                                            2.96924*eV	0.6887
-                                            2.96378*eV	0.74957
-                                            2.939*eV	0.93565
-                                            2.93295*eV	0.96348
-                                            2.92445*eV	0.97913
-                                            2.91853*eV	0.98783
-                                            2.9085*eV	0.99304
-                                            2.90434*eV	0.99304
-                                            2.88632*eV	0.96522
-                                            2.86616*eV	0.92174
-                                            2.84081*eV	0.85217
-                                            2.83226*eV	0.81391
-                                            2.79845*eV	0.68696
-                                            2.7639*eV	0.57043
-                                            2.72934*eV	0.49043
-                                            2.69339*eV	0.43304
-                                            2.67298*eV	0.4
-                                            2.64541*eV	0.3287
-                                            2.62446*eV	0.26609
-                                            2.60577*eV	0.22261
-                                            2.59256*eV	0.19652
-                                            2.58344*eV	0.1687
-                                            2.55948*eV	0.13739
-                                            2.53596*eV	0.10609
-                                            2.50728*eV	0.07652
-                                            2.48165*eV	0.05391" />
-  <matrix name="PVT_ABSL" coldim="2" values="2.91*eV 380.*cm" />
-  <matrix name="PVT_YIELD" coldim="1" values="10000/MeV" />
-  <matrix name="PVT_FASTTAU" coldim="1" values="2.1*ns" />
-  <matrix name="PVT_SCALE" coldim="1" values="1." />
-  <matrix name="WLS_RINDEX" coldim="2" values="2.91*eV 1.60" />
-  <matrix name="WLS_TAU" coldim="1" values="0.5*ns" />
-  <matrix name="WLS_ABSL" coldim="2" values="2.91*eV 350.*cm" />
-  <matrix name="WLS_EMISSION" coldim="2" values="2.875*eV	0.0017
-                                          2.774*eV	0.00482
-                                          2.733*eV	0.05421
-                                          2.682*eV	0.26252
-                                          2.656*eV	0.48937
-                                          2.63*eV		0.71623
-                                          2.605*eV	0.93399
-                                          2.587*eV	1.01097
-                                          2.574*eV	0.99711
-                                          2.546*eV	0.89663
-                                          2.536*eV	0.80101
-                                          2.491*eV	0.70475
-                                          2.451*eV	0.77673
-                                          2.429*eV	0.77177
-                                          2.391*eV	0.61193
-                                          2.352*eV	0.40207
-                                          2.335*eV	0.30627
-                                          2.284*eV	0.237
-                                          2.207*eV	0.09892
-                                          2.168*eV	0.04347
-                                          2.12*eV		0.0241
-                                          2.034*eV	0.00"/>
-  <matrix name="WLS_ABSORB" coldim="2" values="3.472*eV	2724.*mm
-                                          3.334*eV	1390.*mm
-                                          3.236*eV	527.3*mm
-                                          3.133*eV	184.2*mm
-                                          3.036*eV	83.75*mm
-                                          3.009*eV	65.18*mm
-                                          2.972*eV	58.25*mm
-                                          2.938*eV	37.36*mm
-                                          2.88*eV	7.672*mm
-                                          2.859*eV	1.916*mm
-                                          2.814*eV	12.85*mm
-                                          2.778*eV	29.27*mm
-                                          2.718*eV	14.36*mm
-                                          2.695*eV	19.66*mm
-                                          2.68*eV	24.83*mm
-                                          2.668*eV	50.04*mm
-                                          2.655*eV	71.2*mm
-                                          2.65*eV	102.9*mm
-                                          2.635*eV	166.2*mm
-                                          2.628*eV	280.6*mm
-                                          2.61*eV	530.1*mm
-                                          2.589*eV	2074.*mm
-                                          2.536*eV	8178.*mm"/>
-  <matrix name="OpWrapper_Scint_ROUGHNESS" coldim="1" values="0.5"/>
+  &Config;
+  &Property;
 </define>
 
 <materials>
