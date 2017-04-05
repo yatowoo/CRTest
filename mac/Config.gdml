@@ -1,5 +1,6 @@
 <!-- this is a file defining Configuration in split.gdml -->
 <!-- it is _not_ a standalone GDML file -->
+<!-- This file should be refered in <define></define>-->
 
 	<variable name="fiberX" value="0" />
   <position name="targetPos" unit="cm" x="0" y="0" z="1" />

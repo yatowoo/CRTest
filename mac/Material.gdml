@@ -1,0 +1,49 @@
+<!-- this is a file defining Configuration in split.gdml -->
+<!-- it is _not_ a standalone GDML file -->
+<!-- This file should be refered in <materials></materials>-->
+
+  <element Z="6" formula="C" name="Carbon" >
+    <atom value="12.0107" />
+  </element>
+  <element Z="1" formula="H" name="Hydrogen" >
+    <atom value="1.008" />
+  </element>
+  <element Z="7" formula="N" name="Nitrogen" >
+   <atom value="14.01" />
+  </element>
+  <element Z="8" formula="O" name="Oxygen" >
+   <atom value="16" />
+  </element>
+  <material formula=" " name="AIR" >
+		<D value="0.00129" />
+		<fraction n="0.7" ref="Nitrogen" />
+		<fraction n="0.3" ref="Oxygen" />
+		<property name="RINDEX" ref="AIR_RINDEX"/>
+  </material>
+  <material formula=" " name="Y11_PS" >
+    <D value="1.023" />
+    <fraction n="0.085" ref="Hydrogen" />
+    <fraction n="0.915" ref="Carbon" />
+		<property name="RINDEX" ref="WLS_RINDEX"/>
+    <property name="WLSABSLENGTH" ref="WLS_ABSORB"/>
+    <property name="WLSCOMPONENT" ref="WLS_EMISSION"/>
+    <property name="WLSTIMECONSTANT" ref="WLS_TAU"/>
+    <property name="ABSLENGTH" ref="WLS_ABSL"/>
+  </material>
+  <material formula=" " name="PVT" >
+    <D value="1.05" />
+    <fraction n="0.077418" ref="Hydrogen" />
+    <fraction n="0.922582" ref="Carbon" />
+		<property name="RINDEX" ref="PVT_RINDEX"/>
+    <property name="SCINTILLATIONYIELD" ref="PVT_YIELD"/>
+    <property name="FASTCOMPONENT" ref="PVT_FAST"/>
+    <property name="FASTTIMECONSTANT" ref="PVT_FASTTAU"/>
+    <property name="ABSLENGTH" ref="PVT_ABSL"/>
+    <property name="RESOLUTIONSCALE" ref="PVT_SCALE"/>
+  </material>
+  <material name="OpWrapper_Scint">
+    <D value="0.00129" />
+    <fraction n="0.7" ref="Nitrogen" />
+    <fraction n="0.3" ref="Oxygen" />
+    <property name="SURFACEROUGHNESS" ref="OpWrapper_Scint_ROUGHNESS" />
+  </material>

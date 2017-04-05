@@ -1,8 +1,10 @@
 <!-- this is a file defining material properties in split.gdml -->
 <!-- it is _not_ a standalone GDML file -->
+<!-- This file should be refered in <define></define>-->
 
   
   <matrix name="AIR_RINDEX" coldim="2" values="2.91*eV 1.00" />
+  
   <matrix name="PVT_RINDEX" coldim="2" values="2.91*eV 1.58" />
   <matrix name="PVT_FAST" coldim="2" values="3.1344*eV	0.00
                                             3.10754*eV	0.0087
@@ -44,6 +46,7 @@
   <matrix name="PVT_YIELD" coldim="1" values="10000/MeV" />
   <matrix name="PVT_FASTTAU" coldim="1" values="2.1*ns" />
   <matrix name="PVT_SCALE" coldim="1" values="1." />
+
   <matrix name="WLS_RINDEX" coldim="2" values="2.91*eV 1.60" />
   <matrix name="WLS_TAU" coldim="1" values="0.5*ns" />
   <matrix name="WLS_ABSL" coldim="2" values="2.91*eV 350.*cm" />
@@ -92,4 +95,5 @@
                                           2.61*eV	530.1*mm
                                           2.589*eV	2074.*mm
                                           2.536*eV	8178.*mm"/>
+ 
   <matrix name="OpWrapper_Scint_ROUGHNESS" coldim="1" values="0.5"/>
