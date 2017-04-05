@@ -173,7 +173,7 @@ G4bool GdmlConstruction::ReadSkinProperty(
 	if(OpSurf && !OpSurf->GetMaterialPropertiesTable()){
 		OpSurf->SetMaterialPropertiesTable(
 			matptr->GetMaterialPropertiesTable());
-		assert(OpSurf->GetName() == SurfaceName);
+		assert(SurfaceName == OpSurf->GetName());
 	}
 
 	return true;
@@ -192,8 +192,10 @@ G4bool GdmlConstruction::ReadBorderProperty(
 		= auxList->begin();
 		auxIter != auxList->end(); auxIter ++){
 		
-		if(auxIter->type == "SurfaceName")
-			G4cout << "Surface-" << auxIter->value << " | ";
+		if(auxIter->type == "SurfaceName"){
+			SurfaceName = auxIter->value;
+			G4cout << "Surface-" << SurfaceName << " | ";
+		}
 		else if(auxIter->type == "PVname"){
 			G4cout << "PhysVol-" << auxIter->value << " | ";
 			G4VPhysicalVolume* physvol = 
@@ -232,7 +234,7 @@ G4bool GdmlConstruction::ReadBorderProperty(
 	if(OpSurf && !OpSurf->GetMaterialPropertiesTable()){
 		OpSurf->SetMaterialPropertiesTable(
 			matptr->GetMaterialPropertiesTable());
-		assert(OpSurf->GetName() == SurfaceName);
+		assert(SurfaceName == OpSurf->GetName());
 	}
 
 	return true;
