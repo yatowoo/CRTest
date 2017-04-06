@@ -211,4 +211,43 @@ namespace ana {
 
 } // namespace ana
 
+enum VertexType{
+	Primary,
+	Final,
+	Scintillation,
+	Scint2Groove,
+	Groove2Cladding,
+	Cladding2Core,
+	OpWLS,
+	Fiber2Pmt,
+	Photocathode
+};
+
+class CryPostionSD;
+//class PmtSD;
+
+class Analysis {
+public:
+	Analysis();
+	~Analysis();
+public:
+	static Analysis* Instance();
+	
+	G4int CreateNtupleForEvent(G4int eventID);
+	G4bool CreateNtupleForRun();
+	G4bool FillVertexForEvent(
+		const G4Track* theTrack, VertexType type);
+	G4bool FillOutputForRun(const G4Event* theEvent, G4double sdEdep);
+	
+	G4bool RegisterPostionSD(CryPostionSD*,G4int num);
+	//G4bool RegisterPmtSD(PmtSD*,G4int num);
+
+private:
+	static Analysis* fgInstance;
+
+private:
+	G4RootAnalysisManager* rootData;
+	G4int fCurrentNtuple;
+};
+
 #endif // CRTest_Analysis_h
