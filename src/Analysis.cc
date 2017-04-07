@@ -70,20 +70,20 @@ G4bool Analysis::CreateNtupleForRun(){
 	return true;
 }
 
-G4bool Analysis::FillMuonTrackForRun(G4Track* theMuon){
+G4bool Analysis::FillMuonTrackForRun(const G4Track* theMuon){
 
 	if(theMuon->GetParentID() != 0)
 		return false;
 	
-	(fMuon->Ek).push_back(theMuon->GetKineticEnergy());
-	(fMuon->time).push_back(theMuon->GetGlobalTime());
+	(fMuon->Ek).push_back(theMuon->GetKineticEnergy() / GeV );
+	(fMuon->time).push_back(theMuon->GetGlobalTime() / ns );
 
 	G4ThreeVector pos = theMuon->GetPosition();
-	(fMuon->x).push_back(pos.x());
-	(fMuon->y).push_back(pos.y());
-	(fMuon->z).push_back(pos.z());
+	(fMuon->x).push_back(pos.x() / cm );
+	(fMuon->y).push_back(pos.y() / cm );
+	(fMuon->z).push_back(pos.z() / cm );
 
-	G4ThreeVector pmu = theMuon->GetMomentum();
+	G4ThreeVector pmu = theMuon->GetMomentumDirection();
 	(fMuon->px).push_back(pmu.x());
 	(fMuon->py).push_back(pmu.y());
 	(fMuon->pz).push_back(pmu.z());

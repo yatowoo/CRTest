@@ -26,6 +26,13 @@ StackAction::~StackAction()
 G4ClassificationOfNewTrack
 StackAction::ClassifyNewTrack(const G4Track *aTrack)
 {
+	// Record muon
+	if(aTrack->GetParentID() == 0){
+		Analysis::Instance()->FillMuonTrackForRun(aTrack);
+		return fUrgent;
+	}
+
+
     OpRecorder *Recorder = OpRecorder::Instance();
 
 	//Count what process generated the optical photons
@@ -45,7 +52,7 @@ StackAction::ClassifyNewTrack(const G4Track *aTrack)
 
 	}
 
-    return fUrgent;
+    return fWaiting;
 }
 
 void StackAction::NewStage() {}

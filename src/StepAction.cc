@@ -42,10 +42,11 @@ void StepAction::UserSteppingAction(const G4Step *aStep)
 
     const G4VProcess *theProcess = fpSteppingManager->GetfCurrentProcess();
 
-	if (theTrack->GetParentID() == 0 &&
-		(aStep->IsFirstStepInVolume() || aStep->IsLastStepInVolume())
-	)
+	// for Muon (primary track)
+	if (theTrack->GetParentID() == 0){
 		Analysis::Instance()->FillMuonTrackForRun(theTrack);
+		return;
+	}
 
     //  for Optical
     if (theTrack->GetParticleDefinition() !=

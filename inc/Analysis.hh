@@ -257,7 +257,7 @@ public:
 	G4int CreateNtupleForEvent(G4int eventID);
 	G4bool CreateNtupleForRun();
 
-	G4bool FillMuonTrackForRun(G4Track* theMuon);
+	G4bool FillMuonTrackForRun(const G4Track* theMuon);
 
 	G4bool FillVertexForEvent(
 		const G4Track* theTrack, VertexType type);
