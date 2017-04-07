@@ -34,16 +34,18 @@ public:
     virtual void Initialize(G4HCofThisEvent* hce);
     virtual G4bool ProcessHits(
 		G4Step* aStep, G4TouchableHistory* roHist);
-	virtual void EndOfEvent(G4HCofThisEvent* hce){};
+	virtual void EndOfEvent(G4HCofThisEvent* hce);
 
 	virtual void CreateEntry(
-		G4int ntupleID, G4RootAnalysisManager* rootData){};
+		G4int ntupleID, G4RootAnalysisManager* rootData);
 	virtual void FillEntry(
-		G4int ntupleID, G4RootAnalysisManager* rootData){};
+		G4int ntupleID, G4RootAnalysisManager* rootData);
 private:
     G4int fHCID;
     CryHC* fHC;
-	std::vector<double> fEdep;
+
+	G4int fFirstColID;
+	std::vector<double>* fEdep;
 };
 
 #endif /*CRTest_CryPositionSD_h*/

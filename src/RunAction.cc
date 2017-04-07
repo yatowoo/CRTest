@@ -14,8 +14,8 @@ RunAction::RunAction()
 {
     G4RunManager::GetRunManager()->SetPrintProgress(1);
 
-    // Initialize .root file
-	Analysis::Instance()->CreateNtupleForRun();
+	// Build Analysis Instance
+	Analysis::Instance();
 }
 
 RunAction::~RunAction()
@@ -29,8 +29,9 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 {
     G4cout << G4endl << "[-] INFO - Run " << aRun->GetRunID()
         << " begins. - by RunAction" << G4endl;
-    
     // Initialize .root file
+	Analysis::Instance()->CreateNtupleForRun();
+
     Analysis::Instance()->OpenFile();
 }
 

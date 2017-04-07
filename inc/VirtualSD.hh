@@ -24,7 +24,7 @@ public:
 	virtual void Initialize(G4HCofThisEvent* hc){};
 	virtual void EndOfEvent(G4HCofThisEvent* hc){};
 	virtual G4bool ProcessHits(
-		G4Step* theStep, G4TouchableHistory* roHist){};
+		G4Step* theStep, G4TouchableHistory* roHist){return true;};
 
 	virtual void CreateEntry(
 		G4int ntupleID, G4RootAnalysisManager* rootData) = 0;

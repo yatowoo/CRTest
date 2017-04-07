@@ -5,6 +5,9 @@
 
 #include "GdmlConstruction.hh"
 
+#include "Analysis.hh"
+#include "CryPositionSD.hh"
+
 #include "G4GDMLParser.hh"
 #include "G4GDMLAuxStructType.hh"
 
@@ -60,7 +63,18 @@ G4VPhysicalVolume *GdmlConstruction::Construct()
   return fWorldPV;
 }
 
-// TODO : ADD format check, exception handle and output
+
+void GdmlConstruction::ConstructSDandField(){
+    G4String sdName = "CryPostionSD";
+    CryPositionSD* crySD = new CryPositionSD(sdName);
+
+    SetSensitiveDetector(fDetector, crySD);
+	
+	Analysis::Instance()->RegisterSD(crySD);
+
+    return;
+}
+
 void GdmlConstruction::ReadAuxiliary(){
 	// Volume Auxiliary
 	const G4LogicalVolumeStore* LVstore = G4LogicalVolumeStore::GetInstance();

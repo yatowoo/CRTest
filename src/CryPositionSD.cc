@@ -11,13 +11,17 @@
 #include "G4ios.hh"
 
 CryPositionSD::CryPositionSD(G4String &name)
-    : VirtualSD(name), fHCID(0)
+	: VirtualSD(name), fHCID(0), fFirstColID(-1),
+	fEdep(NULL)
 {
     collectionName.insert("CryHC");
+
+	fEdep = new std::vector<double>;
 }
 
 CryPositionSD::~CryPositionSD()
 {
+	delete fEdep;
 }
 
 void CryPositionSD::Initialize(G4HCofThisEvent *hce)
@@ -29,6 +33,11 @@ void CryPositionSD::Initialize(G4HCofThisEvent *hce)
     fHCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]);
 
     hce->AddHitsCollection(fHCID, fHC);
+
+	if(fEdep) 
+		fEdep->clear();
+	else
+		fEdep = new std::vector<double>;
 }
 
 G4bool CryPositionSD::ProcessHits(G4Step *aStep, G4TouchableHistory *roHist)
@@ -51,3 +60,26 @@ G4bool CryPositionSD::ProcessHits(G4Step *aStep, G4TouchableHistory *roHist)
 
     return true;
 }
+
+void CryPositionSD::EndOfEvent(G4HCofThisEvent* hce){
+    CryHC *cryHC = static_cast<CryHC *>(hce->GetHC(fHCID));
+
+    G4double sdEdep = 0.;
+    for (int i = 0; i < cryHC->entries(); i++)
+    {
+        sdEdep += (*cryHC)[i]->GetEdep();
+    }
+
+	fEdep->push_back(sdEdep);
+}
+
+void CryPositionSD::CreateEntry(
+	G4int ntupleID, G4RootAnalysisManager* rootData)
+{
+	fFirstColID =
+		rootData->CreateNtupleDColumn(ntupleID, "sd.Edep", *fEdep);
+}
+
+void CryPositionSD::FillEntry(
+	G4int ntupleID, G4RootAnalysisManager* rootData)
+{}

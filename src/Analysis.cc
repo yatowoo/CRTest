@@ -10,12 +10,14 @@
 Analysis* Analysis::fgInstance = NULL;
 
 Analysis::Analysis()
-	: fCurrentNtuple(-1), fMuon(NULL)
+	: fCurrentNtuple(-1), fMuon(NULL), fSD(NULL)
 {
 	rootData = G4RootAnalysisManager::Instance();
 	rootData->SetFileName("CRTest");
 
 	fMuon = new _Muon;
+
+	fSD = new std::vector<VirtualSD*>;
 
 	G4cout << "[+] INFO - CRTest_Analysis created." 
 		<< G4endl;
@@ -58,6 +60,8 @@ G4bool Analysis::CreateNtupleForRun(){
 	rootData->CreateNtupleDColumn(fCurrentNtuple, "mu.pz" , fMuon->pz);
 
 	// #for each sd in fCrySD (std::vector)
+	for(G4int i = 0 ; i < fSD->size() ; i++)
+		(*fSD)[i]->CreateEntry(fCurrentNtuple, rootData);
 	// sd->CreateEntry(rootData, fCurrentNtuple)
 
 	// #ifdef CRTest_DEBUG_OPTICAL
@@ -90,10 +94,10 @@ G4bool Analysis::FillMuonTrackForRun(const G4Track* theMuon){
 
 G4bool Analysis::FillEntryForRun(){
 
-	// [TODO] # fMuon filled with StepAction call Analysis::FillEntryForMuon
-
 	// #for each sd in fCrySD (std::vector)
 	// sd->FillEntry(fCurrentNtuple)
+	for(G4int i = 0 ; i < fSD->size() ; i++)
+		(*fSD)[i]->FillEntry(0, rootData);
 
 	// #ifdef CRTest_DEBUG_OPTICAL
 	// FillNtupleIColumn(fCurrentNtuple, op_debug->nCol[scint,wls,det])
@@ -157,4 +161,16 @@ G4bool Analysis::FillOpPhotonTrackForEvent(
 	rootData->FillNtupleDColumn(fCurrentNtuple, 9, direction.z());
 
 	return rootData->AddNtupleRow(fCurrentNtuple);
+}
+
+G4bool Analysis::RegisterSD(VirtualSD* sd){
+
+	if(std::find(fSD->begin(),fSD->end(),sd)
+		== fSD->end())
+	{
+		fSD->push_back(sd);
+		return true;
+	}
+	else
+		return false;
 }

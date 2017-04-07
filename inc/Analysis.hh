@@ -19,6 +19,7 @@
 #include "g4root.hh"
 
 #include "OpRecorder.hh"
+#include "VirtualSD.hh"
 
 #include "G4Track.hh"
 #include "G4Event.hh"
@@ -84,7 +85,7 @@ public:
 		const G4Track* theTrack, OpPhotonType type);
 	G4bool FillEntryForRun();
 	
-	// [TODO] G4bool RegisterSD(CrySD*);
+	G4bool RegisterSD(VirtualSD*);
 
 private:
 	static Analysis* fgInstance;
@@ -92,8 +93,10 @@ private:
 private:
 	G4RootAnalysisManager* rootData;
 	G4int fCurrentNtuple;
-	// [TODO] std::vector<CRTestSD*> fCRTestSD;
+
 	_Muon* fMuon;
+
+	std::vector<VirtualSD*>* fSD;
 };
 
 #endif // CRTest_Analysis_h

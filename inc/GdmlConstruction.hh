@@ -23,6 +23,7 @@ public:
     virtual ~GdmlConstruction();
 
     virtual G4VPhysicalVolume* Construct();
+	virtual void ConstructSDandField();
 
 private:
 	void Init();
