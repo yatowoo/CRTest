@@ -156,6 +156,7 @@ namespace ana {
 		return rootData->AddNtupleRow(ntupleID);
 	}
 
+	static std::vector<double> vTest;
 	static G4bool CreateNtupleForRun(){
 		if(CURRENT_NTUPLE != -1) return false;
 		
@@ -177,6 +178,12 @@ namespace ana {
 
 		// TODO : Replace with SD method
 		rootData->CreateNtupleDColumn(ntupleID, RunColName[EnergyDeposit]);	
+
+		// DEBUG
+		vTest.push_back(1.0);
+		vTest.push_back(2.0);
+
+		rootData->CreateNtupleDColumn(ntupleID, "test", vTest);
 
 		rootData->FinishNtuple(ntupleID);
 
