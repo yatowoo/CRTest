@@ -40,9 +40,6 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 void RunAction::EndOfRunAction(const G4Run* aRun)
 {
     // Write data to file
-    //G4AnalysisManager* rootData = G4AnalysisManager::Instance();
-    //rootData->Write();
-    //rootData->CloseFile();
 	Analysis::Instance()->SaveFile();
 
     G4cout << "[-] INFO - Run " << aRun->GetRunID()

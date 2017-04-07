@@ -56,7 +56,7 @@ void StepAction::UserSteppingAction(const G4Step *aStep)
     //
     // Boundary Check
     //
-	ana::VertexType type = ana::Final;
+	OpPhotonType type = OpPhotonType::Nothing;
     if (thePostPoint->GetStepStatus() == fGeomBoundary)
 	{
         assert(theProcess->GetProcessName() == "OpBoundary");
@@ -69,27 +69,27 @@ void StepAction::UserSteppingAction(const G4Step *aStep)
 			if (thePrePV->GetName() == "Detector_PV" &&
 				thePostPV->GetName() == "Groove_PV")
 			{
-				type = ana::Scint2Groove;
+				type = Scint2Groove;
 				Recorder->nScint2Groove ++;
 
 			}
 			else if (thePrePV->GetName() == "Groove_PV" &&
 				thePostPV->GetName() == "Cladding_PV")
 			{
-				type = ana::Groove2Cladding;
+				type = Groove2Cladding;
 				Recorder->nGroove2Cladding += 1;
 			}
 			else if (thePrePV->GetName() == "Cladding_PV" &&
 				thePostPV->GetName() == "Core_PV")
 			{
-				type = ana::Cladding2Core;
+				type = Cladding2Core;
 				Recorder->nCladding2Core += 1;
 			}
 			// TODO : REMOVE after GDML setup completed
 			else if (thePrePV->GetName() == "Groove_PV" &&
 				thePostPV->GetName() == "Core_PV")
 			{
-				type = ana::Groove2Cladding;
+				type = Groove2Cladding;
 				Recorder->nGroove2Cladding += 1;
 			}
 		}
@@ -97,7 +97,7 @@ void StepAction::UserSteppingAction(const G4Step *aStep)
                  thePostPV->GetName() == "PMT_PV")
         {
 			// OpPhoton hit PMT photocathode
-            type = ana::Fiber2Pmt;
+            type = Fiber2Pmt;
             Recorder->nCore2PMT += 1;
             if (status == Detection)
 				Recorder->nDetection += 1;
@@ -113,8 +113,7 @@ void StepAction::UserSteppingAction(const G4Step *aStep)
             return;
         }
     }
-	if(type != ana::Final)
-		ana::FillVertexForEvent(theTrack, type);
+	Analysis::Instance()->FillOpPhotonTrackForEvent(theTrack, type);
 }
 
 G4bool StepAction::BoundaryStats(G4OpBoundaryProcess *boundary)

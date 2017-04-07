@@ -7,9 +7,6 @@
 
 #include "globals.hh"
 
-// REMOVE after class Analysis COMPLETED
-int ana::CURRENT_NTUPLE = -1;
-
 Analysis* Analysis::fgInstance = NULL;
 
 Analysis::Analysis()
@@ -91,9 +88,9 @@ G4bool Analysis::FillMuonTrackForRun(const G4Track* theMuon){
 	return true;
 }
 
-G4bool Analysis::FillEntryForRun(const G4Event* theEvent){
+G4bool Analysis::FillEntryForRun(){
 
-	// # fMuon filled with StepAction call Analysis::FillEntryForMuon
+	// [TODO] # fMuon filled with StepAction call Analysis::FillEntryForMuon
 
 	// #for each sd in fCrySD (std::vector)
 	// sd->FillEntry(fCurrentNtuple)
@@ -109,4 +106,55 @@ G4bool Analysis::FillEntryForRun(const G4Event* theEvent){
 	fMuon = new _Muon;
 
 	return true;
+}
+
+G4int Analysis::CreateNtupleForEvent(G4int eventID){
+	
+	if(fCurrentNtuple < 0) return -1;
+	
+	G4int ntupleID = rootData->CreateNtuple(
+		"Event"+std::to_string(eventID),
+		"Storege Event Vertex.");
+
+	rootData->CreateNtupleIColumn(ntupleID, "type");  // id = 0
+	rootData->CreateNtupleIColumn(ntupleID, "id"); // id = 1
+	rootData->CreateNtupleDColumn(ntupleID, "E");	// eV
+	rootData->CreateNtupleDColumn(ntupleID, "t");	// ns
+	rootData->CreateNtupleDColumn(ntupleID, "x"); // cm
+	rootData->CreateNtupleDColumn(ntupleID, "y");	// cm
+	rootData->CreateNtupleDColumn(ntupleID, "z");	// cm
+	rootData->CreateNtupleDColumn(ntupleID, "px");
+	rootData->CreateNtupleDColumn(ntupleID, "py");
+	rootData->CreateNtupleDColumn(ntupleID, "pz");
+
+	rootData->FinishNtuple(ntupleID);
+
+	fCurrentNtuple = ntupleID;
+	return ntupleID;
+}
+
+G4bool Analysis::FillOpPhotonTrackForEvent(
+	const G4Track* theTrack, OpPhotonType type)
+{
+	if(std::find(TypeList.begin(),TypeList.end(),type)
+		== TypeList.end())
+		return false;
+
+	rootData->FillNtupleIColumn(fCurrentNtuple, 0, type);
+	rootData->FillNtupleIColumn(fCurrentNtuple, 1, theTrack->GetTrackID());
+
+	rootData->FillNtupleDColumn(fCurrentNtuple, 2, theTrack->GetKineticEnergy() / eV);
+	rootData->FillNtupleDColumn(fCurrentNtuple, 3, theTrack->GetGlobalTime());
+
+	G4ThreeVector position = theTrack->GetPosition();
+	rootData->FillNtupleDColumn(fCurrentNtuple, 4, position.x()/ cm);
+	rootData->FillNtupleDColumn(fCurrentNtuple, 5, position.y()/ cm);
+	rootData->FillNtupleDColumn(fCurrentNtuple, 6, position.z()/ cm);
+
+	G4ThreeVector direction = theTrack->GetMomentumDirection();
+	rootData->FillNtupleDColumn(fCurrentNtuple, 7, direction.x());
+	rootData->FillNtupleDColumn(fCurrentNtuple, 8, direction.y());
+	rootData->FillNtupleDColumn(fCurrentNtuple, 9, direction.z());
+
+	return rootData->AddNtupleRow(fCurrentNtuple);
 }
