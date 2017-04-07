@@ -35,8 +35,8 @@ void EventAction::BeginOfEventAction(const G4Event *anEvent)
     OpRecorder* Recorder = OpRecorder::Instance();
     Recorder->Reset();
 
-	G4int ntupleID = Analysis::Instance()->CreateNtupleForEvent(eventID);
-		//ana::CreateNtupleForEvent(eventID);
+	G4int ntupleID = 
+		Analysis::Instance()->CreateNtupleForEvent(eventID);
 	assert(ntupleID == eventID + 1);
 	G4cout << " | + Create Event Vertex Ntuple " << ntupleID << G4endl;
 }
@@ -60,8 +60,7 @@ void EventAction::EndOfEventAction(const G4Event *anEvent)
         sdEdep += (*cryHC)[i]->GetEdep();
     }
 
-	//ana::FillOutputForRun(anEvent, sdEdep);
-	Analysis::Instance()->FillEntryForRun(anEvent);
+	Analysis::Instance()->FillEntryForRun();
 
     G4cout << "[-] INFO - Event " << anEvent->GetEventID()
            << " ends. - by EventAction" << G4endl;

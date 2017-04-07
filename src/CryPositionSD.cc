@@ -11,7 +11,7 @@
 #include "G4ios.hh"
 
 CryPositionSD::CryPositionSD(G4String &name)
-    : G4VSensitiveDetector(name), fHCID(0)
+    : VirtualSD(name), fHCID(0)
 {
     collectionName.insert("CryHC");
 }
