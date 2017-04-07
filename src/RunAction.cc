@@ -15,12 +15,14 @@ RunAction::RunAction()
     G4RunManager::GetRunManager()->SetPrintProgress(1);
 
     // Initialize .root file
-	ana::CreateNtupleForRun();
+	//ana::CreateNtupleForRun();
+	Analysis::Instance()->CreateNtupleForRun();
 }
 
 RunAction::~RunAction()
 {
-    delete G4AnalysisManager::Instance();
+    //delete G4AnalysisManager::Instance();
+	delete Analysis::Instance();
 	G4cout << "[-] INFO - RunAction deleted. " << G4endl;
 }
 
@@ -30,17 +32,18 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
         << " begins. - by RunAction" << G4endl;
     
     // Initialize .root file
-    G4AnalysisManager* rootData = G4AnalysisManager::Instance();
+    //G4AnalysisManager* rootData = G4AnalysisManager::Instance();
 
-    rootData->OpenFile();
+    Analysis::Instance()->OpenFile();
 }
 
 void RunAction::EndOfRunAction(const G4Run* aRun)
 {
     // Write data to file
-    G4AnalysisManager* rootData = G4AnalysisManager::Instance();
-    rootData->Write();
-    rootData->CloseFile();
+    //G4AnalysisManager* rootData = G4AnalysisManager::Instance();
+    //rootData->Write();
+    //rootData->CloseFile();
+	Analysis::Instance()->SaveFile();
 
     G4cout << "[-] INFO - Run " << aRun->GetRunID()
         << " ends. - by RunAction" << G4endl;

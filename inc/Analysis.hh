@@ -233,6 +233,17 @@ enum VertexType{
 class CryPostionSD;
 //class PmtSD;
 
+typedef struct MuonTrack{
+	std::vector<double> Ek;
+	std::vector<double> time;
+	std::vector<double> x;
+	std::vector<double> y;
+	std::vector<double> z;
+	std::vector<double> px;
+	std::vector<double> py;
+	std::vector<double> pz;
+}_Muon;
+
 class Analysis {
 public:
 	Analysis();
@@ -240,14 +251,19 @@ public:
 public:
 	static Analysis* Instance();
 	
+	G4bool OpenFile();
+	G4bool SaveFile();
+
 	G4int CreateNtupleForEvent(G4int eventID);
 	G4bool CreateNtupleForRun();
+
+	G4bool FillMuonTrackForRun(G4Track* theMuon);
+
 	G4bool FillVertexForEvent(
 		const G4Track* theTrack, VertexType type);
-	G4bool FillOutputForRun(const G4Event* theEvent, G4double sdEdep);
+	G4bool FillEntryForRun(const G4Event* theEvent);
 	
-	G4bool RegisterPostionSD(CryPostionSD*,G4int num);
-	//G4bool RegisterPmtSD(PmtSD*,G4int num);
+	//G4bool RegisterSD(CrySD*);
 
 private:
 	static Analysis* fgInstance;
@@ -255,6 +271,8 @@ private:
 private:
 	G4RootAnalysisManager* rootData;
 	G4int fCurrentNtuple;
+	//std::vector<CrySD*> fCrySD;
+	_Muon* fMuon;
 };
 
 #endif // CRTest_Analysis_h

@@ -42,6 +42,11 @@ void StepAction::UserSteppingAction(const G4Step *aStep)
 
     const G4VProcess *theProcess = fpSteppingManager->GetfCurrentProcess();
 
+	if (theTrack->GetParentID() == 0 &&
+		(aStep->IsFirstStepInVolume() || aStep->IsLastStepInVolume())
+	)
+		Analysis::Instance()->FillMuonTrackForRun(theTrack);
+
     //  for Optical
     if (theTrack->GetParticleDefinition() !=
         G4OpticalPhoton::OpticalPhotonDefinition())

@@ -59,7 +59,8 @@ void EventAction::EndOfEventAction(const G4Event *anEvent)
         sdEdep += (*cryHC)[i]->GetEdep();
     }
 
-	ana::FillOutputForRun(anEvent, sdEdep);
+	//ana::FillOutputForRun(anEvent, sdEdep);
+	Analysis::Instance()->FillEntryForRun(anEvent);
 
     G4cout << "[-] INFO - Event " << anEvent->GetEventID()
            << " ends. - by EventAction" << G4endl;
