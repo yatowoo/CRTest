@@ -44,8 +44,6 @@ enum OpPhotonType{
 
 // add option for each type 
 static std::vector<OpPhotonType> TypeList = {
-	Cladding2Core,
-	OpWLS,
 	Fiber2Pmt,
 	Photocathode
 };
@@ -97,6 +95,8 @@ private:
 	_Muon* fMuon;
 
 	std::vector<VirtualSD*>* fSD;
+
+	G4int fOpticalFirstColID;
 };
 
 #endif // CRTest_Analysis_h

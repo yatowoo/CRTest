@@ -26,15 +26,11 @@
 	<eltube aunit="radian" lunit="mm" name="grooveS" dx="0.5" dy="0.5" dz="30" />
 	<eltube aunit="radian" lunit="mm" name="coreS" dx="0.48" dy="0.48" dz="30" />
 	<eltube aunit="radian" lunit="mm" name="pmtS" dx="0.48" dy="0.48" dz="1" />  
-  <opticalsurface name="scint_surf" model="unified" finish="ground" type="dielectric_dielectric" value="0.01"/>
+  <opticalsurface name="scint_surf" model="glisur" finish="polished" type="dielectric_dielectric" value="0.01"/>
   <opticalsurface name="photocath" model="unified" finish="ground" type="dielectric_dielectric" value="0.01"/>
 </solids>
 
 <structure>
-  <volume name="Target">
-    <materialref ref="G4_AIR" />
-    <solidref ref="targetS" />
-  </volume>
   <volume name="PMT">
     <materialref ref="AIR" />
     <solidref ref="pmtS" />
@@ -80,10 +76,6 @@
     <physvol>
         <volumeref ref="Detector" />
         <positionref ref="detectorPos" />
-    </physvol>
-    <physvol>
-        <volumeref ref="Target" />
-        <positionref ref="targetPos" />
     </physvol>
   </volume>
 

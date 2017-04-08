@@ -10,7 +10,8 @@
 Analysis* Analysis::fgInstance = NULL;
 
 Analysis::Analysis()
-	: fCurrentNtuple(-1), fMuon(NULL), fSD(NULL)
+	: fCurrentNtuple(-1), fMuon(NULL), fSD(NULL),
+	fOpticalFirstColID(-1)
 {
 	rootData = G4RootAnalysisManager::Instance();
 	rootData->SetFileName("CRTest");
@@ -67,6 +68,14 @@ G4bool Analysis::CreateNtupleForRun(){
 	// #ifdef CRTest_DEBUG_OPTICAL
 	// CreateNtupleIColumn(fCurrentNtuple, "op.[scint,wls,det]")
 		// or Call OpRecorder::CreateEntry ?
+	fOpticalFirstColID = 
+		rootData->CreateNtupleIColumn(fCurrentNtuple, "op.scint");
+	rootData->CreateNtupleIColumn(fCurrentNtuple, "op.groove");
+	rootData->CreateNtupleIColumn(fCurrentNtuple, "op.fiber");
+	rootData->CreateNtupleIColumn(fCurrentNtuple, "op.wls");
+	rootData->CreateNtupleIColumn(fCurrentNtuple, "op.pmt");
+	rootData->CreateNtupleIColumn(fCurrentNtuple, "op.det");
+
 
 	return true;
 }
@@ -102,6 +111,14 @@ G4bool Analysis::FillEntryForRun(){
 	// #ifdef CRTest_DEBUG_OPTICAL
 	// FillNtupleIColumn(fCurrentNtuple, op_debug->nCol[scint,wls,det])
 		// or Call OpRecorder::FillEntry ?
+	G4int colID = fOpticalFirstColID;
+	OpRecorder* Rec = OpRecorder::Instance();
+	rootData->FillNtupleIColumn(0,colID,Rec->nScintTotal);
+	rootData->FillNtupleIColumn(0,colID+1,Rec->nScint2Groove);
+	rootData->FillNtupleIColumn(0,colID+2,Rec->nGroove2Cladding);
+	rootData->FillNtupleIColumn(0,colID+3,Rec->nWlsEmit);
+	rootData->FillNtupleIColumn(0,colID+4,Rec->nCore2PMT);
+	rootData->FillNtupleIColumn(0,colID+5,Rec->nDetection);
 
 	rootData->AddNtupleRow();
 

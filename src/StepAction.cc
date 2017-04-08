@@ -99,8 +99,10 @@ void StepAction::UserSteppingAction(const G4Step *aStep)
 			// OpPhoton hit PMT photocathode
             type = Fiber2Pmt;
             Recorder->nCore2PMT += 1;
-            if (status == Detection)
+            if (status == Detection){
+				type = Photocathode;
 				Recorder->nDetection += 1;
+			}
         }
 		// For Debug boundary details
         else if (thePrePV->GetName() == "Core_PV" &&
