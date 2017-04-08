@@ -24,9 +24,14 @@ public:
 
     virtual G4VPhysicalVolume* Construct();
 	virtual void ConstructSDandField();
+	
+	void DumpStructure();
 
 private:
 	void Init();
+	void DumpVolume(G4VPhysicalVolume* physvol, 
+		G4String prefix, G4bool expanded=true) const;
+
 	void ReadAuxiliary();
 	void PrintAuxiliary(const G4GDMLAuxListType*,G4String);
 	void ReadProperty(const G4GDMLAuxListType*,G4String);
@@ -35,6 +40,8 @@ private:
 
 private:
     G4VPhysicalVolume* fWorldPV;
+	G4LogicalVolume* fPmt;
+
 	G4GDMLParser* fGdml;
 };
 

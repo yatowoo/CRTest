@@ -43,11 +43,11 @@
   <volume name="Core">
     <materialref ref="Y11_PS" />
     <solidref ref="coreS" />
-    <physvol>
+    <physvol copynumber="0">
       <volumeref ref="PMT" />
       <position lunit="mm" z="30"/>
     </physvol>
-    <physvol>
+    <physvol copynumber="1">
       <volumeref ref="PMT" />
       <position lunit="mm" z="-30"/>
     </physvol>
