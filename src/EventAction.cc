@@ -47,19 +47,6 @@ void EventAction::EndOfEventAction(const G4Event *anEvent)
     G4cout << "[+] INFO - Optical Process Track & Record - by EventAction." << G4endl;
     Recorder->Print();
 
-    // Covert Hits info. into data
-    G4int hcID = G4SDManager::GetSDMpointer()
-                     ->GetCollectionID("CryPostionSD/CryHC");
-
-    CryHC *cryHC = static_cast<CryHC *>(
-        anEvent->GetHCofThisEvent()->GetHC(hcID));
-
-    G4double sdEdep = 0.;
-    for (int i = 0; i < cryHC->entries(); i++)
-    {
-        sdEdep += (*cryHC)[i]->GetEdep();
-    }
-
 	Analysis::Instance()->FillEntryForRun();
 
     G4cout << "[-] INFO - Event " << anEvent->GetEventID()

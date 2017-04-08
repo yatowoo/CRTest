@@ -7,6 +7,7 @@
 
 #include "Analysis.hh"
 #include "CryPositionSD.hh"
+#include "PmtSD.hh"
 
 #include "G4GDMLParser.hh"
 #include "G4GDMLAuxStructType.hh"
@@ -82,6 +83,12 @@ void GdmlConstruction::ConstructSDandField(){
 	}
 	if(fPmt){
 		// Create, Set & Register PmtSD
+		G4String sdName = "PmtSD";
+		PmtSD* pmtSD = new PmtSD(sdName);
+
+		SetSensitiveDetector(fPmt, pmtSD);
+
+		Analysis::Instance()->RegisterSD(pmtSD);
 	}
 	return;
 }
