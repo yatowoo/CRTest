@@ -16,9 +16,6 @@
 
 #include "G4ParticleDefinition.hh"
 #include "G4OpticalPhoton.hh"
-
-#include "G4ProcessManager.hh"
-#include "G4Scintillation.hh"
 #include "G4OpBoundaryProcess.hh"
 
 #include "G4SystemOfUnits.hh"
@@ -29,7 +26,7 @@ StepAction::StepAction()
 
 StepAction::~StepAction()
 {
-	G4cout << "[-] INFO - StepAction deleted. " << G4endl;
+    G4cout << "[-] INFO - StepAction deleted. " << G4endl;
 }
 
 void StepAction::UserSteppingAction(const G4Step *aStep)
@@ -45,6 +42,12 @@ void StepAction::UserSteppingAction(const G4Step *aStep)
 
     const G4VProcess *theProcess = fpSteppingManager->GetfCurrentProcess();
 
+	// for Muon (primary track)
+	if (theTrack->GetParentID() == 0){
+		Analysis::Instance()->FillMuonTrackForRun(theTrack);
+		return;
+	}
+
     //  for Optical
     if (theTrack->GetParticleDefinition() !=
         G4OpticalPhoton::OpticalPhotonDefinition())
@@ -53,68 +56,66 @@ void StepAction::UserSteppingAction(const G4Step *aStep)
     //
     // Boundary Check
     //
+	OpPhotonType type = OpPhotonType::Nothing;
     if (thePostPoint->GetStepStatus() == fGeomBoundary)
-    {
+	{
         assert(theProcess->GetProcessName() == "OpBoundary");
         G4OpBoundaryProcess *boundary = (G4OpBoundaryProcess *)theProcess;
-        if (thePrePV->GetName() == "Detector_PV" &&
-            thePostPV->GetName() == "Groove_PV")
-        {
-			ana::FillVertexForEvent(theTrack, ana::VertexType::Scint2Groove);
-            Recorder->nScint2Groove += 1;
-            return;
-        }
-        else if (thePrePV->GetName() == "Groove_PV" &&
-                 thePostPV->GetName() == "Cladding_PV")
-        {
-			ana::FillVertexForEvent(theTrack, ana::VertexType::Groove2Cladding);
-            Recorder->nGroove2Cladding += 1;
-            return;
-        }
-        else if (thePrePV->GetName() == "Cladding_PV" &&
-                 thePostPV->GetName() == "Core_PV")
-        {
-			ana::FillVertexForEvent(theTrack, ana::VertexType::Cladding2Core);
-            Recorder->nGroove2Cladding += 1;
-            return;
-        }
+		G4OpBoundaryProcessStatus status = boundary->GetStatus();
+		G4bool gotThrough = 
+			(status == Transmission || status == FresnelRefraction);
+		if(gotThrough){
+			// OpPthoton got through boundary
+			if (thePrePV->GetName() == "Detector_PV" &&
+				thePostPV->GetName() == "Groove_PV")
+			{
+				type = Scint2Groove;
+				Recorder->nScint2Groove ++;
+
+			}
+			else if (thePrePV->GetName() == "Groove_PV" &&
+				thePostPV->GetName() == "Cladding_PV")
+			{
+				type = Groove2Cladding;
+				Recorder->nGroove2Cladding += 1;
+			}
+			else if (thePrePV->GetName() == "Cladding_PV" &&
+				thePostPV->GetName() == "Core_PV")
+			{
+				type = Cladding2Core;
+				Recorder->nCladding2Core += 1;
+			}
+			// TODO : REMOVE after GDML setup completed
+			else if (thePrePV->GetName() == "Groove_PV" &&
+				thePostPV->GetName() == "Core_PV")
+			{
+				type = Groove2Cladding;
+				Recorder->nGroove2Cladding += 1;
+			}
+		}
         else if (thePrePV->GetName() == "Core_PV" &&
                  thePostPV->GetName() == "PMT_PV")
         {
-			ana::FillVertexForEvent(theTrack, ana::VertexType::Fiber2Pmt);
+			// OpPhoton hit PMT photocathode
+            type = Fiber2Pmt;
             Recorder->nCore2PMT += 1;
-            return;
+            if (status == Detection){
+				type = Photocathode;
+				Recorder->nDetection += 1;
+			}
         }
-		else if(boundary->GetStatus() == Detection){
-			Recorder->nDetection +=1;
-			return;
-		}
-		// TODO : REMOVE after GDML setup completed
-        else if (thePrePV->GetName() == "Groove_PV" &&
-                 thePostPV->GetName() == "Core_PV")
-        {
-			ana::FillVertexForEvent(theTrack, ana::VertexType::Groove2Cladding);
-			Recorder->nGroove2Cladding += 1;
-            return;
-        }
-        else if (thePrePV->GetName() == "Core_PV" &&
-                 thePostPV->GetName() == "World_PV")
-        {
-			ana::FillVertexForEvent(theTrack, ana::VertexType::Fiber2Pmt);
-            Recorder->nCore2PMT += 1;
-			//Recorder->nDetection +=1;
-            return;
-        }
+		// For Debug boundary details
         else if (thePrePV->GetName() == "Core_PV" &&
                  thePostPV->GetName() == "Groove_PV")
         {
             Recorder->nDebug += 1;
-			Recorder->SetBoundaryName("Core2Groove");
+            Recorder->SetBoundaryName("Core2Groove");
             BoundaryStats(boundary);
             //theTrack->SetTrackStatus(G4TrackStatus::fStopAndKill);
             return;
         }
     }
+	Analysis::Instance()->FillOpPhotonTrackForEvent(theTrack, type);
 }
 
 G4bool StepAction::BoundaryStats(G4OpBoundaryProcess *boundary)

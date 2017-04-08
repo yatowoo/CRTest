@@ -26,6 +26,13 @@ StackAction::~StackAction()
 G4ClassificationOfNewTrack
 StackAction::ClassifyNewTrack(const G4Track *aTrack)
 {
+	// Record muon
+	if(aTrack->GetParentID() == 0){
+		Analysis::Instance()->FillMuonTrackForRun(aTrack);
+		return fUrgent;
+	}
+
+
     OpRecorder *Recorder = OpRecorder::Instance();
 
 	//Count what process generated the optical photons
@@ -33,19 +40,23 @@ StackAction::ClassifyNewTrack(const G4Track *aTrack)
 	{
 		// particle is secondary
 		if (aTrack->GetCreatorProcess()->GetProcessName() 
-			== "Scintillation"){
-			ana::FillVertexForEvent(aTrack, ana::VertexType::Scintillation);
+			== "Scintillation")
+		{
+			Analysis::Instance()->FillOpPhotonTrackForEvent(
+				aTrack, OpPhotonType::Scintillation);
 			Recorder->nScintTotal++;
 		}
 		else if (aTrack->GetCreatorProcess()->GetProcessName() 
-			== "OpWLS"){
-			ana::FillVertexForEvent(aTrack, ana::VertexType::OpWLS);
+			== "OpWLS")
+		{
+			Analysis::Instance()->FillOpPhotonTrackForEvent(
+				aTrack, OpPhotonType::OpWLS);
 			Recorder->nWlsEmit++;
 		}
 
 	}
 
-    return fUrgent;
+    return fWaiting;
 }
 
 void StackAction::NewStage() {}

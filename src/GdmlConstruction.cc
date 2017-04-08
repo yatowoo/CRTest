@@ -5,6 +5,9 @@
 
 #include "GdmlConstruction.hh"
 
+#include "Analysis.hh"
+#include "CryPositionSD.hh"
+
 #include "G4GDMLParser.hh"
 #include "G4GDMLAuxStructType.hh"
 
@@ -49,9 +52,16 @@ void GdmlConstruction::Init(){
 		  << __FILE__ << " " << __func__ << G4endl;
 	  exit(1);
   }
-  fWorld = fGdml->GetVolume("World");
-  fDetector = fGdml->GetVolume("Detector");
-  fTarget = fGdml->GetVolume("Target");
+  G4LogicalVolumeStore* lvStore = G4LogicalVolumeStore::GetInstance();
+  fWorld = lvStore->GetVolume("World", false);
+  if(!fWorld)
+	  fWorld = fWorldPV->GetLogicalVolume();
+  fDetector = lvStore->GetVolume("Detector",false);
+  fTarget = lvStore->GetVolume("Target", false);
+  fPmt = lvStore->GetVolume("PMT",false);
+  
+  DumpStructure();
+  
   ReadAuxiliary();
 }
 
@@ -60,7 +70,22 @@ G4VPhysicalVolume *GdmlConstruction::Construct()
   return fWorldPV;
 }
 
-// TODO : ADD format check, exception handle and output
+
+void GdmlConstruction::ConstructSDandField(){
+	if(fDetector){
+		G4String sdName = "CryPostionSD";
+		CryPositionSD* crySD = new CryPositionSD(sdName);
+
+		SetSensitiveDetector(fDetector, crySD);
+
+		Analysis::Instance()->RegisterSD(crySD);
+	}
+	if(fPmt){
+		// Create, Set & Register PmtSD
+	}
+	return;
+}
+
 void GdmlConstruction::ReadAuxiliary(){
 	// Volume Auxiliary
 	const G4LogicalVolumeStore* LVstore = G4LogicalVolumeStore::GetInstance();
@@ -238,4 +263,41 @@ G4bool GdmlConstruction::ReadBorderProperty(
 	}
 
 	return true;
+}
+
+void GdmlConstruction::DumpStructure(){
+	G4cout << "[-] INFO - CRTest Geometry Structure : " << G4endl;
+	
+	DumpVolume(fWorldPV," | ");
+}
+
+void GdmlConstruction::DumpVolume(
+	G4VPhysicalVolume* physvol, 
+	G4String prefix, G4bool expanded) const
+{
+	G4ThreeVector pos = physvol->GetTranslation();
+
+	G4cout << prefix << physvol->GetName() 
+		<< "[" << physvol->GetCopyNo() << "] : "
+		<< "Position(" << pos.x() << ", " << pos.y() << ", " << pos.z() << ")"
+		<< G4endl;
+
+	if(!expanded) return;
+
+	G4LogicalVolume* lvptr = physvol->GetLogicalVolume();
+	G4cout << prefix << " + " << lvptr->GetName() << " : ";
+	lvptr->GetSolid()->DumpInfo();
+
+	G4String lastPVName = "";
+	for(int i = 0 ; i < lvptr->GetNoDaughters() ; i++){
+		G4VPhysicalVolume* thePV = lvptr->GetDaughter(i);
+		if(thePV->GetName() != lastPVName){
+			expanded = true;
+			lastPVName = thePV->GetName();
+		}
+		else
+			expanded = false;
+		DumpVolume(thePV, prefix+" | ", expanded);
+	}
+
 }

@@ -15,7 +15,7 @@
 #ifndef CRTest_CryPositionSD_h
 #define CRTest_CryPositionSD_h
 
-#include "G4VSensitiveDetector.hh"
+#include "VirtualSD.hh"
 
 #include "CryHit.hh"
 
@@ -25,17 +25,27 @@
 
 #include "G4String.hh"
 
-class CryPositionSD : public G4VSensitiveDetector {
+class CryPositionSD : public VirtualSD {
 
 public:
     CryPositionSD(G4String& name);
     virtual ~CryPositionSD();
 public:
     virtual void Initialize(G4HCofThisEvent* hce);
-    virtual G4bool ProcessHits(G4Step* aStep, G4TouchableHistory* roHist);
+    virtual G4bool ProcessHits(
+		G4Step* aStep, G4TouchableHistory* roHist);
+	virtual void EndOfEvent(G4HCofThisEvent* hce);
+
+	virtual void CreateEntry(
+		G4int ntupleID, G4RootAnalysisManager* rootData);
+	virtual void FillEntry(
+		G4int ntupleID, G4RootAnalysisManager* rootData);
 private:
     G4int fHCID;
     CryHC* fHC;
+
+	G4int fFirstColID;
+	std::vector<double>* fEdep;
 };
 
 #endif /*CRTest_CryPositionSD_h*/

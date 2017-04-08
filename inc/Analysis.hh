@@ -19,6 +19,7 @@
 #include "g4root.hh"
 
 #include "OpRecorder.hh"
+#include "VirtualSD.hh"
 
 #include "G4Track.hh"
 #include "G4Event.hh"
@@ -28,187 +29,74 @@
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"
 
-namespace ana {
-	// TODO : Wrap by class Analysis with static & Instance()
-	extern int CURRENT_NTUPLE;
+//
+// [TODO] #ifdef CRTest_DEBUG_OPTICAL_MORE
+enum OpPhotonType{
+	Nothing = 0,
+	Scintillation,
+	Scint2Groove,
+	Groove2Cladding,
+	Cladding2Core,
+	OpWLS,
+	Fiber2Pmt,
+	Photocathode
+};
 
-	enum RunCol {
-		PRIMARY_E = 0,
-		PRIMARY_X = 1,
-		PRIMARY_Y = 2,
-		PRIMARY_Z = 3,
-		PRIMARY_PX = 4,
-		PRIMARY_PY = 5,
-		PRIMARY_PZ = 6,
-		NUM_SCINT = 7,
-		NUM_WLS = 8,
-		NUM_DETECTION = 9,
-		END = NUM_DETECTION +1,
-		EnergyDeposit = 10 // TODO : Create new method to register SD col
-	};
+// add option for each type 
+static std::vector<OpPhotonType> TypeList = {
+	Fiber2Pmt,
+	Photocathode
+};
+// #endif CRTest_DEBUG_OPTICAL_MORE
+//
 
-	static const char* RunColName[] =
-	{
-		"pri.E",
-		"pri.x",
-		"pri.y",
-		"pri.z",
-		"pri.px",
-		"pri.py",
-		"pri.pz",
-		"op.scint",
-		"op.wls",
-		"op.det",
-		"sd.Edep"
-	};
+class CryPostionSD;
+//[TODO] class PmtSD;
 
-	enum VertexType{
-		Primary = 0,
-		Final = 1,
-		Scintillation = 2,
-		Scint2Groove = 3,
-		Groove2Cladding = 4,
-		Cladding2Core = 5,
-		OpWLS = 6,
-		Fiber2Pmt = 7,
-		PmtSD = 8
-	};
+typedef struct MuonTrack{
+	std::vector<double> Ek;	// GeV
+	std::vector<double> time;	// ns
+	std::vector<double> x;	// cm
+	std::vector<double> y;
+	std::vector<double> z;
+	std::vector<double> px;	// direction
+	std::vector<double> py;
+	std::vector<double> pz;
+}_Muon;
 
-	enum VertexInfoID {
-		Type, // 0
-		TrackID,
-		Energy,
-		Time,
-		PositionX,
-		PositionY,
-		PositionZ,
-		DirectionX,
-		DirectionY,
-		DirectionZ	// 9
-	};
+class Analysis {
+public:
+	Analysis();
+	~Analysis();
+public:
+	static Analysis* Instance();
+	
+	G4bool OpenFile();
+	G4bool SaveFile();
 
-	static const char* VertexInfoName[] =
-	{
-		"type",		// VertexType == VertexID
-		"trackID",	// TrackID to idendtify track
-		"Ek",		// Kinetic Energy
-		"time",		// Global Time
-		"x",		// PositionX
-		"y",		// PositionY
-		"z",		// PositionZ
-		"px",		// DirectionX
-		"py",		// DirectionY
-		"pz"		// DirectionZ
-	};
+	G4int CreateNtupleForEvent(G4int eventID);
+	G4bool CreateNtupleForRun();
 
-	static G4bool FillOutputForRun(const G4Event* theEvent, G4double sdEdep)
-	{
-		if(CURRENT_NTUPLE <= 0) return false;
-		G4int ntupleID = 0;
+	G4bool FillMuonTrackForRun(const G4Track* theMuon);
 
-		G4AnalysisManager* rootData = G4AnalysisManager::Instance();
+	G4bool FillOpPhotonTrackForEvent(
+		const G4Track* theTrack, OpPhotonType type);
+	G4bool FillEntryForRun();
+	
+	G4bool RegisterSD(VirtualSD*);
 
-		G4PrimaryVertex *priV = theEvent->GetPrimaryVertex();
-		G4PrimaryParticle *priP = priV->GetPrimary();
-		rootData->FillNtupleDColumn(ntupleID, PRIMARY_E, priP->GetKineticEnergy() / MeV);
-		rootData->FillNtupleDColumn(ntupleID, PRIMARY_X, priV->GetX0() / cm);
-		rootData->FillNtupleDColumn(ntupleID, PRIMARY_X, priV->GetX0() / cm);
-		rootData->FillNtupleDColumn(ntupleID, PRIMARY_Y, priV->GetY0() / cm);
-		rootData->FillNtupleDColumn(ntupleID, PRIMARY_Z, priV->GetZ0() / cm);
-		rootData->FillNtupleDColumn(ntupleID, PRIMARY_PX, priP->GetPx() );
-		rootData->FillNtupleDColumn(ntupleID, PRIMARY_PY, priP->GetPy() );
-		rootData->FillNtupleDColumn(ntupleID, PRIMARY_PZ, priP->GetPz() );
+private:
+	static Analysis* fgInstance;
 
-		OpRecorder* Recorder = OpRecorder::Instance();
-		rootData->FillNtupleIColumn(ntupleID, NUM_SCINT, Recorder->nScintTotal);
-		rootData->FillNtupleIColumn(ntupleID, NUM_WLS, Recorder->nWlsEmit);
-		rootData->FillNtupleIColumn(ntupleID, NUM_DETECTION, Recorder->nDetection);
+private:
+	G4RootAnalysisManager* rootData;
+	G4int fCurrentNtuple;
 
-		// TODO : SD method
-		rootData->FillNtupleDColumn(ntupleID, EnergyDeposit, sdEdep / MeV);
+	_Muon* fMuon;
 
-		return rootData->AddNtupleRow(ntupleID);
-	}
+	std::vector<VirtualSD*>* fSD;
 
-	static G4bool FillVertexForEvent(const G4Track* theTrack, VertexType type){
-		if(CURRENT_NTUPLE <= 0)
-			return false;
-		G4int ntupleID = CURRENT_NTUPLE;
-
-		G4AnalysisManager* rootData = G4AnalysisManager::Instance();
-
-		rootData->FillNtupleIColumn(ntupleID, Type, type);
-		rootData->FillNtupleIColumn(ntupleID, TrackID, theTrack->GetTrackID());
-
-		rootData->FillNtupleDColumn(ntupleID, Energy, theTrack->GetKineticEnergy() / eV);
-		rootData->FillNtupleDColumn(ntupleID, Time, theTrack->GetGlobalTime());
-		
-		G4ThreeVector position = theTrack->GetPosition();
-		rootData->FillNtupleDColumn(ntupleID, PositionX, position.x()/ cm);
-		rootData->FillNtupleDColumn(ntupleID, PositionY, position.y()/ cm);
-		rootData->FillNtupleDColumn(ntupleID, PositionZ, position.z()/ cm);
-
-		G4ThreeVector direction = theTrack->GetMomentumDirection();
-		rootData->FillNtupleDColumn(ntupleID, DirectionX, direction.x()/ cm);
-		rootData->FillNtupleDColumn(ntupleID, DirectionY, direction.y()/ cm);
-		rootData->FillNtupleDColumn(ntupleID, DirectionZ, direction.z()/ cm);
-
-		return rootData->AddNtupleRow(ntupleID);
-	}
-
-	static G4bool CreateNtupleForRun(){
-		if(CURRENT_NTUPLE != -1) return false;
-		
-		G4AnalysisManager *rootData = G4AnalysisManager::Instance();
-		
-		G4int ntupleID = rootData->CreateNtuple(
-			"Run", "Run sammary & SD output");
-
-		rootData->CreateNtupleDColumn(ntupleID, RunColName[PRIMARY_E]);  // id = 0
-		rootData->CreateNtupleDColumn(ntupleID, RunColName[PRIMARY_X]); // id = 1
-		rootData->CreateNtupleDColumn(ntupleID, RunColName[PRIMARY_Y]);
-		rootData->CreateNtupleDColumn(ntupleID, RunColName[PRIMARY_Z]);	// eV
-		rootData->CreateNtupleDColumn(ntupleID, RunColName[PRIMARY_PX]);	// ns
-		rootData->CreateNtupleDColumn(ntupleID, RunColName[PRIMARY_PY]); // cm
-		rootData->CreateNtupleDColumn(ntupleID, RunColName[PRIMARY_PZ]);	// cm
-		rootData->CreateNtupleIColumn(ntupleID, RunColName[NUM_SCINT]);
-		rootData->CreateNtupleIColumn(ntupleID, RunColName[NUM_WLS]);
-		rootData->CreateNtupleIColumn(ntupleID, RunColName[NUM_DETECTION]);	// id = NUM_DETECTION
-
-		// TODO : Replace with SD method
-		rootData->CreateNtupleDColumn(ntupleID, RunColName[EnergyDeposit]);	
-
-		rootData->FinishNtuple(ntupleID);
-
-		CURRENT_NTUPLE = ntupleID;		
-		
-		return true;
-	}
-	static G4int CreateNtupleForEvent(G4int eventID){
-
-		G4AnalysisManager *rootData = G4AnalysisManager::Instance();
-		
-		G4int ntupleID = rootData->CreateNtuple(
-			"Event"+std::to_string(eventID),
-			"Storege Event Vertex.");
-
-		rootData->CreateNtupleIColumn(ntupleID, VertexInfoName[Type]);  // id = 0
-		rootData->CreateNtupleIColumn(ntupleID, VertexInfoName[TrackID]); // id = 1
-		rootData->CreateNtupleDColumn(ntupleID, VertexInfoName[Energy]);	// eV
-		rootData->CreateNtupleDColumn(ntupleID, VertexInfoName[Time]);	// ns
-		rootData->CreateNtupleDColumn(ntupleID, VertexInfoName[PositionX]); // cm
-		rootData->CreateNtupleDColumn(ntupleID, VertexInfoName[PositionY]);	// cm
-		rootData->CreateNtupleDColumn(ntupleID, VertexInfoName[PositionZ]);	// cm
-		rootData->CreateNtupleDColumn(ntupleID, VertexInfoName[DirectionX]);
-		rootData->CreateNtupleDColumn(ntupleID, VertexInfoName[DirectionY]);
-		rootData->CreateNtupleDColumn(ntupleID, VertexInfoName[DirectionZ]);	// id = DirectionZ
-
-		rootData->FinishNtuple(ntupleID);
-
-		CURRENT_NTUPLE = ntupleID;
-		return ntupleID;
-	}
-
-} // namespace ana
+	G4int fOpticalFirstColID;
+};
 
 #endif // CRTest_Analysis_h

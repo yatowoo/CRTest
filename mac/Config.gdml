@@ -3,7 +3,7 @@
 <!-- This file should be refered in <define></define>-->
 
 	<variable name="fiberX" value="0" />
-  <position name="targetPos" unit="cm" x="0" y="0" z="1" />
+  <position name="targetPos" unit="cm" x="-1" y="-1" z="1" />
   <position name="detectorPos" unit="cm" x="0" y="0" z="0" />
 	<position name="fiberPos" unit="mm" x="5" y="0" z="-4" />
 	<rotation name="fiberRot" x="90" unit="deg" />

@@ -96,7 +96,9 @@
                                           2.589*eV	2074.*mm
                                           2.536*eV	8178.*mm"/>
  
-  <matrix name="OpWrapper_Scint_ROUGHNESS" coldim="1" values="0.5"/>
+  <matrix name="OpWrapper_Scint_ROUGHNESS" coldim="1" values="0.01"/>
+  <matrix name="OpWrapper_Scint_SPIKE" coldim="1" values="0.7"/>  
+  <matrix name="OpWrapper_Scint_LOBE" coldim="1" values="0.3"/>
 
   <matrix name="OpBorder_PMT_EFFICIENCY" coldim="2" values="2.6*eV 0.2"/>
   <matrix name="OpBorder_PMT_REFLECTIVITY" coldim="2" values="2.6*eV 0."/>
