@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE gdml [ 
+<!ENTITY Config SYSTEM "Config_SingleSlab.gdml">
+<!ENTITY Property SYSTEM "Property.gdml">
+<!ENTITY Material SYSTEM "Material.gdml">
+]>
+
+<gdml xmlns:gdml="http://gdml.web.cern.ch/GDML/"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="file:///schema/gdml.xsd">
+
+<define>
+  &Config;
+  &Property;
+</define>
+
+<materials>
+  &Material;
+</materials>
+
+<solids>
+  <box lunit="mm" name="detectorS" x="detectorX" y="detectorY" z="detectorZ" />
+  <box lunit="mm" name="worldS" x="worldX" y="worldY" z="worldZ" />
+  <box lunit="mm" name="grooveS" x="grooveWidth" y="detectorY" z="grooveDepth" />
+  <eltube lunit="mm" name="coreS" dx="coreR" dy="coreR" dz="fiberL/2" />
+  <eltube lunit="mm" name="claddingS" dx="claddingR" dy="claddingR" dz="fiberL/2" />
+  <eltube lunit="mm" name="pmtS" dx="claddingR" dy="claddingR" dz="1" />  
+  <opticalsurface name="scint_surf" model="unified" finish="ground" type="dielectric_dielectric" value="0.01"/>
+  <opticalsurface name="photocath" model="unified" finish="ground" type="dielectric_dielectric" value="0.01"/>
+</solids>
+
+<structure>
+  <volume name="PMT">
+    <materialref ref="AIR" />
+    <solidref ref="pmtS" />
+  </volume>
+
+  <volume name="Core">
+    <materialref ref="Y11_PS" />
+    <solidref ref="coreS" />
+    <physvol copynumber="0">
+      <volumeref ref="PMT" />
+      <position lunit="mm" z="fiberL/2"/>
+    </physvol>
+    <physvol copynumber="1">
+      <volumeref ref="PMT" />
+      <position lunit="mm" z="-fiberL/2"/>
+    </physvol>
+  </volume>
+  
+  <volume name="Groove">
+    <materialref ref="AIR" />
+    <solidref ref="grooveS" />
+    <physvol>
+      <volumeref ref="Core" />
+      <rotation name="fiberRot" x="90" unit="deg" />
+      <position z="grooveDepth/2-claddingR"/>
+    </physvol>
+  </volume>
+
+  <volume name="Detector">
+    <materialref ref="PVT" />
+    <solidref ref="detectorS" />
+		<loop for="idxX" to="fiberN-1" step="1">
+      <physvol copynumber="idxX">
+        <volumeref ref="Groove" />
+        <position unit="mm" x="fiberXstep*idxX+fiberX" y="0" z="(-detectorZ+grooveDepth)/2" />
+      </physvol>
+		</loop>
+		<loop for="idxY" to="fiberN-1" step="1">
+      <physvol copynumber="idxY+fiberN">
+        <volumeref ref="Groove" />
+        <rotation name="grooveRotY" y="180" z="90" unit="deg" />
+        <position unit="mm" x="0" y="fiberXstep*idxY+fiberX" z="(detectorZ-grooveDepth)/2" />
+      </physvol>
+		</loop>
+  </volume>
+
+  <volume name="World">
+    <materialref ref="AIR" />
+    <solidref ref="worldS" />
+    <physvol>
+        <volumeref ref="Detector" />
+        <positionref ref="detectorPos" />
+    </physvol>
+  </volume>
+
+  <skinsurface name="skin" surfaceproperty="scint_surf" >
+    <volumeref ref="Detector"/>
+  </skinsurface>
+  <bordersurface name="border" surfaceproperty="scint_surf" >
+    <physvolref ref="Detector_PV"/>
+    <physvolref ref="Groove_PV"/>
+  </bordersurface>
+
+  <bordersurface name="pmt_border" surfaceproperty="photocath" >
+    <physvolref ref="Core_PV"/>
+    <physvolref ref="PMT_PV"/>
+  </bordersurface>
+
+
+</structure>
+
+  <userinfo>
+    <auxiliary auxtype="Property">
+      <auxiliary auxtype="Skin" auxvalue="ScintWrapper">
+        <auxiliary auxtype="SurfaceName" auxvalue="scint_surf" />
+        <auxiliary auxtype="LVname" auxvalue="Detector" />
+        <auxiliary auxtype="Material" auxvalue="OpWrapper_Scint" />
+      </auxiliary>
+
+      <auxiliary auxtype="Border" auxvalue="ScintFiber">
+        <auxiliary auxtype="SurfaceName" auxvalue="scint_surf"/>
+        <auxiliary auxtype="PVname" auxvalue="Detector_PV" />
+        <auxiliary auxtype="PVname" auxvalue="Groove_PV" />
+        <auxiliary auxtype="Material" auxvalue="OpWrapper_Scint"/>
+      </auxiliary>
+
+      <auxiliary auxtype="Border" auxvalue="Photocathode">
+        <auxiliary auxtype="SurfaceName" auxvalue="photocath"/>
+        <auxiliary auxtype="PVname" auxvalue="Core_PV" />
+        <auxiliary auxtype="PVname" auxvalue="PMT_PV" />
+        <auxiliary auxtype="Material" auxvalue="OpBorder_PMT"/>
+      </auxiliary>
+
+    </auxiliary>
+
+    <auxiliary auxtype="Region" auxvalue="sensitive">
+      <auxiliary auxtype="RootLogicalVolume" auxvalue="Detector"/>
+      <auxiliary auxtype="proton_cut_legth" auxvalue="2" auxunit="mm"/>
+    </auxiliary>
+  </userinfo>
+  
+<setup name="SingleSlab" version="4.3" >
+  <world ref="World" />
+</setup>
+
+</gdml>
