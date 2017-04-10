@@ -13,6 +13,7 @@
 <define>
   &Config;
   &Property;
+  <variable name="idx" value="0" />
 </define>
 
 <materials>
@@ -66,6 +67,13 @@
 			<volumeref ref="Groove" />
 			<rotationref ref="fiberRot" />
 			<position unit="mm" x="fiberX*5-22.5" y="0" z="-4" />
+		</physvol>
+		</loop>
+		<loop for="idx" to="9" step="1">
+		<physvol copynumber="idx">
+			<volumeref ref="Groove" />
+			<rotation y="90" unit="deg"/>
+			<position unit="mm" y="idx*5-22.5" x="0" z="4" />
 		</physvol>
 		</loop>
   </volume>

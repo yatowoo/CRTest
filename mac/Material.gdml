@@ -41,12 +41,77 @@
     <property name="ABSLENGTH" ref="PVT_ABSL"/>
     <property name="RESOLUTIONSCALE" ref="PVT_SCALE"/>
   </material>
-  
+
+<!-- Scintillator -->
+<material formula=" " name="EJ200_PVT" >
+  <D value="1.023" />
+  <composite n="517" ref="Hydrogen" />
+  <composite n="469" ref="Carbon" />
+  <property name="RINDEX" ref="EJ200_RINDEX"/>
+  <property name="SCINTILLATIONYIELD" ref="EJ200_SCINTILLATIONYIELD"/>
+  <property name="FASTCOMPONENT" ref="EJ200_FASTCOMPONENT"/>
+  <property name="FASTTIMECONSTANT" ref="EJ200_FASTTIMECONSTANT"/>
+  <property name="ABSLENGTH" ref="EJ200_ABSLENGTH"/>
+  <property name="RESOLUTIONSCALE" ref="EJ200_RESOLUTIONSCALE"/>
+</material>
+<material formula=" " name="BC408_PVT" >
+  <D value="1.32" />
+  <composite n="11" ref="Hydrogen" />
+  <composite n="10" ref="Carbon" />
+  <property name="RINDEX" ref="BC408_RINDEX"/>
+  <property name="SCINTILLATIONYIELD" ref="BC408_SCINTILLATIONYIELD"/>
+  <property name="FASTCOMPONENT" ref="BC408_FASTCOMPONENT"/>
+  <property name="FASTTIMECONSTANT" ref="BC408_FASTTIMECONSTANT"/>
+  <property name="ABSLENGTH" ref="BC408_ABSLENGTH"/>
+  <property name="RESOLUTIONSCALE" ref="BC408_RESOLUTIONSCALE"/>
+</material>
+
+<!-- WLS Fiber -->
+<material formula=" " name="Y11_CORE_PS" >
+  <D value="1.05" />
+  <fraction n="0.077418" ref="Hydrogen" />
+  <fraction n="0.922582" ref="Carbon" />
+  <property name="RINDEX" ref="Y11_CORE_RINDEX"/>
+  <property name="WLSABSLENGTH" ref="Y11_WLSABSLENGTH"/>
+  <property name="WLSCOMPONENT" ref="Y11_WLSCOMPONENT"/>
+  <property name="WLSTIMECONSTANT" ref="Y11_WLSTIMECONSTANT"/>
+  <property name="ABSLENGTH" ref="Y11_ABSLENGTH"/>
+</material>
+
+<material formula=" " name="BCF92_CORE_PS" >
+  <D value="1.05" />
+  <fraction n="0.077418" ref="Hydrogen" />
+  <fraction n="0.922582" ref="Carbon" />
+  <property name="RINDEX" ref="BCF92_CORE_RINDEX"/>
+  <property name="WLSABSLENGTH" ref="BCF92_WLSABSLENGTH"/>
+  <property name="WLSCOMPONENT" ref="BCF92_WLSCOMPONENT"/>
+  <property name="WLSTIMECONSTANT" ref="BCF92_WLSTIMECONSTANT"/>
+  <property name="ABSLENGTH" ref="BCF92_ABSLENGTH"/>
+</material>
+
+<material formula=" " name="Fiber_CLADDING1_PMMA" >
+  <D value="1.19" />
+  <composite n="8" ref="Hydrogen" />
+  <composite n="5" ref="Carbon" />
+  <composite n="2" ref="Oxygen" />
+  <property name="RINDEX" ref="CLADDING1_RINDEX"/>
+</material>
+
+<material formula=" " name="Fiber_CLADDING2_FluorPMMA" >
+  <D value="1.43" />
+  <!-- MORE INFO NEEDED-->
+  <composite n="8" ref="Hydrogen" />
+  <composite n="5" ref="Carbon" />
+  <composite n="2" ref="Oxygen" />
+  <property name="RINDEX" ref="CLADDING2_RINDEX"/>
+</material>
+
   <!-- For OpticalSurface MPT-->
   <material name="OpWrapper_Scint">
     <D value="0.00129" />
     <fraction n="0.7" ref="Nitrogen" />
     <fraction n="0.3" ref="Oxygen" />
+    <property name="REFLECTIVITY" ref="OpWrapper_Scint_REFLECTIVITY" />
     <property name="SURFACEROUGHNESS" ref="OpWrapper_Scint_ROUGHNESS" />
     <property name="SPECULARSPIKECONSTANT" ref="OpWrapper_Scint_SPIKE" />
     <property name="SPECULARLOBECONSTANT" ref="OpWrapper_Scint_LOBE" />

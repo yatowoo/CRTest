@@ -22,12 +22,12 @@
 <solids>
   <box lunit="mm" name="detectorS" x="detectorX" y="detectorY" z="detectorZ" />
   <box lunit="mm" name="worldS" x="worldX" y="worldY" z="worldZ" />
-  <box lunit="mm" name="grooveS" x="grooveWidth" y="detectorY" z="grooveDepth" />
+  <box lunit="mm" name="grooveS" x="grooveWidth" y="fiberL" z="grooveDepth" />
   <eltube lunit="mm" name="coreS" dx="coreR" dy="coreR" dz="fiberL/2" />
   <eltube lunit="mm" name="claddingS" dx="claddingR" dy="claddingR" dz="fiberL/2" />
-  <eltube lunit="mm" name="pmtS" dx="claddingR" dy="claddingR" dz="1" />  
+  <eltube lunit="mm" name="pmtS" dx="coreR" dy="coreR" dz="1" />  
   <opticalsurface name="scint_surf" model="unified" finish="ground" type="dielectric_dielectric" value="0.01"/>
-  <opticalsurface name="photocath" model="unified" finish="ground" type="dielectric_dielectric" value="0.01"/>
+  <opticalsurface name="photocath" model="unified" finish="ground" type="dielectric_metal" value="0.0"/>
 </solids>
 
 <structure>
@@ -55,7 +55,7 @@
     <physvol>
       <volumeref ref="Core" />
       <rotation name="fiberRot" x="90" unit="deg" />
-      <position z="grooveDepth/2-claddingR"/>
+      <position z="grooveDepth/2-claddingR*1.1"/>
     </physvol>
   </volume>
 
