@@ -38,7 +38,7 @@
   </volume>
 
   <volume name="Core">
-    <materialref ref="Y11_PS" />
+    <materialref ref="BCF92_CORE_PS" />
     <solidref ref="coreS" />
     <physvol copynumber="0">
       <volumeref ref="PMT" />
@@ -131,7 +131,7 @@
         <auxiliary auxtype="SurfaceName" auxvalue="photocath"/>
         <auxiliary auxtype="PVname" auxvalue="Core_PV" />
         <auxiliary auxtype="PVname" auxvalue="PMT_PV" />
-        <auxiliary auxtype="Material" auxvalue="OpBorder_PMT"/>
+        <auxiliary auxtype="Material" auxvalue="OpBorder_PMT_R5610A"/>
       </auxiliary>
 
     </auxiliary>
