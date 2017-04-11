@@ -26,13 +26,14 @@
   <eltube lunit="mm" name="coreS" dx="coreR" dy="coreR" dz="fiberL/2" />
   <eltube lunit="mm" name="claddingS" dx="claddingR" dy="claddingR" dz="fiberL/2" />
   <eltube lunit="mm" name="pmtS" dx="coreR" dy="coreR" dz="1" />  
-  <opticalsurface name="scint_surf" model="unified" finish="ground" type="dielectric_dielectric" value="0.01"/>
+  <opticalsurface name="scint_surf" model="unified" finish="ground" type="dielectric_metal" value="1."/>
   <opticalsurface name="photocath" model="unified" finish="ground" type="dielectric_metal" value="0.0"/>
+  <opticalsurface name="groove_surf" model="unified" finish="ground" type="dielectric_dielectric" value="6."/>
 </solids>
 
 <structure>
   <volume name="PMT">
-    <materialref ref="AIR" />
+    <materialref ref="G4_Al" />
     <solidref ref="pmtS" />
   </volume>
 
@@ -48,19 +49,27 @@
       <position lunit="mm" z="-fiberL/2"/>
     </physvol>
   </volume>
+
+  <volume name="Cladding">
+    <materialref ref="Fiber_CLADDING1_PMMA"/>
+    <solidref ref="claddingS"/>
+    <physvol>
+      <volumeref ref="Core"/>
+    </physvol>
+  </volume>
   
   <volume name="Groove">
     <materialref ref="AIR" />
     <solidref ref="grooveS" />
     <physvol>
-      <volumeref ref="Core" />
+      <volumeref ref="Cladding" />
       <rotation name="fiberRot" x="90" unit="deg" />
       <position z="grooveDepth/2-claddingR*1.1"/>
     </physvol>
   </volume>
 
   <volume name="Detector">
-    <materialref ref="PVT" />
+    <materialref ref="EJ200_PVT" />
     <solidref ref="detectorS" />
 		<loop for="idxX" to="fiberN-1" step="1">
       <physvol copynumber="idxX">
@@ -68,13 +77,14 @@
         <position unit="mm" x="fiberXstep*idxX+fiberX" y="0" z="(-detectorZ+grooveDepth)/2" />
       </physvol>
 		</loop>
+    <!--
 		<loop for="idxY" to="fiberN-1" step="1">
       <physvol copynumber="idxY+fiberN">
         <volumeref ref="Groove" />
         <rotation name="grooveRotY" y="180" z="90" unit="deg" />
         <position unit="mm" x="0" y="fiberXstep*idxY+fiberX" z="(detectorZ-grooveDepth)/2" />
       </physvol>
-		</loop>
+		</loop>-->
   </volume>
 
   <volume name="World">
@@ -89,7 +99,7 @@
   <skinsurface name="skin" surfaceproperty="scint_surf" >
     <volumeref ref="Detector"/>
   </skinsurface>
-  <bordersurface name="border" surfaceproperty="scint_surf" >
+  <bordersurface name="border" surfaceproperty="groove_surf" >
     <physvolref ref="Detector_PV"/>
     <physvolref ref="Groove_PV"/>
   </bordersurface>
@@ -110,8 +120,8 @@
         <auxiliary auxtype="Material" auxvalue="OpWrapper_Scint" />
       </auxiliary>
 
-      <auxiliary auxtype="Border" auxvalue="ScintFiber">
-        <auxiliary auxtype="SurfaceName" auxvalue="scint_surf"/>
+      <auxiliary auxtype="Border" auxvalue="ScintGroove">
+        <auxiliary auxtype="SurfaceName" auxvalue="groove_surf"/>
         <auxiliary auxtype="PVname" auxvalue="Detector_PV" />
         <auxiliary auxtype="PVname" auxvalue="Groove_PV" />
         <auxiliary auxtype="Material" auxvalue="OpWrapper_Scint"/>

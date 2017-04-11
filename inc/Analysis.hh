@@ -32,6 +32,7 @@
 
 // add option for each type 
 static std::vector<OpPhotonType> TypeList = {
+	OpWLS,
 	Fiber2Pmt,
 	Detected
 };

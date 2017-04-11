@@ -11,9 +11,10 @@
 
 <!-- WLS Fiber Configuration-->
 <variable name="fiberL" value="detectorX*1.2" />
-<variable name="coreR" value="0.48"/>
-<variable name="claddingR" value="0.5"/>
-<variable name="grooveWidth" value="claddingR*2.2"/>
+<variable name="fiberDiameter" value="1."/>
+<variable name="coreR" value="fiberDiameter*0.97/2."/>
+<variable name="claddingR" value="fiberDiameter/2."/>
+<variable name="grooveWidth" value="fiberDiameter*1.1"/>
 <variable name="grooveDepth" value="2"/>
 
 <!-- PMT Configuration-->

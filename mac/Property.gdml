@@ -291,14 +291,18 @@
 <matrix name="OpWrapper_Scint_ROUGHNESS" coldim="1" values="0.01"/>
 <matrix name="OpWrapper_Scint_SPIKE" coldim="1" values="0.7"/>  
 <matrix name="OpWrapper_Scint_LOBE" coldim="1" values="0.3"/>
-<matrix name="OpWrapper_Scint_REFLECTIVITY" coldim="1" values="1.0"/>
+<matrix name="OpWrapper_Scint_REFLECTIVITY" coldim="1" values="0.95"/>
 
   <!--Tyvek-->
+
+<!-- Optical Cement -->
+<matrix name="Optical_Cement_RINDEX" coldim="2" values="2.91*eV 1.58" />
+<matrix name="EJ500_RINDEX" coldim="2" values="2.91*eV 1.57" />
 
 <!-- PMT Photocathode -->
 <matrix name="OpBorder_PMT_REFLECTIVITY" coldim="2" values="2.6*eV 0."/>
 <matrix name="OpBorder_PMT_TRANSMITTANCE" coldim="2" values="2.6*eV 0."/>
-<matrix name="OpBorder_PMT_EFFICIENCY" coldim="2" values="2.6*eV 0.2"/>
+<matrix name="OpBorder_PMT_EFFICIENCY" coldim="2" values="2.6*eV 0.15"/>
 
 <matrix name="PMT_R7546_EFFICIENCY" coldim="2" values="4.41753*eV	0.103856
   4.29422*eV	0.128665

@@ -66,6 +66,15 @@
   <property name="RESOLUTIONSCALE" ref="BC408_RESOLUTIONSCALE"/>
 </material>
 
+<!-- Optical Glue -->
+<material formula=" " name="EJ500" >
+  <D value="1.17" />
+  <composite n="3" ref="Hydrogen" />
+  <composite n="2" ref="Carbon" />
+  <composite n="1" ref="Oxygen" />
+  <property name="RINDEX" ref="EJ500_RINDEX"/>
+</material>
+
 <!-- WLS Fiber -->
 <material formula=" " name="Y11_CORE_PS" >
   <D value="1.05" />
@@ -125,3 +134,21 @@
     <property name="REFLECTIVITY" ref="OpBorder_PMT_REFLECTIVITY" />
     <property name="TRANSMITTANCE" ref="OpBorder_PMT_TRANSMITTANCE" />
   </material>
+
+<material name="OpBorder_PMT_R5610A">
+  <D value="0.00129" />
+  <fraction n="0.7" ref="Nitrogen" />
+  <fraction n="0.3" ref="Oxygen" />
+  <property name="EFFICIENCY" ref="PMT_R5610A_EFFICIENCY" />
+  <property name="REFLECTIVITY" ref="OpBorder_PMT_REFLECTIVITY" />
+  <property name="TRANSMITTANCE" ref="OpBorder_PMT_TRANSMITTANCE" />
+</material>
+
+<material name="OpBorder_PMT_R7546">
+  <D value="0.00129" />
+  <fraction n="0.7" ref="Nitrogen" />
+  <fraction n="0.3" ref="Oxygen" />
+  <property name="EFFICIENCY" ref="PMT_R7546_EFFICIENCY" />
+  <property name="REFLECTIVITY" ref="OpBorder_PMT_REFLECTIVITY" />
+  <property name="TRANSMITTANCE" ref="OpBorder_PMT_TRANSMITTANCE" />
+</material>
