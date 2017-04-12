@@ -22,13 +22,13 @@
 <solids>
   <box lunit="mm" name="detectorS" x="detectorX" y="detectorY" z="detectorZ" />
   <box lunit="mm" name="worldS" x="worldX" y="worldY" z="worldZ" />
-  <box lunit="mm" name="grooveS" x="grooveWidth" y="fiberL" z="grooveDepth" />
+  <box lunit="mm" name="grooveS" x="grooveWidth" y="fiberL+pmtZ*2" z="grooveDepth" />
   <eltube lunit="mm" name="coreS" dx="coreR" dy="coreR" dz="fiberL/2" />
   <eltube lunit="mm" name="claddingS" dx="claddingR" dy="claddingR" dz="fiberL/2" />
-  <eltube lunit="mm" name="pmtS" dx="coreR" dy="coreR" dz="1" />  
+  <eltube lunit="mm" name="pmtS" dx="claddingR" dy="claddingR" dz="pmtZ/2." />  
   <opticalsurface name="scint_surf" model="unified" finish="ground" type="dielectric_metal" value="1."/>
   <opticalsurface name="photocath" model="unified" finish="ground" type="dielectric_metal" value="0.0"/>
-  <opticalsurface name="groove_surf" model="unified" finish="ground" type="dielectric_dielectric" value="6."/>
+  <opticalsurface name="groove_surf" model="unified" finish="ground" type="dielectric_dielectric" value="1."/>
 </solids>
 
 <structure>
@@ -40,14 +40,6 @@
   <volume name="Core">
     <materialref ref="BCF92_CORE_PS" />
     <solidref ref="coreS" />
-    <physvol copynumber="0">
-      <volumeref ref="PMT" />
-      <position lunit="mm" z="fiberL/2"/>
-    </physvol>
-    <physvol copynumber="1">
-      <volumeref ref="PMT" />
-      <position lunit="mm" z="-fiberL/2"/>
-    </physvol>
   </volume>
 
   <volume name="Cladding">
@@ -59,12 +51,22 @@
   </volume>
   
   <volume name="Groove">
-    <materialref ref="AIR" />
+    <materialref ref="EJ500" />
     <solidref ref="grooveS" />
     <physvol>
       <volumeref ref="Cladding" />
       <rotation name="fiberRot" x="90" unit="deg" />
       <position z="grooveDepth/2-claddingR*1.1"/>
+    </physvol>
+    <physvol copynumber="0">
+      <volumeref ref="PMT" />
+      <position lunit="mm" y="fiberL/2-pmtZ/2." z="grooveDepth/2-claddingR*1.1"/>
+      <rotation name="fiberRot" x="90" unit="deg" />
+    </physvol>
+    <physvol copynumber="1">
+      <volumeref ref="PMT" />
+      <position lunit="mm" y="-fiberL/2+pmtZ/2." z="grooveDepth/2-claddingR*1.1"/>
+      <rotation name="fiberRot" x="90" unit="deg" />
     </physvol>
   </volume>
 

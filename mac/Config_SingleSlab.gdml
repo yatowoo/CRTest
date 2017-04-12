@@ -18,7 +18,7 @@
 <variable name="grooveDepth" value="2"/>
 
 <!-- PMT Configuration-->
-
+<variable name="pmtZ" value="0.05"/>
 
 <!-- World Configuration-->
 <variable name="worldX" value="detectorX*1.4" />
