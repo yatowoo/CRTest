@@ -51,15 +51,6 @@ G4bool Analysis::CreateNtupleForRun(){
 		rootData->CreateNtuple("Run","Muon track & SD outputs");
 	assert(fCurrentNtuple == 0);
 
-	rootData->CreateNtupleDColumn(fCurrentNtuple, "mu.E" , fMuon->Ek);
-	rootData->CreateNtupleDColumn(fCurrentNtuple, "mu.t" , fMuon->time);
-	rootData->CreateNtupleDColumn(fCurrentNtuple, "mu.x" , fMuon->x);
-	rootData->CreateNtupleDColumn(fCurrentNtuple, "mu.y" , fMuon->y);
-	rootData->CreateNtupleDColumn(fCurrentNtuple, "mu.z" , fMuon->z);
-	rootData->CreateNtupleDColumn(fCurrentNtuple, "mu.px" , fMuon->px);
-	rootData->CreateNtupleDColumn(fCurrentNtuple, "mu.py" , fMuon->py);
-	rootData->CreateNtupleDColumn(fCurrentNtuple, "mu.pz" , fMuon->pz);
-
 	// #for each sd in fCrySD (std::vector)
 	for(G4int i = 0 ; i < fSD->size() ; i++)
 		(*fSD)[i]->CreateEntry(fCurrentNtuple, rootData);

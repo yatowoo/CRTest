@@ -28,6 +28,11 @@ public:
 		G4int ntupleID, G4RootAnalysisManager* rootData);
 	virtual void FillEntry(
 		G4int ntupleID, G4RootAnalysisManager* rootData);
+
+private:
+	virtual void CalculateNoPhysvols(G4Step*);
+	virtual int CalculateCopyNo(G4Step*);
+
 private:
     G4int fHCID;
     PmtHC* fHC;

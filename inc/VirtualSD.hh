@@ -12,25 +12,39 @@
 
 #include "G4RootAnalysisManager.hh"
 
+#include "globals.hh"
+#include<vector>
+
 class VirtualSD : public G4VSensitiveDetector {
 
 public:
-	VirtualSD();
-	VirtualSD(G4String name):G4VSensitiveDetector(name){};
+	VirtualSD(G4String name)
+		:G4VSensitiveDetector(name),fNvolume(0),fNphysvol(NULL){};
 	virtual ~VirtualSD(){};
 
-public:
+public: // for Geant4
 
 	virtual void Initialize(G4HCofThisEvent* hc){};
 	virtual void EndOfEvent(G4HCofThisEvent* hc){};
 	virtual G4bool ProcessHits(
-		G4Step* theStep, G4TouchableHistory* roHist){return true;};
+		G4Step*, G4TouchableHistory*){return true;};
 
+public: // for class Analysis
 	virtual void CreateEntry(
-		G4int ntupleID, G4RootAnalysisManager* rootData) = 0;
+		G4int ntupleID, G4RootAnalysisManager*) = 0;
 	virtual void FillEntry(
-		G4int ntupleID, G4RootAnalysisManager* rootData) = 0;
+		G4int ntupleID, G4RootAnalysisManager*) = 0;
 
+private:
+	virtual void CalculateNoPhysvols(G4Step*){return;};
+	virtual int CalculateCopyNo(G4Step*){return 0;};
+
+protected:
+	int fNvolume;
+	std::vector<int>* fNphysvol;
+
+public:
+	virtual int GetNoVolumes(){return fNvolume;};
 };
 
 #endif /*CRTest_VirtualSD_h*/
