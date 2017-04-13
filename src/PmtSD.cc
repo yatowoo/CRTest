@@ -67,7 +67,7 @@ void PmtSD::CalculateNoPhysvols(G4Step* theStep){
 		G4cout << "\t" << pvName << "\t" << nPV << G4endl;
 	}
 	// VERBOSE
-	G4cout << "Total - " << SensitiveDetectorName << "x" << fNvolume << G4endl;
+	G4cout << "Total - " << SensitiveDetectorName << " x" << fNvolume << G4endl;
 }
 
 int PmtSD::CalculateCopyNo(G4Step* theStep){
