@@ -7,6 +7,7 @@
 
 #include "Analysis.hh"
 #include "OpRecorder.hh"
+#include "MuonRecorder.hh"
 
 #include "G4Track.hh"
 #include "G4VProcess.hh"
@@ -24,11 +25,11 @@ StackAction::~StackAction()
 }
 
 G4ClassificationOfNewTrack
-StackAction::ClassifyNewTrack(const G4Track *aTrack)
+StackAction::ClassifyNewTrack(const G4Track *theTrack)
 {
 	// Record muon
-	if(aTrack->GetParentID() == 0){
-		Analysis::Instance()->FillMuonTrackForRun(aTrack);
+	if(theTrack->GetParentID() == 0){
+		MuonRecorder::Instance()->Record(theTrack);
 		return fUrgent;
 	}
 
@@ -36,21 +37,21 @@ StackAction::ClassifyNewTrack(const G4Track *aTrack)
     OpRecorder *Recorder = OpRecorder::Instance();
 
 	//Count what process generated the optical photons
-	if (aTrack->GetDefinition() == G4OpticalPhoton::OpticalPhotonDefinition())
+	if (theTrack->GetDefinition() == G4OpticalPhoton::OpticalPhotonDefinition())
 	{
 		// particle is secondary
-		if (aTrack->GetCreatorProcess()->GetProcessName() 
+		if (theTrack->GetCreatorProcess()->GetProcessName() 
 			== "Scintillation")
 		{
 			Analysis::Instance()->FillOpPhotonTrackForEvent(
-				aTrack, OpPhotonType::Scintillation);
+				theTrack, OpPhotonType::Scintillation);
 			Recorder->nScintTotal++;
 		}
-		else if (aTrack->GetCreatorProcess()->GetProcessName() 
+		else if (theTrack->GetCreatorProcess()->GetProcessName() 
 			== "OpWLS")
 		{
 			Analysis::Instance()->FillOpPhotonTrackForEvent(
-				aTrack, OpPhotonType::OpWLS);
+				theTrack, OpPhotonType::OpWLS);
 			Recorder->nWlsEmit++;
 		}
 

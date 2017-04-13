@@ -10,15 +10,14 @@
 Analysis* Analysis::fgInstance = NULL;
 
 Analysis::Analysis()
-	: fCurrentNtuple(-1), fMuon(NULL), fSD(NULL),
+	: fCurrentNtuple(-1), fSD(NULL),
 	fOpticalFirstColID(-1)
 {
 	rootData = G4RootAnalysisManager::Instance();
 	rootData->SetFileName("CRTest");
 
-	fMuon = new _Muon;
-
 	fSD = new std::vector<VirtualSD*>;
+	fRecorder = new std::vector<VirtualRecorder*>;
 
 	G4cout << "[+] INFO - CRTest_Analysis created." 
 		<< G4endl;
@@ -26,7 +25,8 @@ Analysis::Analysis()
 
 Analysis::~Analysis(){
 	delete rootData;
-	delete fMuon;
+	fRecorder->erase(fRecorder->begin(),fRecorder->end());
+	delete fRecorder;
 }
 
 Analysis* Analysis::Instance(){
@@ -55,39 +55,12 @@ G4bool Analysis::CreateNtupleForRun(){
 	for(G4int i = 0 ; i < fSD->size() ; i++)
 		(*fSD)[i]->CreateEntry(fCurrentNtuple, rootData);
 	// sd->CreateEntry(rootData, fCurrentNtuple)
-
+	
 	// #ifdef CRTest_DEBUG_OPTICAL
 	// CreateNtupleIColumn(fCurrentNtuple, "op.[scint,wls,det]")
 		// or Call OpRecorder::CreateEntry ?
-	fOpticalFirstColID = 
-		rootData->CreateNtupleIColumn(fCurrentNtuple, "op.scint");
-	rootData->CreateNtupleIColumn(fCurrentNtuple, "op.groove");
-	rootData->CreateNtupleIColumn(fCurrentNtuple, "op.fiber");
-	rootData->CreateNtupleIColumn(fCurrentNtuple, "op.wls");
-	rootData->CreateNtupleIColumn(fCurrentNtuple, "op.pmt");
-	rootData->CreateNtupleIColumn(fCurrentNtuple, "op.det");
-
-
-	return true;
-}
-
-G4bool Analysis::FillMuonTrackForRun(const G4Track* theMuon){
-
-	if(theMuon->GetParentID() != 0)
-		return false;
-	
-	(fMuon->Ek).push_back(theMuon->GetKineticEnergy() / GeV );
-	(fMuon->time).push_back(theMuon->GetGlobalTime() / ns );
-
-	G4ThreeVector pos = theMuon->GetPosition();
-	(fMuon->x).push_back(pos.x() / cm );
-	(fMuon->y).push_back(pos.y() / cm );
-	(fMuon->z).push_back(pos.z() / cm );
-
-	G4ThreeVector pmu = theMuon->GetMomentumDirection();
-	(fMuon->px).push_back(pmu.x());
-	(fMuon->py).push_back(pmu.y());
-	(fMuon->pz).push_back(pmu.z());
+	for(G4int i = 0 ; i < fRecorder->size() ; i++)
+		(*fRecorder)[i]->CreateEntry(fCurrentNtuple, rootData);
 
 	return true;
 }
@@ -102,20 +75,10 @@ G4bool Analysis::FillEntryForRun(){
 	// #ifdef CRTest_DEBUG_OPTICAL
 	// FillNtupleIColumn(fCurrentNtuple, op_debug->nCol[scint,wls,det])
 		// or Call OpRecorder::FillEntry ?
-	G4int colID = fOpticalFirstColID;
-	OpRecorder* Rec = OpRecorder::Instance();
-	rootData->FillNtupleIColumn(0,colID,Rec->nScintTotal);
-	rootData->FillNtupleIColumn(0,colID+1,Rec->nScint2Groove);
-	rootData->FillNtupleIColumn(0,colID+2,Rec->nGroove2Cladding);
-	rootData->FillNtupleIColumn(0,colID+3,Rec->nWlsEmit);
-	rootData->FillNtupleIColumn(0,colID+4,Rec->nCore2PMT);
-	rootData->FillNtupleIColumn(0,colID+5,Rec->nDetection);
+	for(G4int i = 0 ; i < fRecorder->size() ; i++)
+		(*fRecorder)[i]->FillEntry(0, rootData);
 
 	rootData->AddNtupleRow();
-
-	// Clear/Reset fMuon
-	delete fMuon;
-	fMuon = new _Muon;
 
 	return true;
 }
@@ -177,6 +140,18 @@ G4bool Analysis::RegisterSD(VirtualSD* sd){
 		== fSD->end())
 	{
 		fSD->push_back(sd);
+		return true;
+	}
+	else
+		return false;
+}
+
+G4bool Analysis::RegisterRecorder(VirtualRecorder* recorder){
+
+	if(std::find(fRecorder->begin(),fRecorder->end(),recorder)
+		== fRecorder->end())
+	{
+		fRecorder->push_back(recorder);
 		return true;
 	}
 	else

@@ -8,7 +8,8 @@
 OpRecorder *OpRecorder::fgInstance = 0;
 
 OpRecorder::OpRecorder()
-    : nScintTotal(0), nScint2Groove(0), nGroove2Cladding(0),
+    : VirtualRecorder(),
+	nScintTotal(0), nScint2Groove(0), nGroove2Cladding(0),
       nCladding2Core(0), nWlsEmit(0),nCore2PMT(0),nDetection(0),
       nBoundaryReflection(0), nBoundaryAbsorption(0), nBoundaryTransmission(0),
       nDebug(0)
@@ -17,7 +18,6 @@ OpRecorder::OpRecorder()
 }
 
 OpRecorder::~OpRecorder() {
-	delete fgInstance;
 }
 
 OpRecorder *OpRecorder::Instance()
@@ -67,3 +67,29 @@ void OpRecorder::Print()
            << " | + + Boundary WARNNING\t: " << nBoundaryWARNNING << G4endl
            << " | + X Count for Debug\t\t: " << nDebug << G4endl;
 }
+
+void OpRecorder::CreateEntry(G4int ntupleID, G4RootAnalysisManager* rootData)
+{
+	fFirstColID = 
+		rootData->CreateNtupleIColumn(ntupleID, "op.scint");
+	rootData->CreateNtupleIColumn(ntupleID, "op.s2g");
+	rootData->CreateNtupleIColumn(ntupleID, "op.g2c");
+	rootData->CreateNtupleIColumn(ntupleID, "op.c2c");
+	rootData->CreateNtupleIColumn(ntupleID, "op.wls");
+	rootData->CreateNtupleIColumn(ntupleID, "op.c2p");
+	rootData->CreateNtupleIColumn(ntupleID, "op.det");
+}
+
+void OpRecorder::FillEntry(G4int ntupleID, G4RootAnalysisManager* rootData)
+{
+	rootData->FillNtupleIColumn(ntupleID, fFirstColID, nScintTotal);
+	rootData->FillNtupleIColumn(ntupleID, fFirstColID+1, nScint2Groove);
+	rootData->FillNtupleIColumn(ntupleID, fFirstColID+2, nGroove2Cladding);
+	rootData->FillNtupleIColumn(ntupleID, fFirstColID+3, nCladding2Core);
+	rootData->FillNtupleIColumn(ntupleID, fFirstColID+4, nWlsEmit);
+	rootData->FillNtupleIColumn(ntupleID, fFirstColID+5, nCore2PMT);
+	rootData->FillNtupleIColumn(ntupleID, fFirstColID+6, nDetection);
+}
+
+G4bool OpRecorder::Record(const G4Track*)
+{}

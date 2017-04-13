@@ -6,6 +6,8 @@
 #include "RunAction.hh"
 
 #include "Analysis.hh"
+#include "OpRecorder.hh"
+#include "MuonRecorder.hh"
 
 #include "G4RunManager.hh"
 
@@ -16,6 +18,10 @@ RunAction::RunAction()
 
 	// Build Analysis Instance
 	Analysis::Instance();
+		// [TODO] Build-option : CRTest_DEBUG_OPTICAL
+	Analysis::Instance()->RegisterRecorder(OpRecorder::Instance());
+		// Default for resolution estimation
+	Analysis::Instance()->RegisterRecorder(MuonRecorder::Instance());
 }
 
 RunAction::~RunAction()

@@ -7,6 +7,7 @@
 
 #include "Analysis.hh"
 #include "OpRecorder.hh"
+#include "MuonRecorder.hh"
 
 #include "G4Step.hh"
 #include "G4StepPoint.hh"
@@ -44,7 +45,7 @@ void StepAction::UserSteppingAction(const G4Step *aStep)
 
 	// for Muon (primary track)
 	if (theTrack->GetParentID() == 0){
-		Analysis::Instance()->FillMuonTrackForRun(theTrack);
+		MuonRecorder::Instance()->Record(theTrack);
 		return;
 	}
 
@@ -100,7 +101,7 @@ void StepAction::UserSteppingAction(const G4Step *aStep)
             type = Fiber2Pmt;
             Recorder->nCore2PMT += 1;
             if (status == Detection){
-				type = Photocathode;
+				type = Detected;
 				Recorder->nDetection += 1;
 			}
         }

@@ -9,9 +9,24 @@
 #ifndef CRTest_OpRecorder_h
 #define CRTest_OpRecorder_h
 
+#include "VirtualRecorder.hh"
+
+#include "G4RootAnalysisManager.hh"
+#include "G4Track.hh"
 #include "globals.hh"
 
-class OpRecorder{
+enum OpPhotonType{
+	Nothing = 0,
+	Scintillation,
+	Scint2Groove,
+	Groove2Cladding,
+	Cladding2Core,
+	OpWLS,
+	Fiber2Pmt,
+	Detected
+};
+
+class OpRecorder : public VirtualRecorder{
 public:
     OpRecorder();
     ~OpRecorder();
@@ -19,6 +34,15 @@ public:
     void Reset();
     void Print();
 	void SetBoundaryName(G4String);
+
+public: // for class Analysis
+	virtual void CreateEntry(
+		G4int ntupleID, G4RootAnalysisManager*);
+	virtual void FillEntry(
+		G4int ntupleID, G4RootAnalysisManager*);
+
+	G4bool Record(const G4Track*);
+
 // TODO : Convert to 'private' and add Increment method
 public:
     G4int nScintTotal;
