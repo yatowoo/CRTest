@@ -40,54 +40,6 @@ void CryPositionSD::Initialize(G4HCofThisEvent *hce)
 		fEdep = new std::vector<double>;
 }
 
-void CryPositionSD::CalculateNoPhysvols(G4Step* theStep){
-	// VERBOSE
-	G4cout << "[+] VERBOSE - Physical Volume : Numbers" << G4endl;
-	fNphysvol = new std::vector<int>;
-	fNvolume = 1;
-		// for PMT or other SD invoked by G4OpBoundaryStatus::Detection
-		// Get the POST step point but not 'pre'
-	G4TouchableHistory* touchable
-		= (G4TouchableHistory*)(theStep->GetPreStepPoint()->GetTouchable());
-	for(int i = 0 ; i < 10 ; i++){
-		G4VPhysicalVolume* thePV = touchable->GetVolume(i);
-		G4String pvName = thePV->GetName();
-		if(pvName == "World_PV")
-			break;
-		int nSibling = 
-			thePV->GetMotherLogical()->GetNoDaughters();
-		int nPV = 0;
-		for(int idxPV = 0 ; idxPV < nSibling ; idxPV++)
-			if(thePV->GetMotherLogical()->GetDaughter(idxPV)->GetName()
-				== pvName)
-				nPV ++;
-		fNphysvol->push_back(nPV);
-		fNvolume *= nPV;
-		// VERBOSE
-		G4cout << "\t" << pvName << "\t" << nPV << G4endl;
-	}
-	// VERBOSE
-	G4cout << "Total - " << SensitiveDetectorName << " x" << fNvolume << G4endl;
-}
-
-int CryPositionSD::CalculateCopyNo(G4Step* theStep){
-	int copyNo = 0;
-		// for PMT or other SD invoked by G4OpBoundaryStatus::Detection
-		// Get the POST step point but not 'pre'
-    G4TouchableHistory* touchable
-		= (G4TouchableHistory*)(theStep->GetPreStepPoint()->GetTouchable());
-	int factor = 1;
-	for(int i = 0 ; i < 10 ; i++){
-		G4VPhysicalVolume* thePV = touchable->GetVolume(i);
-		if(thePV->GetName() == "World_PV")
-			break;
-		copyNo += thePV->GetCopyNo() * factor;
-		factor *= fNphysvol->at(i);
-	}
-
-	return copyNo;
-}
-
 G4bool CryPositionSD::ProcessHits(G4Step *theStep, G4TouchableHistory *)
 {
 	// Sensitive only for Primary track
@@ -97,11 +49,11 @@ G4bool CryPositionSD::ProcessHits(G4Step *theStep, G4TouchableHistory *)
     if(edep <= 0) return false;
 
 	if(!fNphysvol)
-		CalculateNoPhysvols(theStep);
+		CalculateNoPhysvols(theStep->GetPreStepPoint());
     
     CryHit* newHit = new CryHit();
     newHit->SetEdep(edep);
-	newHit->SetDetectorID(CalculateCopyNo(theStep));
+	newHit->SetDetectorID(CalculateCopyNo(theStep->GetPreStepPoint()));
 
     fHC->insert(newHit);
 

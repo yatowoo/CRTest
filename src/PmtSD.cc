@@ -11,17 +11,19 @@
 #include "G4ios.hh"
 
 PmtSD::PmtSD(G4String &name)
-	: VirtualSD(name), fHCID(0), fFirstColID(-1),
+	: VirtualSD(name), fHCID(0), fHC(NULL), fFirstColID(-1),
 	fCounter(NULL)
 {
     collectionName.insert("PmtHC");
 
 	fCounter = new std::vector<int>;
+
 }
 
 PmtSD::~PmtSD()
 {
 	delete fCounter;
+
 }
 
 void PmtSD::Initialize(G4HCofThisEvent *hce)
@@ -34,58 +36,16 @@ void PmtSD::Initialize(G4HCofThisEvent *hce)
 
     hce->AddHitsCollection(fHCID, fHC);
 
-	if(fCounter)
-		fCounter->clear();
-	else
-		fCounter = new std::vector<int>;
-}
-
-void PmtSD::CalculateNoPhysvols(G4Step* theStep){
-	// VERBOSE
-	G4cout << "[+] VERBOSE - Physical Volume : Numbers" << G4endl;
-	fNphysvol = new std::vector<int>;
-	fNvolume = 1;
-		// for PMT or other SD invoked by G4OpBoundaryStatus::Detection
-		// Get the POST step point but not 'pre'
-	G4TouchableHistory* touchable
-		= (G4TouchableHistory*)(theStep->GetPostStepPoint()->GetTouchable());
-	for(int i = 0 ; i < 10 ; i++){
-		G4VPhysicalVolume* thePV = touchable->GetVolume(i);
-		G4String pvName = thePV->GetName();
-		if(pvName == "World_PV")
-			break;
-		int nSibling = 
-			thePV->GetMotherLogical()->GetNoDaughters();
-		int nPV = 0;
-		for(int idxPV = 0 ; idxPV < nSibling ; idxPV++)
-			if(thePV->GetMotherLogical()->GetDaughter(idxPV)->GetName()
-				== pvName)
-				nPV ++;
-		fNphysvol->push_back(nPV);
-		fNvolume *= nPV;
-		// VERBOSE
-		G4cout << "\t" << pvName << "\t" << nPV << G4endl;
-	}
-	// VERBOSE
-	G4cout << "Total - " << SensitiveDetectorName << " x" << fNvolume << G4endl;
-}
-
-int PmtSD::CalculateCopyNo(G4Step* theStep){
-	int copyNo = 0;
-		// for PMT or other SD invoked by G4OpBoundaryStatus::Detection
-		// Get the POST step point but not 'pre'
-    G4TouchableHistory* touchable
-		= (G4TouchableHistory*)(theStep->GetPostStepPoint()->GetTouchable());
-	int factor = 1;
-	for(int i = 0 ; i < 10 ; i++){
-		G4VPhysicalVolume* thePV = touchable->GetVolume(i);
-		if(thePV->GetName() == "World_PV")
-			break;
-		copyNo += thePV->GetCopyNo() * factor;
-		factor *= fNphysvol->at(i);
-	}
-
-	return copyNo;
+	fCounter->clear();
+	fHitCopyNo->clear();
+	fHitEk->clear();
+	fHitTime->clear();
+	fHitX->clear();
+	fHitY->clear();
+	fHitZ->clear();
+	fHitPX->clear();
+	fHitPY->clear();
+	fHitPZ->clear();
 }
 
 G4bool PmtSD::ProcessHits(G4Step *theStep, G4TouchableHistory *)
@@ -94,14 +54,33 @@ G4bool PmtSD::ProcessHits(G4Step *theStep, G4TouchableHistory *)
     G4double edep = theStep->GetTotalEnergyDeposit();
     if(edep <= 0) return false;
     
+	G4StepPoint* theParticle = theStep->GetPostStepPoint();
+
 	if(!fNphysvol)
-		CalculateNoPhysvols(theStep);
+		CalculateNoPhysvols(theParticle);
 
 	PmtHit* newHit = new PmtHit;
 
-	newHit->SetPmtID(CalculateCopyNo(theStep));
+	G4int copyNo = CalculateCopyNo(theParticle);
+	newHit->SetPmtID(copyNo);
 
     fHC->insert(newHit);
+	
+	// TODO : #ifdef CRTest_SD_MORE
+	// TODO : move to DumpHit and call in EndOfEvent
+	fHitCopyNo->push_back(copyNo);
+	fHitEk->push_back(theParticle->GetKineticEnergy());
+	fHitTime->push_back(theParticle->GetGlobalTime());
+
+	G4ThreeVector pos = theParticle->GetPosition();
+	fHitX->push_back(pos.x());
+	fHitY->push_back(pos.y());
+	fHitZ->push_back(pos.z());
+
+	G4ThreeVector dir = theParticle->GetMomentumDirection();
+	fHitPX->push_back(dir.x());
+	fHitPY->push_back(dir.y());
+	fHitPZ->push_back(dir.z());
 
     return true;
 }
@@ -123,6 +102,16 @@ void PmtSD::CreateEntry(
 {
 	fFirstColID = 
 		rootData->CreateNtupleIColumn(ntupleID, "sd.pmt", *fCounter);
+	// TODO : #ifdef CRTest_SD_MORE
+	rootData->CreateNtupleIColumn(ntupleID, "pmt.id", *fHitCopyNo);
+	rootData->CreateNtupleDColumn(ntupleID, "pmt.E", *fHitEk);
+	rootData->CreateNtupleDColumn(ntupleID, "pmt.t", *fHitTime);
+	rootData->CreateNtupleDColumn(ntupleID, "pmt.x", *fHitX);
+	rootData->CreateNtupleDColumn(ntupleID, "pmt.y", *fHitY);
+	rootData->CreateNtupleDColumn(ntupleID, "pmt.z", *fHitZ);
+	rootData->CreateNtupleDColumn(ntupleID, "pmt.px", *fHitPX);
+	rootData->CreateNtupleDColumn(ntupleID, "pmt.py", *fHitPY);
+	rootData->CreateNtupleDColumn(ntupleID, "pmt.pz", *fHitPZ);
 }
 
 void PmtSD::FillEntry(
