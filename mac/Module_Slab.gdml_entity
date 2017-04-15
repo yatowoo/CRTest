@@ -1,0 +1,4 @@
+<!-- this is a file defining Slab Design (G4LogicalVolume) in split.gdml -->
+<!-- it is _not_ a standalone GDML file -->
+<!-- This file should be referenced in <structure></structure>-->
+<!-- Dependencies : Config/MaterialDB/SolidDB.gdml_entity-->

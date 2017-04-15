@@ -1,0 +1,11 @@
+<!-- this is a file defining G4VSolid in split.gdml -->
+<!-- it is _not_ a standalone GDML file -->
+<!-- This file should be referenced in <solids></solids>-->
+<!-- Dependencies : Config.gdml_entity-->
+
+<box lunit="mm" name="detectorS" x="detectorX" y="detectorY" z="detectorZ" />
+<box lunit="mm" name="worldS" x="worldX" y="worldY" z="worldZ" />
+<box lunit="mm" name="grooveS" x="grooveWidth" y="fiberL+pmtZ*2" z="grooveDepth" />
+<eltube lunit="mm" name="coreS" dx="coreR" dy="coreR" dz="fiberL/2" />
+<eltube lunit="mm" name="claddingS" dx="claddingR" dy="claddingR" dz="fiberL/2" />
+<eltube lunit="mm" name="pmtS" dx="claddingR" dy="claddingR" dz="pmtZ/2." />

@@ -1,6 +1,7 @@
-<!-- this is a file defining Configuration in split.gdml -->
+<!-- this is a file defining G4Material in split.gdml -->
 <!-- it is _not_ a standalone GDML file -->
 <!-- This file should be refered in <materials></materials>-->
+<!-- Dependencies : Config/MaterialDB/PropertyDB.gdml_entity-->
 
   <element Z="6" formula="C" name="Carbon" >
     <atom value="12.0107" />
