@@ -69,14 +69,13 @@
       <position unit="mm" x="fiberXstep*idxX+fiberX" y="0" z="(-detectorZ+grooveDepth)/2" />
     </physvol>
   </loop>
-  <!--
-		<loop for="idxY" to="fiberN-1" step="1">
-      <physvol copynumber="idxY+fiberN">
-        <volumeref ref="Groove" />
-        <rotation name="grooveRotY" y="180" z="90" unit="deg" />
-        <position unit="mm" x="0" y="fiberXstep*idxY+fiberX" z="(detectorZ-grooveDepth)/2" />
-      </physvol>
-		</loop>-->
+  <loop for="idxY" to="fiberN-1" step="1">
+    <physvol copynumber="idxY+fiberN">
+      <volumeref ref="Groove" />
+      <rotation name="grooveRotY" y="180" z="90" unit="deg" />
+      <position unit="mm" x="0" y="fiberXstep*idxY+fiberX" z="(detectorZ-grooveDepth)/2" />
+    </physvol>
+  </loop>
 </volume>
 
 <volume name="Module">

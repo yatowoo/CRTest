@@ -33,13 +33,11 @@
 <!-- PMT Configuration-->
 <variable name="pmtZ" value="0.05"/>
 
-<!-- World Configuration-->
-<variable name="worldX" value="detectorX*1.4" />
-<variable name="worldY" value="detectorY*1.4" />
-<variable name="worldZ" value="detectorZ*1.4" />
-
 <!-- Placement -->
 <position name="detectorPos" unit="mm" x="0" y="0" z="0" />
+<constant name="detectorN" value="4" />
+<matrix name="detectorPosZ" coldim="1" values="-50. -10. 10. 50." />
+
 <variable name="fiberOffset" value="7.5" />
 <variable name="fiberX" value="-detectorX/2+fiberOffset" />
 <variable name="fiberN" value="10"/>
@@ -47,6 +45,12 @@
 <rotation name="fiberRotX" x="90" unit="deg" />
 <rotation name="fiberRotY" y="90" unit="deg" />
 
+<!-- World Configuration-->
+<variable name="worldX" value="detectorX*1.4" />
+<variable name="worldY" value="detectorY*1.4" />
+<variable name="worldZ" value="(detectorZ*detectorN+detectorPosZ[detectorN]-detectorPosZ[1])*1.2" />
+
 <!-- Others-->
+<variable name="iDetector" value="0" />
 <variable name="idxX" value="0" />
 <variable name="idxY" value="0" />
