@@ -5,7 +5,8 @@
 <!ENTITY Property SYSTEM "PropertyDB.gdml_entity">
 <!ENTITY Material SYSTEM "MaterialDB.gdml_entity">
 <!ENTITY Solid SYSTEM "SolidDB.gdml_entity">
- <!ENTITY Surface SYSTEM "SurfaceDB.gdml_entity">
+<!ENTITY Surface SYSTEM "SurfaceDB.gdml_entity">
+<!ENTITY Slab SYSTEM "Module_Slab.gdml_entity">
 ]>
 
 <gdml xmlns:gdml="http://gdml.web.cern.ch/GDML/"
@@ -27,62 +28,7 @@
  </solids>
 
 <structure>
-  <volume name="PMT">
-    <materialref ref="G4_Al" />
-    <solidref ref="pmtS" />
-  </volume>
-
-  <volume name="Core">
-    <materialref ref="BCF92_CORE_PS" />
-    <solidref ref="coreS" />
-  </volume>
-
-  <volume name="Cladding">
-    <materialref ref="Fiber_CLADDING1_PMMA"/>
-    <solidref ref="claddingS"/>
-    <physvol>
-      <volumeref ref="Core"/>
-    </physvol>
-  </volume>
-  
-  <volume name="Groove">
-    <materialref ref="EJ500" />
-    <solidref ref="grooveS" />
-    <physvol>
-      <volumeref ref="Cladding" />
-      <rotation name="fiberRot" x="90" unit="deg" />
-      <position z="grooveDepth/2-claddingR*1.1"/>
-    </physvol>
-    <physvol copynumber="0">
-      <volumeref ref="PMT" />
-      <position lunit="mm" y="fiberL/2-pmtZ/2." z="grooveDepth/2-claddingR*1.1"/>
-      <rotation name="fiberRot" x="90" unit="deg" />
-    </physvol>
-    <physvol copynumber="1">
-      <volumeref ref="PMT" />
-      <position lunit="mm" y="-fiberL/2+pmtZ/2." z="grooveDepth/2-claddingR*1.1"/>
-      <rotation name="fiberRot" x="90" unit="deg" />
-    </physvol>
-  </volume>
-
-  <volume name="Detector">
-    <materialref ref="EJ200_PVT" />
-    <solidref ref="detectorS" />
-		<loop for="idxX" to="fiberN-1" step="1">
-      <physvol copynumber="idxX">
-        <volumeref ref="Groove" />
-        <position unit="mm" x="fiberXstep*idxX+fiberX" y="0" z="(-detectorZ+grooveDepth)/2" />
-      </physvol>
-		</loop>
-    <!--
-		<loop for="idxY" to="fiberN-1" step="1">
-      <physvol copynumber="idxY+fiberN">
-        <volumeref ref="Groove" />
-        <rotation name="grooveRotY" y="180" z="90" unit="deg" />
-        <position unit="mm" x="0" y="fiberXstep*idxY+fiberX" z="(detectorZ-grooveDepth)/2" />
-      </physvol>
-		</loop>-->
-  </volume>
+  &Slab;
 
   <volume name="World">
     <materialref ref="AIR" />
@@ -94,15 +40,15 @@
   </volume>
 
   <skinsurface name="skin" surfaceproperty="scint_surf" >
-    <volumeref ref="Detector"/>
+    <volumeref ref="Scintillator"/>
   </skinsurface>
   <bordersurface name="border" surfaceproperty="groove_surf" >
-    <physvolref ref="Detector_PV"/>
+    <physvolref ref="Scintillator_PV"/>
     <physvolref ref="Groove_PV"/>
   </bordersurface>
 
   <bordersurface name="pmt_border" surfaceproperty="photocath" >
-    <physvolref ref="Core_PV"/>
+    <physvolref ref="Fiber_PV"/>
     <physvolref ref="PMT_PV"/>
   </bordersurface>
 
@@ -113,20 +59,20 @@
     <auxiliary auxtype="Property">
       <auxiliary auxtype="Skin" auxvalue="ScintWrapper">
         <auxiliary auxtype="SurfaceName" auxvalue="scint_surf" />
-        <auxiliary auxtype="LVname" auxvalue="Detector" />
+        <auxiliary auxtype="LVname" auxvalue="Scintillator" />
         <auxiliary auxtype="Material" auxvalue="OpWrapper_Scint" />
       </auxiliary>
 
       <auxiliary auxtype="Border" auxvalue="ScintGroove">
         <auxiliary auxtype="SurfaceName" auxvalue="groove_surf"/>
-        <auxiliary auxtype="PVname" auxvalue="Detector_PV" />
+        <auxiliary auxtype="PVname" auxvalue="Scintillator_PV" />
         <auxiliary auxtype="PVname" auxvalue="Groove_PV" />
         <auxiliary auxtype="Material" auxvalue="OpWrapper_Scint"/>
       </auxiliary>
 
       <auxiliary auxtype="Border" auxvalue="Photocathode">
         <auxiliary auxtype="SurfaceName" auxvalue="photocath"/>
-        <auxiliary auxtype="PVname" auxvalue="Core_PV" />
+        <auxiliary auxtype="PVname" auxvalue="Fiber_PV" />
         <auxiliary auxtype="PVname" auxvalue="PMT_PV" />
         <auxiliary auxtype="Material" auxvalue="OpBorder_PMT_R5610A"/>
       </auxiliary>
