@@ -1,0 +1,61 @@
+<!-- this is a file defining Slab Design (G4LogicalVolume) in split.gdml -->
+<!-- it is _not_ a standalone GDML file -->
+<!-- This file should be referenced in <structure></structure>-->
+<!-- Dependencies : Config/MaterialDB/SolidDB.gdml_entity-->
+
+<!-- Structure : Detector<-Module(Wrapper/Coating)
+  <-Scintillator<-Groove<-Fiber
+    <- Cladding2<-Cladding1<-Core
+    <- PMT -->
+
+<volume name="PMT">
+  <materialref ref="G4_Al" />
+  <solidref ref="pmtS" />
+</volume>
+
+<volume name="Core">
+  <materialref ref="BCF92_CORE_PS" />
+  <solidref ref="coreS" />
+</volume>
+
+<volume name="Cladding1">
+  <materialref ref="Fiber_CLADDING1_PMMA"/>
+  <solidref ref="cladding1S"/>
+  <physvol>
+    <volumeref ref="Core"/>
+  </physvol>
+</volume>
+
+<volume name="Cladding2">
+  <materialref ref="Fiber_CLADDING2_FluorPMMA"/>
+  <solidref ref="cladding2S"/>
+  <physvol>
+    <volumeref ref="Cladding1"/>
+  </physvol>
+</volume>
+
+<volume name="Fiber">
+  <materialref ref="AIR"/>
+  <solidref ref="fiberS"/>
+  <physvol>
+    <volumeref ref="Cladding2"/>
+  </physvol>
+  <physvol copynumber="0">
+    <volumeref ref="PMT"/>
+    <position unit="mm" z="-fiberL/2.+pmtZ/2."/>
+  </physvol>
+  <physvol copynumber="1">
+    <volumeref ref="PMT"/>
+    <position unit="mm" z="fiberL/2.-pmtZ/2."/>
+  </physvol>
+</volume>
+
+<volume name="Groove">
+  <materialref ref="EJ500" />
+  <solidref ref="grooveS" />
+  <physvol>
+    <volumeref ref="Fiber" />
+    <rotation name="fiberRot" x="90" unit="deg" />
+    <position unit="mm" z="grooveDepth/2-claddingR*1.1"/>
+  </physvol>
+</volume>
