@@ -29,6 +29,11 @@ Generator::Generator()
     fParticleGun->SetParticleDefinition(particleDefinition);
     fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0., 0., 1.));
     fParticleGun->SetParticleEnergy(3.0 * GeV);
+    G4ThreeVector position = GetWorldBoundary();
+    position.setX(0.);
+    position.setY(0.);
+    position.setZ(-position.z());
+    fParticleGun->SetParticlePosition(position);
 }
 
 Generator::~Generator()
@@ -39,11 +44,6 @@ Generator::~Generator()
 
 void Generator::GeneratePrimaries(G4Event *anEvent)
 {
-    G4ThreeVector position = GetWorldBoundary();
-    position.setX(0.);
-    position.setY(0.);
-    position.setZ(-position.z());
-    fParticleGun->SetParticlePosition(position);
 
     fParticleGun->GeneratePrimaryVertex(anEvent);
 }
