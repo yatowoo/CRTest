@@ -11,10 +11,9 @@ Analysis* Analysis::fgInstance = NULL;
 
 // add option for each type 
 static std::vector<OpPhotonType> TypeList = {
-	Cladding2Core,
-	OpWLS,
 	Fiber2Pmt,
-	Detected
+	Detected,
+	OpDebug
 };
 // #endif CRTest_DEBUG_OPTICAL_MORE
 

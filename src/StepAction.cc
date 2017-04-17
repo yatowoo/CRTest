@@ -54,6 +54,14 @@ void StepAction::UserSteppingAction(const G4Step *aStep)
         G4OpticalPhoton::OpticalPhotonDefinition())
         return;
 
+	// Step Numbers CUT - to avoid endless OpBoundary process
+	if(theTrack->GetCurrentStepNumber() > 5000){
+		theTrack->SetTrackStatus(G4TrackStatus::fStopAndKill);
+		Analysis::Instance()->FillOpPhotonTrackForEvent(theTrack, OpDebug);
+		Recorder->nDebug += 1;
+		return;
+	}
+
     //
     // Boundary Check
     //
@@ -104,10 +112,8 @@ void StepAction::UserSteppingAction(const G4Step *aStep)
 			thePrePV->GetName() == "Cladding2_PV" )&&
                  thePostPV->GetName() == "Groove_PV")
         {
-            Recorder->nDebug += 1;
             Recorder->SetBoundaryName("Fiber2Groove");
             BoundaryStats(boundary);
-            //theTrack->SetTrackStatus(G4TrackStatus::fStopAndKill);
             return;
         }
     }

@@ -23,7 +23,8 @@ enum OpPhotonType{
 	Cladding2Core,
 	OpWLS,
 	Fiber2Pmt,
-	Detected
+	Detected,
+	OpDebug
 };
 
 class OpRecorder : public VirtualRecorder{

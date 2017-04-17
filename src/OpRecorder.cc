@@ -78,6 +78,7 @@ void OpRecorder::CreateEntry(G4int ntupleID, G4RootAnalysisManager* rootData)
 	rootData->CreateNtupleIColumn(ntupleID, "op.wls");
 	rootData->CreateNtupleIColumn(ntupleID, "op.c2p");
 	rootData->CreateNtupleIColumn(ntupleID, "op.det");
+	rootData->CreateNtupleIColumn(ntupleID, "op.dbg");
 }
 
 void OpRecorder::FillEntry(G4int ntupleID, G4RootAnalysisManager* rootData)
@@ -89,6 +90,7 @@ void OpRecorder::FillEntry(G4int ntupleID, G4RootAnalysisManager* rootData)
 	rootData->FillNtupleIColumn(ntupleID, fFirstColID+4, nWlsEmit);
 	rootData->FillNtupleIColumn(ntupleID, fFirstColID+5, nCore2PMT);
 	rootData->FillNtupleIColumn(ntupleID, fFirstColID+6, nDetection);
+	rootData->FillNtupleIColumn(ntupleID, fFirstColID+7, nDebug);
 }
 
 G4bool OpRecorder::Record(const G4Track*)

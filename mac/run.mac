@@ -4,5 +4,5 @@
 /analysis/verbose 1
 /run/verbose 0
 /run/initialize
-/process/optical/scintillation/setYieldFactor 0.5
-/run/beamOn 1
+/process/optical/scintillation/setYieldFactor 1.
+/run/beamOn 5
