@@ -9,10 +9,10 @@
 <box lunit="mm" name="worldS" x="worldX" y="worldY" z="worldZ" />
 <box lunit="mm" name="grooveS" x="grooveWidth" y="fiberL+pmtZ*2" z="grooveDepth" />
 
-<eltube lunit="mm" name="coreS" dx="coreR" dy="coreR" dz="fiberL/2-pmtZ" />
-<eltube lunit="mm" name="claddingS" dx="claddingR" dy="claddingR" dz="fiberL/2-pmtZ" />
-<eltube lunit="mm" name="cladding1S" dx="cladding1R" dy="cladding1R" dz="fiberL/2-pmtZ" />
-<eltube lunit="mm" name="cladding2S" dx="cladding2R" dy="cladding2R" dz="fiberL/2-pmtZ" />
+<eltube lunit="mm" name="coreS" dx="coreR" dy="coreR" dz="fiberL/2-pmtZ-1." />
+<eltube lunit="mm" name="claddingS" dx="claddingR" dy="claddingR" dz="fiberL/2-pmtZ-1." />
+<eltube lunit="mm" name="cladding1S" dx="cladding1R" dy="cladding1R" dz="fiberL/2-pmtZ-1." />
+<eltube lunit="mm" name="cladding2S" dx="cladding2R" dy="cladding2R" dz="fiberL/2-pmtZ-1." />
 <eltube lunit="mm" name="fiberS" dx="fiberR" dy="fiberR" dz="fiberL/2" />
 
-<eltube lunit="mm" name="pmtS" dx="claddingR" dy="claddingR" dz="pmtZ/2." />
+<eltube lunit="mm" name="pmtS" dx="fiberR" dy="fiberR" dz="pmtZ/2." />

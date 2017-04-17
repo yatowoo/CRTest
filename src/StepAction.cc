@@ -67,7 +67,7 @@ void StepAction::UserSteppingAction(const G4Step *aStep)
 			(status == Transmission || status == FresnelRefraction);
 		if(gotThrough){
 			// OpPthoton got through boundary
-			if (thePrePV->GetName() == "Detector_PV" &&
+			if (thePrePV->GetName() == "Scintillator_PV" &&
 				thePostPV->GetName() == "Groove_PV")
 			{
 				type = Scint2Groove;
@@ -75,26 +75,20 @@ void StepAction::UserSteppingAction(const G4Step *aStep)
 
 			}
 			else if (thePrePV->GetName() == "Groove_PV" &&
-				thePostPV->GetName() == "Cladding_PV")
+				(thePostPV->GetName() == "Fiber_PV"
+				|| thePostPV->GetName() == "Cladding2_PV"))
 			{
 				type = Groove2Cladding;
 				Recorder->nGroove2Cladding += 1;
 			}
-			else if (thePrePV->GetName() == "Cladding_PV" &&
+			else if (thePrePV->GetName() == "Cladding1_PV" &&
 				thePostPV->GetName() == "Core_PV")
 			{
 				type = Cladding2Core;
 				Recorder->nCladding2Core += 1;
 			}
-			// TODO : REMOVE after GDML setup completed
-			else if (thePrePV->GetName() == "Groove_PV" &&
-				thePostPV->GetName() == "Core_PV")
-			{
-				type = Groove2Cladding;
-				Recorder->nGroove2Cladding += 1;
-			}
 		}
-        else if (thePrePV->GetName() == "Core_PV" &&
+        else if (thePrePV->GetName() == "Fiber_PV" &&
                  thePostPV->GetName() == "PMT_PV")
         {
 			// OpPhoton hit PMT photocathode
@@ -106,11 +100,12 @@ void StepAction::UserSteppingAction(const G4Step *aStep)
 			}
         }
 		// For Debug boundary details
-        else if (thePrePV->GetName() == "Core_PV" &&
+        else if ((thePrePV->GetName() == "Fiber_PV" || 
+			thePrePV->GetName() == "Cladding2_PV" )&&
                  thePostPV->GetName() == "Groove_PV")
         {
             Recorder->nDebug += 1;
-            Recorder->SetBoundaryName("Core2Groove");
+            Recorder->SetBoundaryName("Fiber2Groove");
             BoundaryStats(boundary);
             //theTrack->SetTrackStatus(G4TrackStatus::fStopAndKill);
             return;
