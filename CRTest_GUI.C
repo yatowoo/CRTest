@@ -16,6 +16,7 @@
 #include "TGLayout.h"
 #include "TGTab.h"
 #include "TGTextEntry.h"
+#include "TGNumberEntry.h"
 #include "TGComboBox.h"
 #include "TGTextView.h"
 #include "TGLabel.h"
@@ -23,7 +24,9 @@
 #include "TRootEmbeddedCanvas.h"
 #include "TCanvas.h"
 
+#include "TMath.h"
 #include "TF1.h"
+#include "TRandom.h"
 #include "TSystem.h"
 #include "TROOT.h"
 #include "TRint.h"
@@ -31,7 +34,7 @@
 class CRTestWindow : public TGObject {
 	RQ_OBJECT("CRTestWindow")
 
-private:
+private: // Display
 	TGMainFrame         *fMain;
 	TGCompositeFrame    *fF1;
 	TGCompositeFrame    *fFcanvasL;
@@ -40,14 +43,16 @@ private:
 	TGLayoutHints       *fL3;
 	TGLayoutHints       *fLCanvas;
 	TGTextEntry         *fTxt;
-	TGTextEntry         *fTent;
 	TGTextEntry         *fCommand;
+	TGNumberEntry		*fDrawParam;
 	TGComboBox          *fComboCmd;
 	TGTextView          *fTextView;
 	TString              fName;
 	TGLabel             *fLabel;
 	TRootEmbeddedCanvas *fCanvas;
 	TGStatusBar         *fStatusBar;
+private: // Local Variable
+	TF1* fDrawFunc;
 public:
 	CRTestWindow(const TGWindow* p, UInt_t w, UInt_t h);
 	virtual ~CRTestWindow();
@@ -55,7 +60,6 @@ public:
 	void DoTextChanged();
 	void DoDraw();
 	void DoClear();
-	void DoEnteredCommand();
 	// for Control buttons
 	void DoConfigure();
 	void DoBuild();
@@ -63,7 +67,12 @@ public:
 };
 
 CRTestWindow::CRTestWindow(const TGWindow* p, UInt_t w, UInt_t h){
+	// Initialize Local Variable
+	fDrawFunc = NULL;
 
+	/*
+	**	Initialize CRTestWindow
+	*/
 	fMain = new TGMainFrame(p,w,h,kVerticalFrame);
 
 	fMain->SetCleanup(kDeepCleanup);
@@ -73,8 +82,8 @@ CRTestWindow::CRTestWindow(const TGWindow* p, UInt_t w, UInt_t h){
 	//
 	fTab = new TGTab(fMain, 300, 300);
 	//fTab->Connect("Selected(Int_t)", "TestDialog", this, "DoTab(Int_t)");
-
 	fL3 = new TGLayoutHints(kLHintsTop | kLHintsLeft , 5, 5, 5, 5);
+		// Tab - File
 	TGCompositeFrame *tf = fTab->AddTab("File");
 	fF1 = new TGCompositeFrame(tf, 60, 20, kHorizontalFrame);
 
@@ -86,19 +95,21 @@ CRTestWindow::CRTestWindow(const TGWindow* p, UInt_t w, UInt_t h){
 	TGTextButton *tb1 = new TGTextButton(fF1, "&Clear", 0);
 	tb1->Connect("Clicked()","CRTestWindow",this,"DoClear()");
 	fF1->AddFrame(tb1, fL3);
-
+		
+		// Tab - Info
 	tf = fTab->AddTab("Info");
 	fF1 = new TGCompositeFrame(tf, 60, 20, kVerticalFrame);
 	fLabel = new TGLabel(fF1,"Normal Label");
 	fF1->AddFrame(fLabel, fL3);
 	tf->AddFrame(fF1, fL3);
-	// Tab - Canvas
+		// Tab - Canvas
 	tf = fTab->AddTab("Canvas");
 	fF1 = new TGCompositeFrame(tf, 60, 20, kHorizontalFrame);
 
 	fFcanvasL = new TGCompositeFrame(tf, 150, 100, kVerticalFrame);
-	fTent = new TGTextEntry(fFcanvasL, new TGTextBuffer(50));
-	fFcanvasL->AddFrame(fTent, fL3);
+
+	fDrawParam = new TGNumberEntry(fFcanvasL, 1.0, 5, 0);
+	fFcanvasL->AddFrame(fDrawParam, fL3);
 
 	TGTextButton* tb = new TGTextButton(fFcanvasL,"&Draw",0);
 	tb->Connect("Clicked()","CRTestWindow",this,"DoDraw()");
@@ -111,11 +122,11 @@ CRTestWindow::CRTestWindow(const TGWindow* p, UInt_t w, UInt_t h){
 	fF1->AddFrame(fCanvas, fLCanvas);
 
 	tf->AddFrame(fF1, fLCanvas);
-	fTent->Resize(50, fTent->GetDefaultHeight());
+	fDrawParam->Resize(50, fDrawParam->GetDefaultHeight());
 	tb->Resize(tb->GetDefaultWidth(), tb->GetDefaultHeight());
 
 	//
-	// FRAME - Create a horizontal frame containing button(s)
+	// FRAME - for button(s)
 	//
 	TGHorizontalFrame *hframe = new TGHorizontalFrame(fMain, 350, 20, kFixedWidth);
 	TGTextButton *generate = new TGTextButton(hframe, "&Configure ");
@@ -161,7 +172,7 @@ void CRTestWindow::DoRun(){
 
 
 void CRTestWindow::DoClear(){
-	gSystem->Exec("mkdir -p .build;cd .build;cmake ../code;make -j4;./CRTest");
+	gSystem->Exec("cd .build; /bin/rm -rf CMake* cmake* Makefile");
 }
 
 void CRTestWindow::DoTextChanged(){
@@ -170,42 +181,15 @@ void CRTestWindow::DoTextChanged(){
 }
 
 void CRTestWindow::DoDraw(){
-	TF1 *f1 = new TF1("f1","sin(x)/x",0,gRandom->Rndm()*10);
-	f1->SetLineWidth(3);
-	f1->Draw();
+	if(fDrawFunc) delete fDrawFunc;
+	TString fcn = "sin(" + std::to_string(fDrawParam->GetNumber())
+		+ "*x)";
+	fDrawFunc = new TF1("f1",fcn.Data(),0,TMath::Pi());
+	fDrawFunc->SetLineWidth(3);
+	fDrawFunc->Draw();
 	TCanvas *canvas = fCanvas->GetCanvas();
 	canvas->cd();
 	canvas->Update();
-}
-
-void CRTestWindow::DoEnteredCommand()
-{
-	// Execute the CINT command after the ENTER key was pressed.
-
-	const char *command = fCommand->GetTitle();
-	TString prompt;
-
-	if (strlen(command)) {
-		// form temporary file path
-		prompt = ((TRint*)gROOT->GetApplication())->GetPrompt();
-		FILE *cintout = fopen(fName.Data(), "a+t");
-		if (cintout) {
-			fputs(Form("%s%s\n",prompt.Data(), command), cintout);
-			fclose(cintout);
-		}
-		gSystem->RedirectOutput(fName.Data(), "a");
-		gROOT->ProcessLine(command);
-		fComboCmd->InsertEntry(command, 0, -1);
-		Gl_histadd((char *)command);
-		gSystem->RedirectOutput(0);
-		fTextView->LoadFile(fName.Data());
-		if (fTextView->ReturnLineCount() > 10)
-			fTextView->SetVsbPosition(fTextView->ReturnLineCount());
-		fCommand->Clear();
-	} else {
-		printf("No command entered\n");
-	}
-	fTextView->ShowBottom();
 }
 
 void CRTest_GUI(){
