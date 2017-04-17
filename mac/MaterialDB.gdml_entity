@@ -105,6 +105,7 @@
   <composite n="5" ref="Carbon" />
   <composite n="2" ref="Oxygen" />
   <property name="RINDEX" ref="CLADDING1_RINDEX"/>
+  <property name="ABSLENGTH" ref="Y11_ABSLENGTH"/>
 </material>
 
 <material formula=" " name="Fiber_CLADDING2_FluorPMMA" >
@@ -114,42 +115,53 @@
   <composite n="5" ref="Carbon" />
   <composite n="2" ref="Oxygen" />
   <property name="RINDEX" ref="CLADDING2_RINDEX"/>
+  <property name="ABSLENGTH" ref="Y11_ABSLENGTH"/>
 </material>
 
   <!-- For OpticalSurface MPT-->
-  <material name="OpWrapper_Scint">
+  <material name="OpSurface_Scint">
     <D value="0.00129" />
     <fraction n="0.7" ref="Nitrogen" />
     <fraction n="0.3" ref="Oxygen" />
-    <property name="REFLECTIVITY" ref="OpWrapper_Scint_REFLECTIVITY" />
-    <property name="SURFACEROUGHNESS" ref="OpWrapper_Scint_ROUGHNESS" />
-    <property name="SPECULARSPIKECONSTANT" ref="OpWrapper_Scint_SPIKE" />
-    <property name="SPECULARLOBECONSTANT" ref="OpWrapper_Scint_LOBE" />
+    <property name="REFLECTIVITY" ref="OpSurface_Scint_REFLECTIVITY" />
+    <property name="SURFACEROUGHNESS" ref="OpSurface_Scint_ROUGHNESS" />
+    <property name="SPECULARSPIKECONSTANT" ref="OpSurface_Scint_SPIKE" />
+    <property name="SPECULARLOBECONSTANT" ref="OpSurface_Scint_LOBE" />
   </material>
 
-  <material name="OpBorder_PMT">
+<material name="OpSurface_Groove">
+  <D value="0.00129" />
+  <fraction n="0.7" ref="Nitrogen" />
+  <fraction n="0.3" ref="Oxygen" />
+  <property name="REFLECTIVITY" ref="OpSurface_Groove_REFLECTIVITY" />
+  <property name="SURFACEROUGHNESS" ref="OpSurface_Groove_ROUGHNESS" />
+  <property name="SPECULARSPIKECONSTANT" ref="OpSurface_Groove_SPIKE" />
+  <property name="SPECULARLOBECONSTANT" ref="OpSurface_Groove_LOBE" />
+</material>
+
+  <material name="OpSurface_PMT">
     <D value="0.00129" />
     <fraction n="0.7" ref="Nitrogen" />
     <fraction n="0.3" ref="Oxygen" />
-    <property name="EFFICIENCY" ref="OpBorder_PMT_EFFICIENCY" />
-    <property name="REFLECTIVITY" ref="OpBorder_PMT_REFLECTIVITY" />
-    <property name="TRANSMITTANCE" ref="OpBorder_PMT_TRANSMITTANCE" />
+    <property name="EFFICIENCY" ref="OpSurface_PMT_EFFICIENCY" />
+    <property name="REFLECTIVITY" ref="OpSurface_PMT_REFLECTIVITY" />
+    <property name="TRANSMITTANCE" ref="OpSurface_PMT_TRANSMITTANCE" />
   </material>
 
-<material name="OpBorder_PMT_R5610A">
+<material name="OpSurface_PMT_R5610A">
   <D value="0.00129" />
   <fraction n="0.7" ref="Nitrogen" />
   <fraction n="0.3" ref="Oxygen" />
   <property name="EFFICIENCY" ref="PMT_R5610A_EFFICIENCY" />
-  <property name="REFLECTIVITY" ref="OpBorder_PMT_REFLECTIVITY" />
-  <property name="TRANSMITTANCE" ref="OpBorder_PMT_TRANSMITTANCE" />
+  <property name="REFLECTIVITY" ref="OpSurface_PMT_REFLECTIVITY" />
+  <property name="TRANSMITTANCE" ref="OpSurface_PMT_TRANSMITTANCE" />
 </material>
 
-<material name="OpBorder_PMT_R7546">
+<material name="OpSurface_PMT_R7546">
   <D value="0.00129" />
   <fraction n="0.7" ref="Nitrogen" />
   <fraction n="0.3" ref="Oxygen" />
   <property name="EFFICIENCY" ref="PMT_R7546_EFFICIENCY" />
-  <property name="REFLECTIVITY" ref="OpBorder_PMT_REFLECTIVITY" />
-  <property name="TRANSMITTANCE" ref="OpBorder_PMT_TRANSMITTANCE" />
+  <property name="REFLECTIVITY" ref="OpSurface_PMT_REFLECTIVITY" />
+  <property name="TRANSMITTANCE" ref="OpSurface_PMT_TRANSMITTANCE" />
 </material>

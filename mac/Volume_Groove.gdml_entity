@@ -51,7 +51,7 @@
 </volume>
 
 <volume name="Groove">
-  <materialref ref="EJ500" />
+  <materialref ref="AIR" />
   <solidref ref="grooveS" />
   <physvol>
     <volumeref ref="Fiber" />

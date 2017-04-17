@@ -49,10 +49,9 @@
       <physvolref ref="Groove_PV"/>
     </bordersurface>
 
-    <bordersurface name="pmt_border" surfaceproperty="photocath" >
-      <physvolref ref="Fiber_PV"/>
-      <physvolref ref="PMT_PV"/>
-    </bordersurface>
+    <skinsurface name="pmt_skin" surfaceproperty="photocath" >
+      <volumeref ref="PMT"/>
+    </skinsurface>
 
 
   </structure>
@@ -62,32 +61,26 @@
       <auxiliary auxtype="Skin" auxvalue="ScintWrapper">
         <auxiliary auxtype="SurfaceName" auxvalue="scint_surf" />
         <auxiliary auxtype="LVname" auxvalue="Module" />
-        <auxiliary auxtype="Material" auxvalue="OpWrapper_Scint" />
+        <auxiliary auxtype="Material" auxvalue="OpSurface_Scint" />
       </auxiliary>
 
       <auxiliary auxtype="Border" auxvalue="ScintGroove">
         <auxiliary auxtype="SurfaceName" auxvalue="groove_surf"/>
         <auxiliary auxtype="PVname" auxvalue="Scintillator_PV" />
         <auxiliary auxtype="PVname" auxvalue="Groove_PV" />
-        <auxiliary auxtype="Material" auxvalue="OpWrapper_Scint"/>
+        <auxiliary auxtype="Material" auxvalue="OpSurface_Groove"/>
       </auxiliary>
 
-      <auxiliary auxtype="Border" auxvalue="Photocathode">
+      <auxiliary auxtype="Skin" auxvalue="Photocathode">
         <auxiliary auxtype="SurfaceName" auxvalue="photocath"/>
-        <auxiliary auxtype="PVname" auxvalue="Fiber_PV" />
-        <auxiliary auxtype="PVname" auxvalue="PMT_PV" />
-        <auxiliary auxtype="Material" auxvalue="OpBorder_PMT_R5610A"/>
+        <auxiliary auxtype="LVname" auxvalue="PMT" />
+        <auxiliary auxtype="Material" auxvalue="OpSurface_PMT_R5610A"/>
       </auxiliary>
-
     </auxiliary>
 
-    <auxiliary auxtype="Region" auxvalue="sensitive">
-      <auxiliary auxtype="RootLogicalVolume" auxvalue="Detector"/>
-      <auxiliary auxtype="proton_cut_legth" auxvalue="2" auxunit="mm"/>
-    </auxiliary>
   </userinfo>
 
-  <setup name="SingleSlab" version="4.3" >
+  <setup name="Test_Slab" version="6" >
     <world ref="World" />
   </setup>
 
