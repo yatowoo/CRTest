@@ -157,7 +157,7 @@
   <property name="TRANSMITTANCE" ref="OpSurface_PMT_TRANSMITTANCE" />
 </material>
 
-<material name="OpSurface_PMT_R7546">
+<material name="OpSurface_PMT_H7546">
   <D value="0.00129" />
   <fraction n="0.7" ref="Nitrogen" />
   <fraction n="0.3" ref="Oxygen" />

@@ -5,8 +5,8 @@
 <!-- Units : mm, deg, g/cm3 -->
 
 <!-- Detector Configuration -->
-<variable name="detectorX" value="60" />
-<variable name="detectorY" value="60" />
+<variable name="detectorX" value="26" />
+<variable name="detectorY" value="7000" />
 <variable name="detectorZ" value="10" />
 
 <variable name="coatingThickness" value="0.12" />
@@ -16,18 +16,18 @@
 <variable name="moduleY" value="detectorY" />
 <variable name="moduleZ" value="detectorZ" />
 
-<variable name="scintillatorX" value="detectorX-wrapperGap" />
-<variable name="scintillatorY" value="detectorY-wrapperGap" />
-<variable name="scintillatorZ" value="detectorZ-wrapperGap" />
+<variable name="scintillatorX" value="moduleX-coatingThickness" />
+<variable name="scintillatorY" value="moduleY-coatingThickness" />
+<variable name="scintillatorZ" value="moduleZ-coatingThickness" />
 
 <!-- WLS Fiber Configuration-->
-<variable name="fiberL" value="detectorX*1.2" />
-<variable name="fiberR" value="1./2."/>
+<variable name="fiberL" value="detectorY*1.2" />
+<variable name="fiberR" value="0.5"/>
 <variable name="coreR" value="fiberR*0.95"/>
 <variable name="claddingR" value="fiberR"/>
 <variable name="cladding1R" value="fiberR*0.98"/>
 <variable name="cladding2R" value="fiberR"/>
-<variable name="grooveWidth" value="fiberR*2.2"/>
+<variable name="grooveWidth" value="1.6"/>
 <variable name="grooveDepth" value="2"/>
 
 <!-- PMT Configuration-->

@@ -2,3 +2,28 @@
 <!-- it is _not_ a standalone GDML file -->
 <!-- This file should be referenced in <structure></structure>-->
 <!-- Dependencies : Config/MaterialDB/SolidDB.gdml_entity-->
+
+<volume name="Scintillator">
+  <materialref ref="EJ200_PVT" />
+  <solidref ref="slabScintS" />
+  <physvol>
+    <volumeref ref="Groove" />
+    <position unit="mm" x="0" y="0" z="(-detectorZ+grooveDepth)/2" />
+  </physvol>
+</volume>
+
+<volume name="Module">
+  <materialref ref="AIR" />
+  <solidref ref="slabModuleS" />
+  <physvol>
+    <volumeref ref="Scintillator" />
+  </physvol>
+</volume>
+
+<volume name="Detector">
+  <materialref ref="AIR" />
+  <solidref ref="detectorS" />
+  <physvol>
+    <volumeref ref="Module" />
+  </physvol>
+</volume>

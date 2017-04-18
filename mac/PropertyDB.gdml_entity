@@ -242,9 +242,7 @@
   2.284*eV	0.237
   2.207*eV	0.09892
   2.168*eV	0.04347
-  2.12*eV		0.0241
-  2.034*eV	-0.01451
-  1.964*eV	-0.01648" />
+  2.12*eV		0.0241" />
 <matrix name="Y11_WLSTIMECONSTANT" coldim="1" values="0.5*ns" />
 
   <!-- Saint-Gobain BCF92 -->
@@ -297,7 +295,7 @@
 <matrix name="OpSurface_Scint_ROUGHNESS" coldim="1" values="0.01"/>
 <matrix name="OpSurface_Scint_SPIKE" coldim="1" values="0.7"/>  
 <matrix name="OpSurface_Scint_LOBE" coldim="1" values="0.3"/>
-<matrix name="OpSurface_Scint_REFLECTIVITY" coldim="1" values="0.90"/>
+<matrix name="OpSurface_Scint_REFLECTIVITY" coldim="1" values="0.95"/>
 
 <!-- Groove Finish -->
 <matrix name="OpSurface_Groove_ROUGHNESS" coldim="1" values="0.01"/>

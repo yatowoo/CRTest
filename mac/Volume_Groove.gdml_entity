@@ -14,7 +14,7 @@
 </volume>
 
 <volume name="Core">
-  <materialref ref="BCF92_CORE_PS" />
+  <materialref ref="Y11_CORE_PS" />
   <solidref ref="coreS" />
 </volume>
 
@@ -35,7 +35,7 @@
 </volume>
 
 <volume name="Fiber">
-  <materialref ref="AIR"/>
+  <materialref ref="EJ500"/>
   <solidref ref="fiberS"/>
   <physvol>
     <volumeref ref="Cladding2"/>
@@ -51,7 +51,7 @@
 </volume>
 
 <volume name="Groove">
-  <materialref ref="AIR" />
+  <materialref ref="EJ500" />
   <solidref ref="grooveS" />
   <physvol>
     <volumeref ref="Fiber" />

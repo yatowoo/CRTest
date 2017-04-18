@@ -5,4 +5,7 @@
 /run/verbose 0
 /run/initialize
 /process/optical/scintillation/setYieldFactor 1.
+/gun/particle e-
+/gun/energy 1.8 MeV
+/gun/position 0 0 -6 mm
 /run/beamOn 5
