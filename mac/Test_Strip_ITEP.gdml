@@ -7,7 +7,7 @@
   <!ENTITY Solid SYSTEM "SolidDB.gdml_entity">
   <!ENTITY Surface SYSTEM "SurfaceDB.gdml_entity">
   <!ENTITY Groove SYSTEM "Volume_Groove.gdml_entity">
-  <!ENTITY Detector SYSTEM "Module_SlabTest.gdml_entity">
+  <!ENTITY Detector SYSTEM "Module_SquareStrip.gdml_entity">
 ]>
 
 <gdml xmlns:gdml="http://gdml.web.cern.ch/GDML/"
@@ -15,19 +15,19 @@
   xsi:noNamespaceSchemaLocation="file:///schema/gdml.xsd">
 
   <define>
-    <variable name="detectorX" value="60" />
-    <variable name="detectorY" value="60" />
+    <variable name="detectorX" value="25" />
+    <variable name="detectorY" value="2000" />
     <variable name="detectorZ" value="10" />
     <variable name="coatingThickness" value="0.12" />
-    
-    <variable name="fiberR" value="0.5"/>
-    <variable name="fiberL" value="detectorY*1.2" />
-    <variable name="fiberN" value="10"/>
-    <variable name="fiberOffset" value="7.5" />
-    
-    <variable name="grooveWidth" value="1.6"/>
-    <variable name="grooveDepth" value="2"/>
 
+    <variable name="fiberR" value="0.5"/>
+    <variable name="fiberL" value="detectorY" />
+    <variable name="fiberN" value="-1"/>
+    <variable name="fiberOffset" value="0." />
+
+    <variable name="grooveWidth" value="1.6"/>
+    <variable name="grooveDepth" value="2.5"/>
+		
     <variable name="worldX" value="detectorX*1.2" />
     <variable name="worldY" value="fiberL*1.2" />
     <variable name="worldZ" value="detectorZ*1.2" />
@@ -60,10 +60,10 @@
     <skinsurface name="skin" surfaceproperty="scint_surf" >
       <volumeref ref="Scintillator"/>
     </skinsurface>
-
-    <skinsurface name="border" surfaceproperty="groove_surf" >
-      <volumeref ref="Groove"/>
-    </skinsurface>
+    <bordersurface name="border" surfaceproperty="groove_surf" >
+      <physvolref ref="Scintillator_PV"/>
+      <physvolref ref="Groove_PV"/>
+    </bordersurface>
 
     <skinsurface name="pmt_skin" surfaceproperty="photocath" >
       <volumeref ref="PMT"/>
@@ -72,7 +72,7 @@
     <skinsurface name="fiber_skin" surfaceproperty="fiber_surf" >
       <volumeref ref="Cladding2"/>
     </skinsurface>
-    
+
   </structure>
 
   <userinfo>
@@ -83,16 +83,17 @@
         <auxiliary auxtype="Material" auxvalue="OpSurface_Scint" />
       </auxiliary>
 
-      <auxiliary auxtype="Skin" auxvalue="ScintGroove">
+      <auxiliary auxtype="Border" auxvalue="ScintGroove">
         <auxiliary auxtype="SurfaceName" auxvalue="groove_surf"/>
-        <auxiliary auxtype="LVname" auxvalue="Groove" />
+        <auxiliary auxtype="PVname" auxvalue="Scintillator_PV" />
+        <auxiliary auxtype="PVname" auxvalue="Groove_PV" />
         <auxiliary auxtype="Material" auxvalue="OpSurface_Groove"/>
       </auxiliary>
 
       <auxiliary auxtype="Skin" auxvalue="Photocathode">
         <auxiliary auxtype="SurfaceName" auxvalue="photocath"/>
         <auxiliary auxtype="LVname" auxvalue="PMT" />
-        <auxiliary auxtype="Material" auxvalue="OpSurface_PMT_R5610A"/>
+        <auxiliary auxtype="Material" auxvalue="OpSurface_PMT_H7546"/>
       </auxiliary>
     </auxiliary>
 
