@@ -5,11 +5,7 @@
 <!-- Units : mm, deg, g/cm3 -->
 
 <!-- Detector Configuration -->
-<variable name="detectorX" value="26" />
-<variable name="detectorY" value="7000" />
-<variable name="detectorZ" value="10" />
-
-<variable name="coatingThickness" value="0.12" />
+	<!-- Detector Box Size defined in .gdml -->
 <variable name="wrapperGap" value="1." />
 
 <variable name="moduleX" value="detectorX" />
@@ -21,14 +17,12 @@
 <variable name="scintillatorZ" value="moduleZ-coatingThickness" />
 
 <!-- WLS Fiber Configuration-->
-<variable name="fiberL" value="detectorY*1.2" />
-<variable name="fiberR" value="0.5"/>
+	<!-- Fiber Length & Radius defined in .gdml -->
 <variable name="coreR" value="fiberR*0.95"/>
 <variable name="claddingR" value="fiberR"/>
 <variable name="cladding1R" value="fiberR*0.98"/>
 <variable name="cladding2R" value="fiberR"/>
-<variable name="grooveWidth" value="1.6"/>
-<variable name="grooveDepth" value="2"/>
+	<!-- Groove Size defined in .gdml -->
 
 <!-- PMT Configuration-->
 <variable name="pmtZ" value="0.05"/>
@@ -37,18 +31,15 @@
 <position name="detectorPos" unit="mm" x="0" y="0" z="0" />
 <constant name="detectorN" value="4" />
 <matrix name="detectorPosZ" coldim="1" values="-50. -10. 10. 50." />
-
-<variable name="fiberOffset" value="7.5" />
+  
+  <!-- Fiber Number & Offset defined in .gdml -->
 <variable name="fiberX" value="-detectorX/2+fiberOffset" />
-<variable name="fiberN" value="10"/>
 <variable name="fiberXstep" value="(detectorX-2*fiberOffset)/(fiberN-1)" />
 <rotation name="fiberRotX" x="90" unit="deg" />
 <rotation name="fiberRotY" y="90" unit="deg" />
 
 <!-- World Configuration-->
-<variable name="worldX" value="detectorX*1.4" />
-<variable name="worldY" value="detectorY*1.4" />
-<variable name="worldZ" value="(detectorZ*detectorN+detectorPosZ[detectorN]-detectorPosZ[1])*1.2" />
+	<!-- World Box Size defined in .gdml -->
 
 <!-- Others-->
 <variable name="iDetector" value="0" />

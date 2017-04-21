@@ -3,16 +3,16 @@
 <!-- This file should be referenced in <solids></solids>-->
 <!-- Dependencies : Config.gdml_entity-->
 
-<box lunit="mm" name="detectorS" x="detectorX+0.01" y="detectorY+0.01" z="detectorZ+0.01" />
+<box lunit="mm" name="detectorS" x="detectorX" y="detectorY" z="detectorZ" />
 <box lunit="mm" name="slabScintS" x="scintillatorX" y="scintillatorY" z="scintillatorZ" />
 <box lunit="mm" name="slabModuleS" x="moduleX" y="moduleY" z="moduleZ" />
 <box lunit="mm" name="worldS" x="worldX" y="worldY" z="worldZ" />
-<box lunit="mm" name="grooveS" x="grooveWidth" y="fiberL+pmtZ*2" z="grooveDepth" />
+<box lunit="mm" name="grooveS" x="grooveWidth" y="fiberL" z="grooveDepth" />
 
 <eltube lunit="mm" name="coreS" dx="coreR" dy="coreR" dz="fiberL/2-pmtZ-1." />
 <eltube lunit="mm" name="claddingS" dx="claddingR" dy="claddingR" dz="fiberL/2-pmtZ-1." />
 <eltube lunit="mm" name="cladding1S" dx="cladding1R" dy="cladding1R" dz="fiberL/2-pmtZ-1." />
 <eltube lunit="mm" name="cladding2S" dx="cladding2R" dy="cladding2R" dz="fiberL/2-pmtZ-1." />
-<eltube lunit="mm" name="fiberS" dx="fiberR+0.01" dy="fiberR+0.01" dz="fiberL/2" />
+<eltube lunit="mm" name="fiberS" dx="fiberR" dy="fiberR" dz="fiberL/2" />
 
 <eltube lunit="mm" name="pmtS" dx="fiberR" dy="fiberR" dz="pmtZ/2." />
