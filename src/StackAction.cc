@@ -43,14 +43,14 @@ StackAction::ClassifyNewTrack(const G4Track *theTrack)
 		if (theTrack->GetCreatorProcess()->GetProcessName() 
 			== "Scintillation")
 		{
-			Analysis::Instance()->FillOpPhotonTrackForEvent(
+			Analysis::Instance()->FillOpPhotonTrackForDebug(
 				theTrack, OpPhotonType::Scintillation);
 			Recorder->nScintTotal++;
 		}
 		else if (theTrack->GetCreatorProcess()->GetProcessName() 
 			== "OpWLS")
 		{
-			Analysis::Instance()->FillOpPhotonTrackForEvent(
+			Analysis::Instance()->FillOpPhotonTrackForDebug(
 				theTrack, OpPhotonType::OpWLS);
 			Recorder->nWlsEmit++;
 		}

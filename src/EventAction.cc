@@ -35,10 +35,7 @@ void EventAction::BeginOfEventAction(const G4Event *anEvent)
     OpRecorder* Recorder = OpRecorder::Instance();
     Recorder->Reset();
 
-	G4int ntupleID = 
-		Analysis::Instance()->CreateNtupleForEvent(eventID);
-	//assert(ntupleID == eventID + 1);
-	G4cout << " | + Create Event Vertex Ntuple " << ntupleID << G4endl;
+	Analysis::Instance()->SetCurrentEvent(eventID);
 }
 
 void EventAction::EndOfEventAction(const G4Event *anEvent)

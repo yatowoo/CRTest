@@ -18,8 +18,7 @@ static std::vector<OpPhotonType> TypeList = {
 // #endif CRTest_DEBUG_OPTICAL_MORE
 
 Analysis::Analysis()
-	: fCurrentNtuple(-1), fSD(NULL),
-	fOpticalFirstColID(-1)
+	: fRunNtuple(-1), fOpDebugNtuple(-1), fCurrentEvent(-1)
 {
 	rootData = G4RootAnalysisManager::Instance();
 	rootData->SetFileName("CRTest");
@@ -52,38 +51,28 @@ G4bool Analysis::SaveFile(){
 	return rootData->CloseFile();
 }
 
-G4bool Analysis::CreateNtupleForRun(){
-	if(fCurrentNtuple != -1)
-		return false;
-	fCurrentNtuple =
+G4int Analysis::CreateNtupleForRun(){
+	if(fRunNtuple != -1)
+		return fRunNtuple;
+	fRunNtuple =
 		rootData->CreateNtuple("Run","Muon track & SD outputs");
-	assert(fCurrentNtuple == 0);
+	assert(fRunNtuple == 0);
 
-	// #for each sd in fCrySD (std::vector)
-	for(G4int i = 0 ; i < fSD->size() ; i++)
-		(*fSD)[i]->CreateEntry(fCurrentNtuple, rootData);
-	// sd->CreateEntry(rootData, fCurrentNtuple)
+	for(unsigned int i = 0 ; i < fSD->size() ; i++)
+		(*fSD)[i]->CreateEntry(fRunNtuple, rootData);
 	
-	// #ifdef CRTest_DEBUG_OPTICAL
-	// CreateNtupleIColumn(fCurrentNtuple, "op.[scint,wls,det]")
-		// or Call OpRecorder::CreateEntry ?
-	for(G4int i = 0 ; i < fRecorder->size() ; i++)
-		(*fRecorder)[i]->CreateEntry(fCurrentNtuple, rootData);
+	for(unsigned int i = 0 ; i < fRecorder->size() ; i++)
+		(*fRecorder)[i]->CreateEntry(fRunNtuple, rootData);
 
-	return true;
+	return fRunNtuple;
 }
 
 G4bool Analysis::FillEntryForRun(){
 
-	// #for each sd in fCrySD (std::vector)
-	// sd->FillEntry(fCurrentNtuple)
-	for(G4int i = 0 ; i < fSD->size() ; i++)
+	for(unsigned int i = 0 ; i < fSD->size() ; i++)
 		(*fSD)[i]->FillEntry(0, rootData);
 
-	// #ifdef CRTest_DEBUG_OPTICAL
-	// FillNtupleIColumn(fCurrentNtuple, op_debug->nCol[scint,wls,det])
-		// or Call OpRecorder::FillEntry ?
-	for(G4int i = 0 ; i < fRecorder->size() ; i++)
+	for(unsigned int i = 0 ; i < fRecorder->size() ; i++)
 		(*fRecorder)[i]->FillEntry(0, rootData);
 
 	rootData->AddNtupleRow();
@@ -91,13 +80,12 @@ G4bool Analysis::FillEntryForRun(){
 	return true;
 }
 
-G4int Analysis::CreateNtupleForEvent(G4int eventID){
+G4int Analysis::CreateNtupleForOpDebug(){
 	
-	if(fCurrentNtuple < 0) return -1;
+	if(fRunNtuple < 0) return -1;
 	
 	G4int ntupleID = rootData->CreateNtuple(
-		"Event"+std::to_string(eventID),
-		"Storege Event Vertex.");
+		"OpDbg"," Storege Optical Photon for Debug");
 
 	rootData->CreateNtupleIColumn(ntupleID, "type");  // id = 0
 	rootData->CreateNtupleIColumn(ntupleID, "id"); // id = 1
@@ -109,37 +97,40 @@ G4int Analysis::CreateNtupleForEvent(G4int eventID){
 	rootData->CreateNtupleDColumn(ntupleID, "px");
 	rootData->CreateNtupleDColumn(ntupleID, "py");
 	rootData->CreateNtupleDColumn(ntupleID, "pz");
+	rootData->CreateNtupleIColumn(ntupleID, "event");  // Event id
 
 	rootData->FinishNtuple(ntupleID);
 
-	fCurrentNtuple = ntupleID;
-	return ntupleID;
+	fOpDebugNtuple = ntupleID;
+	return fOpDebugNtuple;
 }
 
-G4bool Analysis::FillOpPhotonTrackForEvent(
+G4bool Analysis::FillOpPhotonTrackForDebug(
 	const G4Track* theTrack, OpPhotonType type)
 {
 	if(std::find(TypeList.begin(),TypeList.end(),type)
 		== TypeList.end())
 		return false;
 
-	rootData->FillNtupleIColumn(fCurrentNtuple, 0, type);
-	rootData->FillNtupleIColumn(fCurrentNtuple, 1, theTrack->GetTrackID());
+	rootData->FillNtupleIColumn(fOpDebugNtuple, 0, type);
+	rootData->FillNtupleIColumn(fOpDebugNtuple, 1, theTrack->GetTrackID());
 
-	rootData->FillNtupleDColumn(fCurrentNtuple, 2, theTrack->GetKineticEnergy() / eV);
-	rootData->FillNtupleDColumn(fCurrentNtuple, 3, theTrack->GetGlobalTime());
+	rootData->FillNtupleDColumn(fOpDebugNtuple, 2, theTrack->GetKineticEnergy() / eV);
+	rootData->FillNtupleDColumn(fOpDebugNtuple, 3, theTrack->GetGlobalTime());
 
 	G4ThreeVector position = theTrack->GetPosition();
-	rootData->FillNtupleDColumn(fCurrentNtuple, 4, position.x()/ cm);
-	rootData->FillNtupleDColumn(fCurrentNtuple, 5, position.y()/ cm);
-	rootData->FillNtupleDColumn(fCurrentNtuple, 6, position.z()/ cm);
+	rootData->FillNtupleDColumn(fOpDebugNtuple, 4, position.x()/ cm);
+	rootData->FillNtupleDColumn(fOpDebugNtuple, 5, position.y()/ cm);
+	rootData->FillNtupleDColumn(fOpDebugNtuple, 6, position.z()/ cm);
 
 	G4ThreeVector direction = theTrack->GetMomentumDirection();
-	rootData->FillNtupleDColumn(fCurrentNtuple, 7, direction.x());
-	rootData->FillNtupleDColumn(fCurrentNtuple, 8, direction.y());
-	rootData->FillNtupleDColumn(fCurrentNtuple, 9, direction.z());
-
-	return rootData->AddNtupleRow(fCurrentNtuple);
+	rootData->FillNtupleDColumn(fOpDebugNtuple, 7, direction.x());
+	rootData->FillNtupleDColumn(fOpDebugNtuple, 8, direction.y());
+	rootData->FillNtupleDColumn(fOpDebugNtuple, 9, direction.z());
+	
+	rootData->FillNtupleIColumn(fOpDebugNtuple, 10, fCurrentEvent);
+	
+	return rootData->AddNtupleRow(fOpDebugNtuple);
 }
 
 G4bool Analysis::RegisterSD(VirtualSD* sd){

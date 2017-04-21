@@ -40,10 +40,10 @@ public:
 	G4bool OpenFile();
 	G4bool SaveFile();
 
-	G4int CreateNtupleForEvent(G4int eventID);
-	G4bool CreateNtupleForRun();
+	G4int CreateNtupleForRun();
+	G4int CreateNtupleForOpDebug();
 
-	G4bool FillOpPhotonTrackForEvent(
+	G4bool FillOpPhotonTrackForDebug(
 		const G4Track* theTrack, OpPhotonType type);
 	G4bool FillEntryForRun();
 	
@@ -54,12 +54,16 @@ private:
 
 private:
 	G4RootAnalysisManager* rootData;
-	G4int fCurrentNtuple;
-
+	G4int fRunNtuple;
+	G4int fOpDebugNtuple;
+	G4int fCurrentEvent;
+	
 	std::vector<VirtualSD*>* fSD;
 	std::vector<VirtualRecorder*>* fRecorder;
 
-	G4int fOpticalFirstColID;
+public:
+	void SetCurrentEvent(G4int eventID){fCurrentEvent=eventID;};
+	G4int GetCurrentEvent(){return fCurrentEvent;};
 };
 
 #endif // CRTest_Analysis_h

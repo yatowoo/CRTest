@@ -37,6 +37,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
         << " begins. - by RunAction" << G4endl;
     // Initialize .root file
 	Analysis::Instance()->CreateNtupleForRun();
+	Analysis::Instance()->CreateNtupleForOpDebug();
 
     Analysis::Instance()->OpenFile();
 }

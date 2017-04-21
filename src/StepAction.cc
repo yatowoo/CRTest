@@ -55,7 +55,7 @@ void StepAction::UserSteppingAction(const G4Step *aStep)
 	// Step Numbers CUT - to avoid endless OpBoundary process
 	if(theTrack->GetCurrentStepNumber() > 5000){
 		theTrack->SetTrackStatus(G4TrackStatus::fStopAndKill);
-		Analysis::Instance()->FillOpPhotonTrackForEvent(theTrack, OpDebug);
+		Analysis::Instance()->FillOpPhotonTrackForDebug(theTrack, OpDebug);
 		return;
 	}
 	// DEBUG - ABSLENGTH
@@ -121,7 +121,7 @@ void StepAction::UserSteppingAction(const G4Step *aStep)
 			}
         }
     }
-	Analysis::Instance()->FillOpPhotonTrackForEvent(theTrack, type);
+	Analysis::Instance()->FillOpPhotonTrackForDebug(theTrack, type);
 }
 
 G4bool StepAction::BoundaryStats(G4OpBoundaryProcess *boundary)
