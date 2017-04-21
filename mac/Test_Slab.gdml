@@ -60,10 +60,10 @@
     <skinsurface name="skin" surfaceproperty="scint_surf" >
       <volumeref ref="Scintillator"/>
     </skinsurface>
-    <bordersurface name="border" surfaceproperty="groove_surf" >
-      <physvolref ref="Scintillator_PV"/>
-      <physvolref ref="Groove_PV"/>
-    </bordersurface>
+
+    <skinsurface name="border" surfaceproperty="groove_surf" >
+      <volumeref ref="Groove"/>
+    </skinsurface>
 
     <skinsurface name="pmt_skin" surfaceproperty="photocath" >
       <volumeref ref="PMT"/>
@@ -80,10 +80,9 @@
         <auxiliary auxtype="Material" auxvalue="OpSurface_Scint" />
       </auxiliary>
 
-      <auxiliary auxtype="Border" auxvalue="ScintGroove">
+      <auxiliary auxtype="Skin" auxvalue="ScintGroove">
         <auxiliary auxtype="SurfaceName" auxvalue="groove_surf"/>
-        <auxiliary auxtype="PVname" auxvalue="Scintillator_PV" />
-        <auxiliary auxtype="PVname" auxvalue="Groove_PV" />
+        <auxiliary auxtype="LVname" auxvalue="Groove" />
         <auxiliary auxtype="Material" auxvalue="OpSurface_Groove"/>
       </auxiliary>
 
