@@ -1,7 +1,7 @@
 /*
 *   File : CRTest/inc/CryPositionSD.hh
 *
-*   Brief: Postion-sensitive Detector for Cosmic-ray or others
+*   Brief: Position-sensitive Detector for Cosmic-ray or others
 *
 *   Description:
 *       Derive from G4LogicalVolume
@@ -34,6 +34,8 @@ public:
     virtual void Initialize(G4HCofThisEvent* hce);
     virtual G4bool ProcessHits(
 		G4Step* aStep, G4TouchableHistory* roHist);
+	G4bool ProcessHits_more(const G4Step*,G4VPhysicalVolume*);
+
 	virtual void EndOfEvent(G4HCofThisEvent* hce);
 
 	virtual void CreateEntry(

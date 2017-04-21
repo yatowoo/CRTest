@@ -95,7 +95,7 @@ G4VPhysicalVolume *SysConstruction::Construct()
 
 void SysConstruction::ConstructSDandField()
 {
-    G4String sdName = "CryPostionSD";
+    G4String sdName = "CryPositionSD";
     CryPositionSD* crySD = new CryPositionSD(sdName);
 
     SetSensitiveDetector(fDetector, crySD);

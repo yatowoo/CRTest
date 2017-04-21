@@ -74,7 +74,7 @@ G4VPhysicalVolume *GdmlConstruction::Construct()
 
 void GdmlConstruction::ConstructSDandField(){
 	if(fDetector){
-		G4String sdName = "CryPostionSD";
+		G4String sdName = "CryPositionSD";
 		CryPositionSD* crySD = new CryPositionSD(sdName);
 
 		SetSensitiveDetector(fDetector, crySD);

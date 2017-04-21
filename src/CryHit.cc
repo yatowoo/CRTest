@@ -14,7 +14,7 @@
 #include "G4ios.hh"
 
 CryHit::CryHit()
-:   G4VHit(), 
+:   G4VHit(), fTime(0.),
     fPosition(G4ThreeVector()), fMomentum(G4ThreeVector()),
     fParticleID(-1), fDetectorID(-1), fTrackID(-1),
     fEdep(0.), fIonEdep(0.), fStepLength(0.)

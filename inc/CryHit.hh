@@ -24,6 +24,7 @@ public: // Some Methods
     virtual void Draw();
     virtual void Print();
 private: // Data Member
+	G4double fTime;
     G4ThreeVector fPosition;
     G4ThreeVector fMomentum;
     G4int fParticleID;
@@ -33,6 +34,8 @@ private: // Data Member
     G4double fIonEdep; // Ionization Energy Depoist
     G4double fStepLength;
 public: // Getter & Setter
+	G4double GetTime() const {return fTime;};
+	void SetTime(G4double time) {fTime = time;};
     G4ThreeVector GetPositon() const {return fPosition;};
     void SetPosition(G4ThreeVector position) {fPosition = position;};
     G4ThreeVector GetMomentum() const {return fMomentum;};

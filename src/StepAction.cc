@@ -9,6 +9,8 @@
 #include "OpRecorder.hh"
 #include "MuonRecorder.hh"
 
+#include "CryPositionSD.hh"
+
 #include "G4Step.hh"
 #include "G4StepPoint.hh"
 #include "G4Track.hh"
@@ -44,8 +46,23 @@ void StepAction::UserSteppingAction(const G4Step *aStep)
     const G4VProcess *theProcess = fpSteppingManager->GetfCurrentProcess();
 
 	// for Muon (primary track)
-	if (theTrack->GetParentID() == 0)
+	if (theTrack->GetParentID() == 0){
 		MuonRecorder::Instance()->Record(theTrack);
+		
+		// TODO : #ifndef CRTest_Optical_Test -> primary == OpticalPhoton
+		// Check if Muon in CryPositionSD
+		G4TouchableHistory* touchable
+			= (G4TouchableHistory*)(thePrePoint->GetTouchable());
+		for(int i = 0 ; i < 10 ; i ++){
+			G4VPhysicalVolume* pv = touchable->GetVolume(i);
+			G4LogicalVolume* lv = pv->GetLogicalVolume();
+			if(lv->GetName() == "World") break;
+			
+			G4VSensitiveDetector* sd = lv->GetSensitiveDetector();
+			if(sd && sd->GetName() == "CryPositionSD")
+				static_cast<CryPositionSD*>(sd)->ProcessHits_more(aStep,pv);
+		}
+	}
 
     //  for Optical
     if (theTrack->GetParticleDefinition() !=

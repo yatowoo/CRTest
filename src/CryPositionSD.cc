@@ -34,10 +34,11 @@ void CryPositionSD::Initialize(G4HCofThisEvent *hce)
 
     hce->AddHitsCollection(fHCID, fHC);
 
-	if(fEdep) 
-		fEdep->clear();
-	else
-		fEdep = new std::vector<double>;
+	fEdep->clear();
+	fHitTime->clear();
+	fHitX->clear();
+	fHitY->clear();
+	fHitZ->clear();
 }
 
 G4bool CryPositionSD::ProcessHits(G4Step *theStep, G4TouchableHistory *)
@@ -60,17 +61,72 @@ G4bool CryPositionSD::ProcessHits(G4Step *theStep, G4TouchableHistory *)
     return true;
 }
 
+G4bool CryPositionSD::ProcessHits_more
+	(const G4Step* theStep, G4VPhysicalVolume* thePV)
+{
+	// Sensitive only for Primary track
+	if(theStep->GetTrack()->GetParentID() != 0)
+		return false;
+    G4double edep = theStep->GetTotalEnergyDeposit();
+    if(edep <= 0) return false;
+
+	// fNvolume
+	if(fNvolume == 0){
+		for(int i = 0 ; 
+			i < thePV->GetMotherLogical()->GetNoDaughters() ; i++)
+		{
+			if(thePV->GetMotherLogical()->GetDaughter(i)->GetName()
+				== thePV->GetName())
+				fNvolume++;
+		}
+	}
+
+	CryHit* newHit = new CryHit();
+	
+	newHit->SetDetectorID(thePV->GetCopyNo());
+	newHit->SetEdep(edep);
+
+	G4Track* theTrack = theStep->GetTrack();
+	newHit->SetTime(theTrack->GetGlobalTime());
+	newHit->SetPosition(theTrack->GetPosition());
+
+    fHC->insert(newHit);
+
+    return true;
+}
+
 void CryPositionSD::EndOfEvent(G4HCofThisEvent*){
 
-   	for(int i = 0 ; i < fNvolume ; i++)
+	std::vector<G4int> count;
+   	for(int i = 0 ; i < fNvolume ; i++){
 		fEdep->push_back(0.);
+		fHitTime->push_back(0.);
+		fHitX->push_back(0.);
+		fHitY->push_back(0.);
+		fHitZ->push_back(0.);
+		count.push_back(0);
+	}
 
     for (int i = 0; i < fHC->entries(); i++)
     {
-		(*fEdep)[(*fHC)[i]->GetDetectorID()]
-			+= (*fHC)[i]->GetEdep();
-    }
+		CryHit* hit = (*fHC)[i];
+		G4int id = hit->GetDetectorID();
 
+		count[id] ++;
+		(*fEdep)[id] += hit->GetEdep();
+		(*fHitTime)[id] += hit->GetTime();
+
+		G4ThreeVector pos = hit->GetPositon();
+		(*fHitX)[id] += pos.x();
+		(*fHitY)[id] += pos.y();
+		(*fHitZ)[id] += pos.z();
+    }
+   	for(int i = 0 ; i < fNvolume ; i++){
+		(*fHitTime)[i] /= count[i];
+		(*fHitX)[i] /= count[i];
+		(*fHitY)[i] /= count[i];
+		(*fHitZ)[i] /= count[i];
+	}
 }
 
 void CryPositionSD::CreateEntry(
@@ -78,6 +134,10 @@ void CryPositionSD::CreateEntry(
 {
 	fFirstColID =
 		rootData->CreateNtupleDColumn(ntupleID, "sd.Edep", *fEdep);
+	rootData->CreateNtupleDColumn(ntupleID, "sd.t", *fHitTime);
+	rootData->CreateNtupleDColumn(ntupleID, "sd.x", *fHitX);
+	rootData->CreateNtupleDColumn(ntupleID, "sd.y", *fHitY);
+	rootData->CreateNtupleDColumn(ntupleID, "sd.z", *fHitZ);
 }
 
 void CryPositionSD::FillEntry(
