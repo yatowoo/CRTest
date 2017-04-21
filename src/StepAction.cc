@@ -56,9 +56,11 @@ void StepAction::UserSteppingAction(const G4Step *aStep)
 	if(theTrack->GetCurrentStepNumber() > 5000){
 		theTrack->SetTrackStatus(G4TrackStatus::fStopAndKill);
 		Analysis::Instance()->FillOpPhotonTrackForEvent(theTrack, OpDebug);
-		Recorder->nDebug += 1;
 		return;
 	}
+	// DEBUG - ABSLENGTH
+	if(theProcess->GetProcessName() == "OpAbsorption")
+		Recorder->nDebug += 1;
 
     //
     // Boundary Check
@@ -71,7 +73,11 @@ void StepAction::UserSteppingAction(const G4Step *aStep)
 		G4OpBoundaryProcessStatus status = boundary->GetStatus();
 		G4bool gotThrough = 
 			(status == Transmission || status == FresnelRefraction);
-		if(gotThrough){
+		G4bool fromWLS = false;
+		if(theTrack->GetParentID() != 0)
+			fromWLS = (theTrack->GetCreatorProcess()->GetProcessName()
+			== "OpWLS");
+		if(gotThrough && !fromWLS){
 			// OpPthoton got through boundary
 			if (thePrePV->GetName() == "Scintillator_PV" &&
 				thePostPV->GetName() == "Groove_PV")
@@ -93,6 +99,15 @@ void StepAction::UserSteppingAction(const G4Step *aStep)
 				type = Cladding2Core;
 				Recorder->nCladding2Core += 1;
 			}
+			// For Debug boundary details
+			else if ((thePrePV->GetName() == "Cladding1_PV" || 
+				thePrePV->GetName() == "Cladding2_PV" )&&
+				thePostPV->GetName() == "Groove_PV")
+			{
+				Recorder->SetBoundaryName("Fiber2Groove");
+				BoundaryStats(boundary);
+				return;
+			}
 		}
         else if (thePrePV->GetName() == "Fiber_PV" &&
                  thePostPV->GetName() == "PMT_PV")
@@ -104,15 +119,6 @@ void StepAction::UserSteppingAction(const G4Step *aStep)
 				type = Detected;
 				Recorder->nDetection += 1;
 			}
-        }
-		// For Debug boundary details
-        else if ((thePrePV->GetName() == "Fiber_PV" || 
-			thePrePV->GetName() == "Cladding2_PV" )&&
-                 thePostPV->GetName() == "Groove_PV")
-        {
-            Recorder->SetBoundaryName("Fiber2Groove");
-            BoundaryStats(boundary);
-            return;
         }
     }
 	Analysis::Instance()->FillOpPhotonTrackForEvent(theTrack, type);

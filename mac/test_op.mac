@@ -4,9 +4,10 @@
 /analysis/verbose 1
 /run/verbose 0
 /run/initialize
+#/vis/viewer/set/viewpointVector 0 1 0.0000001
 /process/optical/scintillation/setYieldFactor 1.
 /gun/particle opticalphoton
-/gun/energy 1. eV
-/gun/position 0 -3.55 0 mm
+/gun/energy 1 eV
+/gun/position 0 0 -3.55 mm
 /gun/direction 0 -1 0
-/run/beamOn 100
+/run/beamOn 1000

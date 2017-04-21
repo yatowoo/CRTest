@@ -37,7 +37,7 @@ void EventAction::BeginOfEventAction(const G4Event *anEvent)
 
 	G4int ntupleID = 
 		Analysis::Instance()->CreateNtupleForEvent(eventID);
-	assert(ntupleID == eventID + 1);
+	//assert(ntupleID == eventID + 1);
 	G4cout << " | + Create Event Vertex Ntuple " << ntupleID << G4endl;
 }
 

@@ -301,7 +301,7 @@
 <matrix name="OpSurface_Groove_ROUGHNESS" coldim="1" values="0.01"/>
 <matrix name="OpSurface_Groove_SPIKE" coldim="1" values="0.7"/>
 <matrix name="OpSurface_Groove_LOBE" coldim="1" values="0.3"/>
-<matrix name="OpSurface_Groove_REFLECTIVITY" coldim="1" values="1."/>
+<matrix name="OpSurface_Groove_REFLECTIVITY" coldim="1" values="0.9"/>
 
   <!--Tyvek-->
 

@@ -6,4 +6,5 @@
 <opticalsurface name="scint_surf" model="unified" finish="ground" type="dielectric_metal" value="1."/>
 <opticalsurface name="photocath" model="unified" finish="ground" type="dielectric_metal" value="0.0"/>
 <opticalsurface name="groove_surf" model="unified" finish="ground" type="dielectric_dielectric" value="0.01"/>
-<opticalsurface name="fiber_surf" model="unified" finish="ground" type="dielectric_dielectric" value="0." />
+<opticalsurface name="fiber_surf" model="unified" finish="ground" type="dielectric_dielectric" value="0.01" />
+<opticalsurface name="default" model="unified" finish="polished" type="dielectric_dielectric" value="0." />

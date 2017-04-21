@@ -61,7 +61,7 @@
       <volumeref ref="Scintillator"/>
     </skinsurface>
 
-    <skinsurface name="border" surfaceproperty="groove_surf" >
+    <skinsurface name="groove_border" surfaceproperty="groove_surf" >
       <volumeref ref="Groove"/>
     </skinsurface>
 
@@ -72,7 +72,15 @@
     <skinsurface name="fiber_skin" surfaceproperty="fiber_surf" >
       <volumeref ref="Cladding2"/>
     </skinsurface>
-    
+
+    <skinsurface name="fiber_inner" surfaceproperty="default" >
+      <volumeref ref="Cladding1"/>
+    </skinsurface>
+
+    <skinsurface name="fiber_skin" surfaceproperty="default" >
+      <volumeref ref="Core"/>
+    </skinsurface>
+
   </structure>
 
   <userinfo>

@@ -6,5 +6,5 @@
 /run/initialize
 /process/optical/scintillation/setYieldFactor 1.
 /gun/particle mu-
-/gun/position 0 950 0 mm
-/run/beamOn 5
+/gun/position 0 0 0 mm
+/run/beamOn 10
