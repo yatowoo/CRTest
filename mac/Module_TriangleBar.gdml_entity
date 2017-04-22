@@ -1,0 +1,55 @@
+<!-- this is a file defining Triangle-strip Design in split.gdml -->
+<!-- it is _not_ a standalone GDML file -->
+<!-- This file should be referenced in <structure></structure>-->
+<!-- Dependencies : Config/MaterialDB/SolidDB.gdml_entity-->
+
+<volume name="Scintillator">
+  <materialref ref="EJ200_PVT" />
+  <solidref ref="triBarScintS" />
+  <physvol>
+    <volumeref ref="Groove" />
+    <position unit="mm" z="(triBarScintH-grooveDepth)/2" />
+    <rotation y="180" unit="degree" />
+  </physvol>
+</volume>
+
+<volume name="Module">
+  <materialref ref="AIR" />
+  <solidref ref="triBarModuleS" />
+  <physvol>
+    <volumeref ref="Scintillator" />
+    <position z="triBarScintZ" unit="mm" />
+  </physvol>
+</volume>
+
+<volume name="Detector">
+  <materialref ref="AIR" />
+  <solidref ref="detectorS" />
+  <loop for="idxX1" to="triangleBarN0-1" step="1">
+    <physvol copynumber="idxX1">
+      <volumeref ref="Module" />
+      <position x="(-triangleBarN0/2.+0.5+idxX1)*triBarModuleW" z="-triBarModuleH/2" unit="mm" />
+    </physvol>
+  </loop>
+  <loop for="idxX2" to="triangleBarN0-2" step="1">
+    <physvol copynumber="idxX2+triangleBarN0">
+      <volumeref ref="Module" />
+      <position x="(-triangleBarN0/2.+1.+idxX2)*triBarModuleW" z="-triBarModuleH/2" unit="mm" />
+      <rotation y="180" unit="degree" />
+    </physvol>
+  </loop>
+  <loop for="idxY1" to="triangleBarN0-1" step="1">
+    <physvol copynumber="idxY1+triangleBarN0*2-1">
+      <volumeref ref="Module" />
+      <position y="(-triangleBarN0/2.+0.5+idxY1)*triBarModuleW" z="triBarModuleH/2" unit="mm" />
+      <rotation z="90" unit="degree" />
+    </physvol>
+  </loop>
+  <loop for="idxY2" to="triangleBarN0-2" step="1">
+    <physvol copynumber="idxY2+triangleBarN0*3-1">
+      <volumeref ref="Module" />
+      <position y="(-triangleBarN0/2.+1.+idxY2)*triBarModuleW" z="triBarModuleH/2" unit="mm" />
+      <rotation z="90" y="180" unit="degree" />
+    </physvol>
+  </loop>
+</volume>

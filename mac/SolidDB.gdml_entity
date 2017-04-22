@@ -7,7 +7,7 @@
 <box lunit="mm" name="slabScintS" x="scintillatorX" y="scintillatorY" z="scintillatorZ" />
 <box lunit="mm" name="slabModuleS" x="moduleX" y="moduleY" z="moduleZ" />
 <box lunit="mm" name="worldS" x="worldX" y="worldY" z="worldZ" />
-<box lunit="mm" name="grooveS" x="grooveWidth" y="fiberL" z="grooveDepth" />
+<box lunit="mm" name="grooveS" x="grooveWidth" y="scintillatorY" z="grooveDepth" />
 
 <eltube lunit="mm" name="coreS" dx="coreR" dy="coreR" dz="fiberL/2-pmtZ-0.1" />
 <eltube lunit="mm" name="claddingS" dx="claddingR" dy="claddingR" dz="fiberL/2-pmtZ-0.1" />
@@ -16,3 +16,6 @@
 <eltube lunit="mm" name="fiberS" dx="fiberR" dy="fiberR" dz="fiberL/2" />
 
 <eltube lunit="mm" name="pmtS" dx="fiberR" dy="fiberR" dz="pmtZ/2." />
+
+<trd name = "triBarModuleS"  x1="0." x2="triBarModuleW" y1="triangleBarL" y2="triangleBarL" z="triBarModuleH" lunit= "mm"/>
+<trd name = "triBarScintS"  x1="0." x2="triBarScintW" y1="triangleBarL" y2="triangleBarL" z="triBarScintH" lunit= "mm"/>

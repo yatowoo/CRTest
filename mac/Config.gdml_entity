@@ -28,9 +28,7 @@
 <variable name="pmtZ" value="0.05"/>
 
 <!-- Placement -->
-<position name="detectorPos" unit="mm" x="0" y="0" z="0" />
-<constant name="detectorN" value="4" />
-<matrix name="detectorPosZ" coldim="1" values="-50. -10. 10. 50." />
+  <!-- Detector Position defined in .gdml-->
   
   <!-- Fiber Number & Offset defined in .gdml -->
 <variable name="fiberX" value="-detectorX/2+fiberOffset" />
@@ -45,3 +43,8 @@
 <variable name="iDetector" value="0" />
 <variable name="idxX" value="0" />
 <variable name="idxY" value="0" />
+
+<variable name="idxX1" value="0" />
+<variable name="idxY1" value="0" />
+<variable name="idxX2" value="0" />
+<variable name="idxY2" value="0" />

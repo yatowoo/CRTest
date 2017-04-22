@@ -15,18 +15,18 @@
   xsi:noNamespaceSchemaLocation="file:///schema/gdml.xsd">
 
   <define>
-    <variable name="detectorX" value="60" />
-    <variable name="detectorY" value="60" />
+    <variable name="detectorX" value="520" />
+    <variable name="detectorY" value="520" />
     <variable name="detectorZ" value="10" />
     <variable name="coatingThickness" value="0.12" />
     
     <variable name="fiberR" value="0.5"/>
     <variable name="fiberL" value="detectorY*1.2" />
-    <variable name="fiberN" value="10"/>
-    <variable name="fiberOffset" value="7.5" />
+    <variable name="fiberN" value="50"/>
+    <variable name="fiberOffset" value="15" />
     
-    <variable name="grooveWidth" value="1.6"/>
-    <variable name="grooveDepth" value="2"/>
+    <variable name="grooveWidth" value="fiberR*2.2"/>
+    <variable name="grooveDepth" value="1.8"/>
 
     <variable name="worldX" value="detectorX*1.2" />
     <variable name="worldY" value="fiberL*1.2" />
@@ -53,7 +53,6 @@
       <solidref ref="worldS" />
       <physvol>
         <volumeref ref="Detector" />
-        <positionref ref="detectorPos" />
       </physvol>
     </volume>
 
