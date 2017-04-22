@@ -35,6 +35,7 @@
 
     <variable name="grooveWidth" value="1.2"/>
     <variable name="grooveDepth" value="1.8"/>
+    <variable name="grooveL" value="sqrBarL"/>
 
     <variable name="detectorN" value="4" />
     <matrix name="detectorPosZ" coldim="1" values="-1000 -250 250 1000" />

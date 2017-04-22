@@ -20,6 +20,14 @@
     <variable name="detectorZ" value="10" />
     <variable name="coatingThickness" value="0.12" />
 
+    <variable name="moduleX" value="detectorX" />
+    <variable name="moduleY" value="detectorY" />
+    <variable name="moduleZ" value="detectorZ" />
+
+    <variable name="scintillatorX" value="moduleX-2*coatingThickness" />
+    <variable name="scintillatorY" value="moduleY-2*coatingThickness" />
+    <variable name="scintillatorZ" value="moduleZ-2*coatingThickness" />
+
     <variable name="fiberR" value="0.5"/>
 		<variable name="fiberL" value="detectorY+900*2" />
     <variable name="fiberN" value="-1"/>
@@ -27,6 +35,7 @@
 
     <variable name="grooveWidth" value="1.6"/>
     <variable name="grooveDepth" value="2."/>
+    <variable name="grooveL" value="scintillatorY"/>
 		
 		<variable name="worldX" value="detectorX*1.2" />
 		<variable name="worldY" value="fiberL*1.2" />
@@ -40,6 +49,8 @@
   </materials>
 
   <solids>
+    <box lunit="mm" name="slabScintS" x="scintillatorX" y="scintillatorY" z="scintillatorZ" />
+    <box lunit="mm" name="slabModuleS" x="moduleX" y="moduleY" z="moduleZ" />
     &Solid;
     &Surface;
   </solids>
@@ -53,7 +64,6 @@
       <solidref ref="worldS" />
       <physvol>
         <volumeref ref="Detector" />
-        <positionref ref="detectorPos" />
       </physvol>
     </volume>
 

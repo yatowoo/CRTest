@@ -15,18 +15,27 @@
   xsi:noNamespaceSchemaLocation="file:///schema/gdml.xsd">
 
   <define>
-    <variable name="detectorX" value="520" />
-    <variable name="detectorY" value="520" />
+    <variable name="detectorX" value="60" />
+    <variable name="detectorY" value="60" />
     <variable name="detectorZ" value="10" />
     <variable name="coatingThickness" value="0.12" />
     
+    <variable name="moduleX" value="detectorX" />
+    <variable name="moduleY" value="detectorY" />
+    <variable name="moduleZ" value="detectorZ" />
+
+    <variable name="scintillatorX" value="moduleX-2*coatingThickness" />
+    <variable name="scintillatorY" value="moduleY-2*coatingThickness" />
+    <variable name="scintillatorZ" value="moduleZ-2*coatingThickness" />
+    
     <variable name="fiberR" value="0.5"/>
     <variable name="fiberL" value="detectorY*1.2" />
-    <variable name="fiberN" value="50"/>
-    <variable name="fiberOffset" value="15" />
+    <variable name="fiberN" value="10"/>
+    <variable name="fiberOffset" value="7.5" />
     
     <variable name="grooveWidth" value="fiberR*2.2"/>
     <variable name="grooveDepth" value="1.8"/>
+    <variable name="grooveL" value="scintillatorY"/>
 
     <variable name="worldX" value="detectorX*1.2" />
     <variable name="worldY" value="fiberL*1.2" />
@@ -40,6 +49,8 @@
   </materials>
 
   <solids>
+    <box lunit="mm" name="slabScintS" x="scintillatorX" y="scintillatorY" z="scintillatorZ" />
+    <box lunit="mm" name="slabModuleS" x="moduleX" y="moduleY" z="moduleZ" />
     &Solid;
     &Surface;
   </solids>

@@ -19,7 +19,15 @@
     <variable name="detectorY" value="520" />
     <variable name="detectorZ" value="10" />
     <variable name="coatingThickness" value="0.12" />
+    
+    <variable name="moduleX" value="detectorX" />
+    <variable name="moduleY" value="detectorY" />
+    <variable name="moduleZ" value="detectorZ" />
 
+    <variable name="scintillatorX" value="moduleX-coatingThickness" />
+    <variable name="scintillatorY" value="moduleY-coatingThickness" />
+    <variable name="scintillatorZ" value="moduleZ-coatingThickness" />
+    
     <variable name="fiberR" value="0.5"/>
     <variable name="fiberL" value="detectorY*1.1" />
     <variable name="fiberN" value="50"/>
@@ -27,6 +35,7 @@
 
     <variable name="grooveWidth" value="1.2"/>
     <variable name="grooveDepth" value="1.8"/>
+    <variable name="grooveL" value="scintillatorY"/>
 
     <variable name="detectorN" value="4" />
     <matrix name="detectorPosZ" coldim="1" values="-1000 -250 250 1000" />

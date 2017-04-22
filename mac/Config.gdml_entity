@@ -6,15 +6,6 @@
 
 <!-- Detector Configuration -->
 	<!-- Detector Box Size defined in .gdml -->
-<variable name="wrapperGap" value="1." />
-
-<variable name="moduleX" value="detectorX" />
-<variable name="moduleY" value="detectorY" />
-<variable name="moduleZ" value="detectorZ" />
-
-<variable name="scintillatorX" value="moduleX-coatingThickness" />
-<variable name="scintillatorY" value="moduleY-coatingThickness" />
-<variable name="scintillatorZ" value="moduleZ-coatingThickness" />
 
 <!-- WLS Fiber Configuration-->
 	<!-- Fiber Length & Radius defined in .gdml -->
