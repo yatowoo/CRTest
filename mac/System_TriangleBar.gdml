@@ -71,6 +71,10 @@
       </loop>
     </volume>
 
+    <skinsurface name="skin" surfaceproperty="black" >
+      <volumeref ref="Module"/>
+    </skinsurface>
+    
     <skinsurface name="skin" surfaceproperty="scint_surf" >
       <volumeref ref="Scintillator"/>
     </skinsurface>
@@ -94,11 +98,18 @@
     <skinsurface name="fiber_skin" surfaceproperty="default" >
       <volumeref ref="Core"/>
     </skinsurface>
-
+    
   </structure>
 
   <userinfo>
     <auxiliary auxtype="Property">
+
+      <auxiliary auxtype="Skin" auxvalue="ModuleWrapper">
+        <auxiliary auxtype="SurfaceName" auxvalue="black" />
+        <auxiliary auxtype="LVname" auxvalue="Module" />
+        <auxiliary auxtype="Material" auxvalue="OpSurface_Black" />
+      </auxiliary>
+
       <auxiliary auxtype="Skin" auxvalue="ScintWrapper">
         <auxiliary auxtype="SurfaceName" auxvalue="scint_surf" />
         <auxiliary auxtype="LVname" auxvalue="Scintillator" />

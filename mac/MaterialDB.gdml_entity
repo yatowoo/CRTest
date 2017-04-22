@@ -3,45 +3,45 @@
 <!-- This file should be refered in <materials></materials>-->
 <!-- Dependencies : Config/MaterialDB/PropertyDB.gdml_entity-->
 
-  <element Z="6" formula="C" name="Carbon" >
-    <atom value="12.0107" />
-  </element>
-  <element Z="1" formula="H" name="Hydrogen" >
-    <atom value="1.008" />
-  </element>
-  <element Z="7" formula="N" name="Nitrogen" >
-   <atom value="14.01" />
-  </element>
-  <element Z="8" formula="O" name="Oxygen" >
-   <atom value="16" />
-  </element>
-  <material formula=" " name="AIR" >
-		<D value="0.00129" />
-		<fraction n="0.7" ref="Nitrogen" />
-		<fraction n="0.3" ref="Oxygen" />
-		<property name="RINDEX" ref="AIR_RINDEX"/>
-  </material>
-  <material formula=" " name="Y11_PS" >
-    <D value="1.023" />
-    <fraction n="0.085" ref="Hydrogen" />
-    <fraction n="0.915" ref="Carbon" />
-		<property name="RINDEX" ref="WLS_RINDEX"/>
-    <property name="WLSABSLENGTH" ref="WLS_ABSORB"/>
-    <property name="WLSCOMPONENT" ref="WLS_EMISSION"/>
-    <property name="WLSTIMECONSTANT" ref="WLS_TAU"/>
-    <property name="ABSLENGTH" ref="WLS_ABSL"/>
-  </material>
-  <material formula=" " name="PVT" >
-    <D value="1.05" />
-    <fraction n="0.077418" ref="Hydrogen" />
-    <fraction n="0.922582" ref="Carbon" />
-		<property name="RINDEX" ref="PVT_RINDEX"/>
-    <property name="SCINTILLATIONYIELD" ref="PVT_YIELD"/>
-    <property name="FASTCOMPONENT" ref="PVT_FAST"/>
-    <property name="FASTTIMECONSTANT" ref="PVT_FASTTAU"/>
-    <property name="ABSLENGTH" ref="PVT_ABSL"/>
-    <property name="RESOLUTIONSCALE" ref="PVT_SCALE"/>
-  </material>
+<element Z="6" formula="C" name="Carbon" >
+  <atom value="12.0107" />
+</element>
+<element Z="1" formula="H" name="Hydrogen" >
+  <atom value="1.008" />
+</element>
+<element Z="7" formula="N" name="Nitrogen" >
+  <atom value="14.01" />
+</element>
+<element Z="8" formula="O" name="Oxygen" >
+  <atom value="16" />
+</element>
+<material formula=" " name="AIR" >
+  <D value="0.00129" />
+  <fraction n="0.7" ref="Nitrogen" />
+  <fraction n="0.3" ref="Oxygen" />
+  <property name="RINDEX" ref="AIR_RINDEX"/>
+</material>
+<material formula=" " name="Y11_PS" >
+  <D value="1.023" />
+  <fraction n="0.085" ref="Hydrogen" />
+  <fraction n="0.915" ref="Carbon" />
+  <property name="RINDEX" ref="WLS_RINDEX"/>
+  <property name="WLSABSLENGTH" ref="WLS_ABSORB"/>
+  <property name="WLSCOMPONENT" ref="WLS_EMISSION"/>
+  <property name="WLSTIMECONSTANT" ref="WLS_TAU"/>
+  <property name="ABSLENGTH" ref="WLS_ABSL"/>
+</material>
+<material formula=" " name="PVT" >
+  <D value="1.05" />
+  <fraction n="0.077418" ref="Hydrogen" />
+  <fraction n="0.922582" ref="Carbon" />
+  <property name="RINDEX" ref="PVT_RINDEX"/>
+  <property name="SCINTILLATIONYIELD" ref="PVT_YIELD"/>
+  <property name="FASTCOMPONENT" ref="PVT_FAST"/>
+  <property name="FASTTIMECONSTANT" ref="PVT_FASTTAU"/>
+  <property name="ABSLENGTH" ref="PVT_ABSL"/>
+  <property name="RESOLUTIONSCALE" ref="PVT_SCALE"/>
+</material>
 
 <!-- Scintillator -->
 <material formula=" " name="EJ200_PVT" >
@@ -118,35 +118,46 @@
   <property name="ABSLENGTH" ref="Y11_ABSLENGTH"/>
 </material>
 
-  <!-- For OpticalSurface MPT-->
-  <material name="OpSurface_Scint">
-    <D value="0.00129" />
-    <fraction n="0.7" ref="Nitrogen" />
-    <fraction n="0.3" ref="Oxygen" />
-    <property name="REFLECTIVITY" ref="OpSurface_Scint_REFLECTIVITY" />
-    <property name="SURFACEROUGHNESS" ref="OpSurface_Scint_ROUGHNESS" />
-    <property name="SPECULARSPIKECONSTANT" ref="OpSurface_Scint_SPIKE" />
-    <property name="SPECULARLOBECONSTANT" ref="OpSurface_Scint_LOBE" />
-  </material>
+
+<!-- For OpticalSurface MPT-->
+
+<material name="OpSurface_Scint">
+  <D value="0.00129" />
+  <fraction n="0.7" ref="Nitrogen" />
+  <fraction n="0.3" ref="Oxygen" />
+  <property name="REFLECTIVITY" ref="OpSurface_Scint_REFLECTIVITY" />
+  <property name="SPECULARSPIKECONSTANT" ref="OpSurface_Scint_SPIKE" />
+  <property name="SPECULARLOBECONSTANT" ref="OpSurface_Scint_LOBE" />
+</material>
 
 <material name="OpSurface_Groove">
   <D value="0.00129" />
   <fraction n="0.7" ref="Nitrogen" />
   <fraction n="0.3" ref="Oxygen" />
   <property name="REFLECTIVITY" ref="OpSurface_Groove_REFLECTIVITY" />
-  <property name="SURFACEROUGHNESS" ref="OpSurface_Groove_ROUGHNESS" />
   <property name="SPECULARSPIKECONSTANT" ref="OpSurface_Groove_SPIKE" />
   <property name="SPECULARLOBECONSTANT" ref="OpSurface_Groove_LOBE" />
 </material>
 
-  <material name="OpSurface_PMT">
-    <D value="0.00129" />
-    <fraction n="0.7" ref="Nitrogen" />
-    <fraction n="0.3" ref="Oxygen" />
-    <property name="EFFICIENCY" ref="OpSurface_PMT_EFFICIENCY" />
-    <property name="REFLECTIVITY" ref="OpSurface_PMT_REFLECTIVITY" />
-    <property name="TRANSMITTANCE" ref="OpSurface_PMT_TRANSMITTANCE" />
-  </material>
+<material name="OpSurface_Black">
+  <D value="0.00129" />
+  <fraction n="0.7" ref="Nitrogen" />
+  <fraction n="0.3" ref="Oxygen" />
+  <property name="REFLECTIVITY" ref="OpSurface_Black_REFLECTIVITY" />
+  <property name="EFFICIENCY" ref="OpSurface_Black_EFFICIENCY" />
+  <property name="SPECULARSPIKECONSTANT" ref="OpSurface_Black_SPIKE" />
+  <property name="SPECULARLOBECONSTANT" ref="OpSurface_Black_LOBE" />
+  <property name="BACKSCATTERCONSTANT" ref="OpSurface_Black_BACK" />
+</material>
+
+<material name="OpSurface_PMT">
+  <D value="0.00129" />
+  <fraction n="0.7" ref="Nitrogen" />
+  <fraction n="0.3" ref="Oxygen" />
+  <property name="EFFICIENCY" ref="OpSurface_PMT_EFFICIENCY" />
+  <property name="REFLECTIVITY" ref="OpSurface_PMT_REFLECTIVITY" />
+  <property name="TRANSMITTANCE" ref="OpSurface_PMT_TRANSMITTANCE" />
+</material>
 
 <material name="OpSurface_PMT_R5610A">
   <D value="0.00129" />
