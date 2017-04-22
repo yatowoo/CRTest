@@ -139,6 +139,17 @@
   <property name="SPECULARLOBECONSTANT" ref="OpSurface_Groove_LOBE" />
 </material>
 
+<material name="OpSurface_Tyvek">
+  <D value="0.00129" />
+  <fraction n="0.7" ref="Nitrogen" />
+  <fraction n="0.3" ref="Oxygen" />
+  <property name="REFLECTIVITY" ref="OpSurface_Tyvek_REFLECTIVITY" />
+  <property name="EFFICIENCY" ref="OpSurface_Tyvek_EFFICIENCY" />
+  <property name="SPECULARSPIKECONSTANT" ref="OpSurface_Tyvek_SPIKE" />
+  <property name="SPECULARLOBECONSTANT" ref="OpSurface_Tyvek_LOBE" />
+  <property name="BACKSCATTERCONSTANT" ref="OpSurface_Tyvek_BACK" />
+</material>
+
 <material name="OpSurface_Black">
   <D value="0.00129" />
   <fraction n="0.7" ref="Nitrogen" />
@@ -148,6 +159,63 @@
   <property name="SPECULARSPIKECONSTANT" ref="OpSurface_Black_SPIKE" />
   <property name="SPECULARLOBECONSTANT" ref="OpSurface_Black_LOBE" />
   <property name="BACKSCATTERCONSTANT" ref="OpSurface_Black_BACK" />
+</material>
+
+<material name="OpSurface_EJ200-polished">
+  <D value="0.00129" />
+  <fraction n="0.7" ref="Nitrogen" />
+  <fraction n="0.3" ref="Oxygen" />
+  <property name="REFLECTIVITY" ref="OpSurface_EJ200-polished_REFLECTIVITY" />
+  <property name="EFFICIENCY" ref="OpSurface_EJ200-polished_EFFICIENCY" />
+  <property name="SPECULARSPIKECONSTANT" ref="OpSurface_EJ200-polished_SPIKE" />
+  <property name="SPECULARLOBECONSTANT" ref="OpSurface_EJ200-polished_LOBE" />
+  <property name="BACKSCATTERCONSTANT" ref="OpSurface_EJ200-polished_BACK" />
+</material>
+
+<material name="OpSurface_EJ200-rough">
+  <D value="0.00129" />
+  <fraction n="0.7" ref="Nitrogen" />
+  <fraction n="0.3" ref="Oxygen" />
+  <property name="REFLECTIVITY" ref="OpSurface_EJ200-rough_REFLECTIVITY" />
+  <property name="EFFICIENCY" ref="OpSurface_EJ200-rough_EFFICIENCY" />
+  <property name="SPECULARSPIKECONSTANT" ref="OpSurface_EJ200-rough_SPIKE" />
+  <property name="SPECULARLOBECONSTANT" ref="OpSurface_EJ200-rough_LOBE" />
+  <property name="BACKSCATTERCONSTANT" ref="OpSurface_EJ200-rough_BACK" />
+</material>
+
+<material name="OpSurface_Al-foil">
+  <D value="0.00129" />
+  <fraction n="0.7" ref="Nitrogen" />
+  <fraction n="0.3" ref="Oxygen" />
+  <property name="REFLECTIVITY" ref="OpSurface_Al-foil_REFLECTIVITY" />
+  <property name="EFFICIENCY" ref="OpSurface_Al-foil_EFFICIENCY" />
+  <property name="SPECULARSPIKECONSTANT" ref="OpSurface_Al-foil_SPIKE" />
+  <property name="SPECULARLOBECONSTANT" ref="OpSurface_Al-foil_LOBE" />
+  <property name="BACKSCATTERCONSTANT" ref="OpSurface_Al-foil_BACK" />
+</material>
+
+<material name="OpSurface_Teflon-polished">
+  <D value="0.00129" />
+  <fraction n="0.7" ref="Nitrogen" />
+  <fraction n="0.3" ref="Oxygen" />
+  <property name="RINDEX" ref="OpSurface_Teflon-polished_RINDEX" />
+  <property name="REFLECTIVITY" ref="OpSurface_Teflon-polished_REFLECTIVITY" />
+  <property name="EFFICIENCY" ref="OpSurface_Teflon-polished_EFFICIENCY" />
+  <property name="SPECULARSPIKECONSTANT" ref="OpSurface_Teflon-polished_SPIKE" />
+  <property name="SPECULARLOBECONSTANT" ref="OpSurface_Teflon-polished_LOBE" />
+  <property name="BACKSCATTERCONSTANT" ref="OpSurface_Teflon-polished_BACK" />
+</material>
+
+<material name="OpSurface_Teflon-rough">
+  <D value="0.00129" />
+  <fraction n="0.7" ref="Nitrogen" />
+  <fraction n="0.3" ref="Oxygen" />
+  <property name="RINDEX" ref="OpSurface_Teflon-rough_RINDEX" />
+  <property name="REFLECTIVITY" ref="OpSurface_Teflon-rough_REFLECTIVITY" />
+  <property name="EFFICIENCY" ref="OpSurface_Teflon-rough_EFFICIENCY" />
+  <property name="SPECULARSPIKECONSTANT" ref="OpSurface_Teflon-rough_SPIKE" />
+  <property name="SPECULARLOBECONSTANT" ref="OpSurface_Teflon-rough_LOBE" />
+  <property name="BACKSCATTERCONSTANT" ref="OpSurface_Teflon-rough_BACK" />
 </material>
 
 <material name="OpSurface_PMT">

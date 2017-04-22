@@ -1,0 +1,36 @@
+<!-- this is a file defining Surface Setup in split.gdml -->
+<!-- it is _not_ a standalone GDML file -->
+<!-- This file should be referenced in <structure></structure>-->
+<!-- Dependencies : .gdml/PropertyDB/MaterialDB/SurfaceDB.gdml_entity-->
+
+    <skinsurface name="detector_wrap" surfaceproperty="Black" >
+      <volumeref ref="Module"/>
+    </skinsurface>
+
+    <skinsurface name="module_surf" surfaceproperty="Tyvek" >
+      <volumeref ref="Module"/>
+    </skinsurface>
+    
+    <skinsurface name="scint_skin" surfaceproperty="EJ200-polished" >
+      <volumeref ref="Scintillator"/>
+    </skinsurface>
+
+    <skinsurface name="groove_border" surfaceproperty="groove_surf" >
+      <volumeref ref="Groove"/>
+    </skinsurface>
+
+    <skinsurface name="pmt_skin" surfaceproperty="photocath" >
+      <volumeref ref="PMT"/>
+    </skinsurface>
+
+    <skinsurface name="fiber_skin" surfaceproperty="fiber_surf" >
+      <volumeref ref="Cladding2"/>
+    </skinsurface>
+
+    <skinsurface name="fiber_inner" surfaceproperty="default" >
+      <volumeref ref="Cladding1"/>
+    </skinsurface>
+
+    <skinsurface name="fiber_skin" surfaceproperty="default" >
+      <volumeref ref="Core"/>
+    </skinsurface>

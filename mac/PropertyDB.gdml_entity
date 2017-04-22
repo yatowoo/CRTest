@@ -308,6 +308,32 @@
 <matrix name="OpSurface_Groove_REFLECTIVITY" coldim="2" values="2.91*eV 0.9"/>
 
   <!--Tyvek-->
+<matrix name="OpSurface_Tyvek_SPIKE" coldim="1" values="0."/>
+<matrix name="OpSurface_Tyvek_LOBE" coldim="1" values="0.2"/>
+<matrix name="OpSurface_Tyvek_BACK" coldim="1" values="0."/>
+<matrix name="OpSurface_Tyvek_REFLECTIVITY" coldim="2" values="2.91*eV 0.95"/>
+<matrix name="OpSurface_Tyvek_EFFICIENCY" coldim="2" values="2.91*eV 0."/>
+
+  <!-- Aluminum Foil -->
+<matrix name="OpSurface_Al-foil_SPIKE" coldim="1" values="0."/>
+<matrix name="OpSurface_Al-foil_LOBE" coldim="1" values="1.0"/>
+<matrix name="OpSurface_Al-foil_BACK" coldim="1" values="0."/>
+<matrix name="OpSurface_Al-foil_REFLECTIVITY" coldim="2" values="2.91*eV 0.97"/>
+<matrix name="OpSurface_Al-foil_EFFICIENCY" coldim="2" values="2.91*eV 0."/>
+
+  <!-- EJ200 (polished)-->
+<matrix name="OpSurface_EJ200-polished_SPIKE" coldim="1" values="0."/>
+<matrix name="OpSurface_EJ200-polished_LOBE" coldim="1" values="0.989"/>
+<matrix name="OpSurface_EJ200-polished_BACK" coldim="1" values="0."/>
+<matrix name="OpSurface_EJ200-polished_REFLECTIVITY" coldim="2" values="2.91*eV 0.95"/>
+<matrix name="OpSurface_EJ200-polished_EFFICIENCY" coldim="2" values="2.91*eV 0."/>
+
+  <!-- EJ200 (rough)-->
+<matrix name="OpSurface_EJ200-rough_SPIKE" coldim="1" values="0."/>
+<matrix name="OpSurface_EJ200-rough_LOBE" coldim="1" values="0.89"/>
+<matrix name="OpSurface_EJ200-rough_BACK" coldim="1" values="0."/>
+<matrix name="OpSurface_EJ200-rough_REFLECTIVITY" coldim="2" values="2.91*eV 0.95"/>
+<matrix name="OpSurface_EJ200-rough_EFFICIENCY" coldim="2" values="2.91*eV 0."/>
 
   <!-- Black-->
 <matrix name="OpSurface_Black_SPIKE" coldim="1" values="1."/>
@@ -315,6 +341,22 @@
 <matrix name="OpSurface_Black_BACK" coldim="1" values="0."/>
 <matrix name="OpSurface_Black_REFLECTIVITY" coldim="2" values="2.91*eV 0."/>
 <matrix name="OpSurface_Black_EFFICIENCY" coldim="2" values="2.91*eV 0."/>
+
+  <!-- Teflon (polished)-->
+<matrix name="OpSurface_Teflon-polished_RINDEX" coldim="2" values="2.91*eV 1."/>
+<matrix name="OpSurface_Teflon-polished_SPIKE" coldim="1" values="0."/>
+<matrix name="OpSurface_Teflon-polished_LOBE" coldim="1" values="0."/>
+<matrix name="OpSurface_Teflon-polished_BACK" coldim="1" values="0."/>
+<matrix name="OpSurface_Teflon-polished_REFLECTIVITY" coldim="2" values="2.91*eV 0."/>
+<matrix name="OpSurface_Teflon-polished_EFFICIENCY" coldim="2" values="2.91*eV 0."/>
+
+  <!-- Teflon (rough)-->
+<matrix name="OpSurface_Teflon-rough_RINDEX" coldim="2" values="2.91*eV 1."/>
+<matrix name="OpSurface_Teflon-rough_SPIKE" coldim="1" values="1."/>
+<matrix name="OpSurface_Teflon-rough_LOBE" coldim="1" values="0."/>
+<matrix name="OpSurface_Teflon-rough_BACK" coldim="1" values="0."/>
+<matrix name="OpSurface_Teflon-rough_REFLECTIVITY" coldim="2" values="2.91*eV 0.95"/>
+<matrix name="OpSurface_Teflon-rough_EFFICIENCY" coldim="2" values="2.91*eV 0."/>
 
   <!-- PMT Photocathode -->
 <matrix name="OpSurface_PMT_REFLECTIVITY" coldim="2" values="2.6*eV 0."/>

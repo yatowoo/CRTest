@@ -6,6 +6,8 @@
   <!ENTITY Material SYSTEM "MaterialDB.gdml_entity">
   <!ENTITY Solid SYSTEM "SolidDB.gdml_entity">
   <!ENTITY Surface SYSTEM "SurfaceDB.gdml_entity">
+  <!ENTITY Surface_Setup SYSTEM "Surface_DefaultSetup.gdml_entity">
+  <!ENTITY Surface_Property SYSTEM "Surface_DefaultProperty.gdml_entity">
   <!ENTITY Groove SYSTEM "Volume_Groove.gdml_entity">
   <!ENTITY Detector SYSTEM "Module_TriangleBar.gdml_entity">
 ]>
@@ -74,67 +76,15 @@
       </loop>
     </volume>
 
-    <skinsurface name="skin" surfaceproperty="black" >
-      <volumeref ref="Module"/>
-    </skinsurface>
-    
-    <skinsurface name="skin" surfaceproperty="scint_surf" >
-      <volumeref ref="Scintillator"/>
-    </skinsurface>
-
-    <skinsurface name="groove_border" surfaceproperty="groove_surf" >
-      <volumeref ref="Groove"/>
-    </skinsurface>
-
-    <skinsurface name="pmt_skin" surfaceproperty="photocath" >
-      <volumeref ref="PMT"/>
-    </skinsurface>
-
-    <skinsurface name="fiber_skin" surfaceproperty="fiber_surf" >
-      <volumeref ref="Cladding2"/>
-    </skinsurface>
-
-    <skinsurface name="fiber_inner" surfaceproperty="default" >
-      <volumeref ref="Cladding1"/>
-    </skinsurface>
-
-    <skinsurface name="fiber_skin" surfaceproperty="default" >
-      <volumeref ref="Core"/>
-    </skinsurface>
+    &Surface_Setup;
     
   </structure>
 
   <userinfo>
-    <auxiliary auxtype="Property">
-
-      <auxiliary auxtype="Skin" auxvalue="ModuleWrapper">
-        <auxiliary auxtype="SurfaceName" auxvalue="black" />
-        <auxiliary auxtype="LVname" auxvalue="Module" />
-        <auxiliary auxtype="Material" auxvalue="OpSurface_Black" />
-      </auxiliary>
-
-      <auxiliary auxtype="Skin" auxvalue="ScintWrapper">
-        <auxiliary auxtype="SurfaceName" auxvalue="scint_surf" />
-        <auxiliary auxtype="LVname" auxvalue="Scintillator" />
-        <auxiliary auxtype="Material" auxvalue="OpSurface_Scint" />
-      </auxiliary>
-
-      <auxiliary auxtype="Skin" auxvalue="ScintGroove">
-        <auxiliary auxtype="SurfaceName" auxvalue="groove_surf"/>
-        <auxiliary auxtype="LVname" auxvalue="Groove" />
-        <auxiliary auxtype="Material" auxvalue="OpSurface_Groove"/>
-      </auxiliary>
-
-      <auxiliary auxtype="Skin" auxvalue="Photocathode">
-        <auxiliary auxtype="SurfaceName" auxvalue="photocath"/>
-        <auxiliary auxtype="LVname" auxvalue="PMT" />
-        <auxiliary auxtype="Material" auxvalue="OpSurface_PMT_H7546"/>
-      </auxiliary>
-    </auxiliary>
-
+    &Surface_Property;
   </userinfo>
 
-  <setup name="System_TriangleBar" version="1" >
+  <setup name="System_TriangleBar" version="2" >
     <world ref="World" />
   </setup>
 

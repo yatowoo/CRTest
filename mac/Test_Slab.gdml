@@ -67,7 +67,15 @@
       </physvol>
     </volume>
 
-    <skinsurface name="skin" surfaceproperty="scint_surf" >
+    <skinsurface name="detector_border" surfaceproperty="Black" >
+      <volumeref ref="Detector"/>
+    </skinsurface>
+
+    <skinsurface name="scint_wrapper" surfaceproperty="Al-foil" >
+      <volumeref ref="Module"/>
+    </skinsurface>
+
+    <skinsurface name="scint_skin" surfaceproperty="EJ200-polished" >
       <volumeref ref="Scintillator"/>
     </skinsurface>
 
@@ -95,10 +103,23 @@
 
   <userinfo>
     <auxiliary auxtype="Property">
+
+      <auxiliary auxtype="Skin" auxvalue="DetectorBorder">
+        <auxiliary auxtype="SurfaceName" auxvalue="Black" />
+        <auxiliary auxtype="LVname" auxvalue="Detector" />
+        <auxiliary auxtype="Material" auxvalue="OpSurface_Border" />
+      </auxiliary>
+
       <auxiliary auxtype="Skin" auxvalue="ScintWrapper">
-        <auxiliary auxtype="SurfaceName" auxvalue="scint_surf" />
+        <auxiliary auxtype="SurfaceName" auxvalue="Al-foil" />
+        <auxiliary auxtype="LVname" auxvalue="Module" />
+        <auxiliary auxtype="Material" auxvalue="OpSurface_Al-foil" />
+      </auxiliary>
+
+      <auxiliary auxtype="Skin" auxvalue="ScintSurface">
+        <auxiliary auxtype="SurfaceName" auxvalue="EJ200-polished" />
         <auxiliary auxtype="LVname" auxvalue="Scintillator" />
-        <auxiliary auxtype="Material" auxvalue="OpSurface_Scint" />
+        <auxiliary auxtype="Material" auxvalue="OpSurface_EJ200-polished" />
       </auxiliary>
 
       <auxiliary auxtype="Skin" auxvalue="ScintGroove">

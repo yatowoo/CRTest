@@ -10,16 +10,16 @@
 <opticalsurface name="default" model="unified" finish="polished" type="dielectric_dielectric" value="0." />
 
 <!-- From GATE v7.2 Surfaces.xml -->
-<opticalsurface name="black" model="unified" finish="ground" type="dielectric_metal" value="0." />
+<opticalsurface name="Black" model="unified" finish="ground" type="dielectric_metal" value="0." />
 
-<opticalsurface name="polished_teflon" model="unified" finish="groundbackpainted" type="dielectric_dielectric" value="0.1" />
+<opticalsurface name="Teflon-polished" model="unified" finish="groundbackpainted" type="dielectric_dielectric" value="0.1" />
 
-<opticalsurface name="rough_teflon" model="unified" finish="groundbackpainted" type="dielectric_dielectric" value="6.0" />
+<opticalsurface name="Teflon-rough" model="unified" finish="groundbackpainted" type="dielectric_dielectric" value="6.0" />
 
 <!-- AS Gamma Exp. Simulation -->
-<opticalsurface name="tyvek" model="unified" finish="ground" type="dielectric_dielectric" value="0.2" />
-<opticalsurface name="EJ200_polished" model="unified" finish="ground" type="dielectric_dielectric" value="0.04" />
-<opticalsurface name="EJ200_rough" model="unified" finish="ground" type="dielectric_dielectric" value="0.12" />
+<opticalsurface name="Tyvek" model="unified" finish="ground" type="dielectric_dielectric" value="0.2" />
+<opticalsurface name="EJ200-polished" model="unified" finish="ground" type="dielectric_dielectric" value="0.04" />
+<opticalsurface name="EJ200-rough" model="unified" finish="ground" type="dielectric_dielectric" value="0.12" />
 
 <!-- BES TOF Simu by LiXin-->
-<opticalsurface name="al_foil" model="unified" finish="polished" type="dielectric_metal" value="0." />
+<opticalsurface name="Al-foil" model="unified" finish="polished" type="dielectric_metal" value="0." />

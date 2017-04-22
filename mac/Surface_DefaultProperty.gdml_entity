@@ -1,0 +1,37 @@
+<!-- this is a file defining Surface Property Setup in split.gdml -->
+<!-- it is _not_ a standalone GDML file -->
+<!-- This file should be referenced in <structure></structure>-->
+<!-- Dependencies : .gdml/PropertyDB/MaterialDB/SurfaceDB.gdml_entity-->
+
+   <auxiliary auxtype="Property">
+      
+	  <auxiliary auxtype="Skin" auxvalue="DetectorBorder">
+        <auxiliary auxtype="SurfaceName" auxvalue="Black" />
+        <auxiliary auxtype="LVname" auxvalue="Detector" />
+        <auxiliary auxtype="Material" auxvalue="OpSurface_Black" />
+      </auxiliary>
+
+      <auxiliary auxtype="Skin" auxvalue="ModuleWrapper">
+        <auxiliary auxtype="SurfaceName" auxvalue="Tyvek" />
+        <auxiliary auxtype="LVname" auxvalue="Module" />
+        <auxiliary auxtype="Material" auxvalue="OpSurface_Tyvek" />
+      </auxiliary>
+
+      <auxiliary auxtype="Skin" auxvalue="ScintSurface">
+        <auxiliary auxtype="SurfaceName" auxvalue="EJ200-polished" />
+        <auxiliary auxtype="LVname" auxvalue="Scintillator" />
+        <auxiliary auxtype="Material" auxvalue="OpSurface_EJ200-polished" />
+      </auxiliary>
+
+      <auxiliary auxtype="Skin" auxvalue="ScintGroove">
+        <auxiliary auxtype="SurfaceName" auxvalue="groove_surf"/>
+        <auxiliary auxtype="LVname" auxvalue="Groove" />
+        <auxiliary auxtype="Material" auxvalue="OpSurface_Groove"/>
+      </auxiliary>
+
+      <auxiliary auxtype="Skin" auxvalue="Photocathode">
+        <auxiliary auxtype="SurfaceName" auxvalue="photocath"/>
+        <auxiliary auxtype="LVname" auxvalue="PMT" />
+        <auxiliary auxtype="Material" auxvalue="OpSurface_PMT_H7546"/>
+      </auxiliary>
+    </auxiliary>
