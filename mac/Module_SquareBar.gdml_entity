@@ -1,0 +1,41 @@
+<!-- this is a file defining square-bar Design in split.gdml -->
+<!-- it is _not_ a standalone GDML file -->
+<!-- This file should be referenced in <structure></structure>-->
+<!-- Dependencies : Config/MaterialDB/SolidDB.gdml_entity-->
+
+<volume name="Scintillator">
+  <materialref ref="EJ200_PVT" />
+  <solidref ref="sqrBarScintS" />
+  <physvol>
+    <volumeref ref="Groove" />
+    <position unit="mm" z="(sqrBarScintH-grooveDepth)/2" />
+    <rotation y="180" unit="degree" />
+  </physvol>
+</volume>
+
+<volume name="Module">
+  <materialref ref="AIR" />
+  <solidref ref="sqrBarModuleS" />
+  <physvol>
+    <volumeref ref="Scintillator" />
+  </physvol>
+</volume>
+
+<volume name="Detector">
+  <materialref ref="AIR" />
+  <solidref ref="detectorS" />
+  <loop for="idxX" to="sqrBarN0-1" step="1">
+    <physvol copynumber="idxX">
+      <volumeref ref="Module" />
+      <position x="(-sqrBarN0/2.+0.5+idxX)*sqrBarModuleW" z="-sqrBarModuleH/2" unit="mm" />
+      <rotation y="180" unit="degree" />
+    </physvol>
+  </loop>
+  <loop for="idxY" to="sqrBarN0-1" step="1">
+    <physvol copynumber="idxY+sqrBarN0">
+      <volumeref ref="Module" />
+      <position y="(-sqrBarN0/2.+0.5+idxY)*sqrBarModuleW" z="+sqrBarModuleH/2" unit="mm" />
+      <rotation z="90" unit="degree" />
+    </physvol>
+  </loop>
+</volume>

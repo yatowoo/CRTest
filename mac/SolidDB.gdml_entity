@@ -16,6 +16,3 @@
 <eltube lunit="mm" name="fiberS" dx="fiberR" dy="fiberR" dz="fiberL/2" />
 
 <eltube lunit="mm" name="pmtS" dx="fiberR" dy="fiberR" dz="pmtZ/2." />
-
-<trd name = "triBarModuleS"  x1="0." x2="triBarModuleW" y1="triangleBarL" y2="triangleBarL" z="triBarModuleH" lunit= "mm"/>
-<trd name = "triBarScintS"  x1="0." x2="triBarScintW" y1="triangleBarL" y2="triangleBarL" z="triBarScintH" lunit= "mm"/>
