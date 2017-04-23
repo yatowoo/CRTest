@@ -31,6 +31,18 @@
 #include "TROOT.h"
 #include "TRint.h"
 
+#include<vector>
+#include<map>
+
+// Option Candidates
+const char* optBuild[] = {"None","Debug","Release","RelWithDebInfo","MiniSizeRel"};
+const char* optScintPacking[] = {"Wrapper","Coating"};
+const char* optFiber[] = {"Single-cladding","Multi-cladding"};
+const char* optGenerator[] = {"beam","CRY","Pdu"};
+const char* optRun[] = {"Show","Normal","Jobs"};
+const char* optReadout[] = {"Normal","SD_MORE","Optical","Optical_MORE"};
+const char* optOutput[] = {"Silent","Debug","All"};
+
 class CRTestWindow : public TGObject {
 	RQ_OBJECT("CRTestWindow")
 
@@ -38,7 +50,12 @@ private: // Display
 	TGMainFrame         *fMain;
 	TGCompositeFrame    *fF1;
 	TGCompositeFrame    *fFcanvasL;
+	
 	TGTab               *fTab;
+	TGCompositeFrame *fTabBasic;
+	TGCompositeFrame *fTabGeom;
+	TGCompositeFrame *fTabAbout;
+
 	TGLayoutHints       *fLayout;
 	TGLayoutHints       *fL3;
 	TGLayoutHints       *fLCanvas;
@@ -51,8 +68,30 @@ private: // Display
 	TGLabel             *fLabel;
 	TRootEmbeddedCanvas *fCanvas;
 	TGStatusBar         *fStatusBar;
+
+private: // Layout
+	TGLayoutHints* fLayoutLabel;
+	TGLayoutHints* fLayoutInput;
+	TGLayoutHints* fLayoutHFrame;
+	TGLayoutHints* fLayoutUnit;
+
 private: // Local Variable
 	TF1* fDrawFunc;
+	UInt_t fHFrameH;
+	UInt_t fHFrameW;
+
+private: // Input Param & Options
+	std::map<const char*,TGComboBox*>* fOptions;
+	std::map<const char*,TGNumberEntry*>* fParams;
+	std::map<const char*,TGTextEntry*>* fTextInput;
+
+	const char* fConfigFileName;
+	const char* fGdmlFileName;
+	const char* fRootFileName;
+	const char* fMacroFileName;
+	const char* fBuildDir;
+	const char* fInstallDir;
+
 public:
 	CRTestWindow(const TGWindow* p, UInt_t w, UInt_t h);
 	virtual ~CRTestWindow();
@@ -64,11 +103,40 @@ public:
 	void DoConfigure();
 	void DoBuild();
 	void DoRun();
+	void BuildTab_Basic();
+	void BuildTab_Geometry();
+	void BuildTab_About();
+	void BuildComboBox(
+		TGCompositeFrame* tab, const char* name, const char* opt[], size_t n);
+	void BuildNumberEntry(TGCompositeFrame* tab, 
+		const char* name, double val, const char* unit, 
+		TGNumberFormat::EStyle format = TGNumberFormat::EStyle::kNESRealTwo);
+	void BuildTextEntry(TGCompositeFrame* tab, const char* name, const char* val, size_t buf_size = 100);
 };
 
-CRTestWindow::CRTestWindow(const TGWindow* p, UInt_t w, UInt_t h){
+CRTestWindow::CRTestWindow(const TGWindow* p, UInt_t w, UInt_t h)
+	: fTabBasic(NULL), fTabGeom(NULL), fTabAbout(NULL)
+{
 	// Initialize Local Variable
+	fOptions = new std::map<const char*,TGComboBox*>;
+	fParams = new std::map<const char*,TGNumberEntry*>;
+	fTextInput = new std::map<const char*,TGTextEntry*>;
+
+	fGdmlFileName = "mac/default.gdml";
+	fRootFileName = "CRTest.root";
+	fConfigFileName = "mac/default.config";
+	fMacroFileName = "mac/test_muon.mac";
+	fBuildDir = "./build";
+	fInstallDir = "./install";
+
 	fDrawFunc = NULL;
+	fHFrameH = 20;
+	fHFrameW = w*0.75;
+
+	fLayoutLabel = new TGLayoutHints(kLHintsExpandX, 5, 5, 3, 4);
+	fLayoutInput = new TGLayoutHints(kLHintsExpandX, 5, 5, 5, 5);
+	fLayoutHFrame = new TGLayoutHints(kLHintsExpandX, 2, 2, 5, 1);
+	fLayoutUnit = new TGLayoutHints(0, 2, 2, 5, 1);
 
 	/*
 	**	Initialize CRTestWindow
@@ -83,27 +151,21 @@ CRTestWindow::CRTestWindow(const TGWindow* p, UInt_t w, UInt_t h){
 	fTab = new TGTab(fMain, 300, 300);
 	//fTab->Connect("Selected(Int_t)", "TestDialog", this, "DoTab(Int_t)");
 	fL3 = new TGLayoutHints(kLHintsTop | kLHintsLeft , 5, 5, 5, 5);
-		// Tab - File
-	TGCompositeFrame *tf = fTab->AddTab("File");
-	fF1 = new TGCompositeFrame(tf, 60, 20, kHorizontalFrame);
-
-	fF1->AddFrame(fTxt = new TGTextEntry(fF1, new TGTextBuffer(100)), fL3);
-	tf->AddFrame(fF1, fL3);
-	fTxt->Resize(150, fTxt->GetDefaultHeight());
-	fTxt->Connect("ReturnPressed()","CRTestWindow",this,"DoTextChanged()");
-
-	TGTextButton *tb1 = new TGTextButton(fF1, "&Clear", 0);
-	tb1->Connect("Clicked()","CRTestWindow",this,"DoClear()");
-	fF1->AddFrame(tb1, fL3);
 		
-		// Tab - Info
-	tf = fTab->AddTab("Info");
-	fF1 = new TGCompositeFrame(tf, 60, 20, kVerticalFrame);
-	fLabel = new TGLabel(fF1,"Normal Label");
-	fF1->AddFrame(fLabel, fL3);
-	tf->AddFrame(fF1, fL3);
+		// Tab - Basic
+	fTabBasic = fTab->AddTab("Basic");
+	BuildTab_Basic();
+		
+		// Tab - Geometry
+	fTabGeom = fTab->AddTab("Geometry");
+	BuildTab_Geometry();
+
+		// Tab - About
+	fTabAbout = fTab->AddTab("About");
+	BuildTab_About();
+
 		// Tab - Canvas
-	tf = fTab->AddTab("Canvas");
+	TGCompositeFrame* tf = fTab->AddTab("Canvas");
 	fF1 = new TGCompositeFrame(tf, 60, 20, kHorizontalFrame);
 
 	fFcanvasL = new TGCompositeFrame(tf, 150, 100, kVerticalFrame);
@@ -155,6 +217,103 @@ CRTestWindow::CRTestWindow(const TGWindow* p, UInt_t w, UInt_t h){
 
 CRTestWindow::~CRTestWindow(){
 	fMain->DeleteWindow();
+}
+
+void CRTestWindow::BuildTextEntry(TGCompositeFrame* tab,
+	const char* name, const char* val, size_t buf_size = 100)
+{
+	TGHorizontalFrame* hframe = 
+		new TGHorizontalFrame(tab, fHFrameW, fHFrameH, kLHintsExpandX);
+	TGLabel* label = new TGLabel(hframe,name);
+
+	TGTextEntry* entry = new TGTextEntry(hframe,val);
+	entry->Resize(fHFrameW,fHFrameH);
+
+	hframe->AddFrame(label, fLayoutLabel);
+	hframe->AddFrame(entry, fLayoutInput);
+	tab->AddFrame(hframe, fLayoutHFrame);
+
+	fTextInput->insert(std::pair<const char*,TGTextEntry*>(name,entry));
+}
+
+void CRTestWindow::BuildNumberEntry(TGCompositeFrame* tab, 
+	const char* name, double val, const char* unit, 
+	TGNumberFormat::EStyle format = TGNumberFormat::EStyle::kNESRealTwo){
+
+	TGHorizontalFrame* hframe = 
+		new TGHorizontalFrame(tab, fHFrameW, fHFrameH, kLHintsExpandX);
+	TGLabel* label = new TGLabel(hframe,name);
+	TGLabel* labelUnit = new TGLabel(hframe,unit);
+
+	TGNumberEntry* entry = 
+		new TGNumberEntry(tab, val, 12, fParams->size(),format);
+	entry->Resize(fHFrameW,fHFrameH);
+
+	hframe->AddFrame(label, fLayoutLabel);
+	hframe->AddFrame(entry, fLayoutInput);
+	hframe->AddFrame(labelUnit, fLayoutUnit);
+	tab->AddFrame(hframe, fLayoutHFrame);
+
+	fParams->insert(std::pair<const char*,TGNumberEntry*>(name,entry));
+
+}
+
+void CRTestWindow::BuildComboBox(
+	TGCompositeFrame* tab, 
+	const char* name, const char* opt[], size_t n)
+{
+	TGHorizontalFrame* hframe = 
+		new TGHorizontalFrame(tab, fHFrameW, fHFrameH, kLHintsExpandX);
+	TGLabel* label = new TGLabel(hframe,name);
+	TGComboBox* option = new TGComboBox(hframe,100);
+	for(unsigned int i = 0; i < n; i++)
+		option->AddEntry(opt[i],i);
+	option->EnableTextInput(false);
+	option->Select(0);
+	option->Resize(fHFrameW,fHFrameH);
+
+	hframe->AddFrame(label, fLayoutLabel);
+	hframe->AddFrame(option, fLayoutInput);
+	tab->AddFrame(hframe, fLayoutHFrame);
+
+	fOptions->insert(std::pair<const char*,TGComboBox*>(name,option));
+}
+
+void CRTestWindow::BuildTab_Basic(){
+	if(!fTabBasic) return;
+
+	BuildTextEntry(fTabBasic, "Config_FileName", fConfigFileName);
+	BuildTextEntry(fTabBasic, "GDML_FileName", fGdmlFileName);
+	BuildTextEntry(fTabBasic, "ROOT_FileName", fRootFileName);
+	BuildTextEntry(fTabBasic, "Macro_FileName", fMacroFileName);
+	BuildTextEntry(fTabBasic, "Build_Dir", fBuildDir);
+	BuildTextEntry(fTabBasic, "Install_Dir", fInstallDir);
+
+	BuildComboBox(fTabBasic, "Build_Type",
+		optBuild, sizeof(optBuild)/sizeof(char*));
+	BuildComboBox(fTabBasic, "Generator_Type",
+		optGenerator, sizeof(optGenerator)/sizeof(char*));
+	BuildComboBox(fTabBasic, "Execute_Type", 
+		optRun, sizeof(optRun)/sizeof(char*));
+	BuildComboBox(fTabBasic, "Readout_Option", 
+		optReadout, sizeof(optReadout)/sizeof(char*));
+	BuildComboBox(fTabBasic, "Output_Option", 
+		optOutput, sizeof(optOutput)/sizeof(char*));
+}
+
+void CRTestWindow::BuildTab_Geometry(){
+	if(!fTabGeom) return;
+
+	BuildNumberEntry(fTabGeom, "Detector_Size_X", 500, "mm");
+	
+	BuildComboBox(fTabGeom, "PS_Packing_Type",
+		optScintPacking, sizeof(optScintPacking)/sizeof(char*));
+	BuildComboBox(fTabGeom, "Fiber_Type",
+		optFiber, sizeof(optFiber)/sizeof(char*));
+}
+
+void CRTestWindow::BuildTab_About(){
+	if(!fTabAbout) return;
 }
 
 // Processing [TODO : generate cmd with variables] 
