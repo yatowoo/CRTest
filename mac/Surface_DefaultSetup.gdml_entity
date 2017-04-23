@@ -4,7 +4,7 @@
 <!-- Dependencies : .gdml/PropertyDB/MaterialDB/SurfaceDB.gdml_entity-->
 
     <skinsurface name="detector_wrap" surfaceproperty="Black" >
-      <volumeref ref="Module"/>
+      <volumeref ref="Detector"/>
     </skinsurface>
 
     <skinsurface name="module_surf" surfaceproperty="Tyvek" >
