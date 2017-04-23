@@ -48,6 +48,17 @@ private:
 public: // UIcmd
 	G4String GetGdmlFileName(){return fGdmlFileName;};
 	void SetGdmlFileName(G4String fileName){fGdmlFileName = fileName;};
+
+	G4bool SetMaterial(G4String lvName, G4String matName);
+	G4bool SetSkinSurface(G4String lvName, G4String surfName);
+	G4bool SetPmtType(G4String type);
+	void DumpMaterialAndSurface();
+  void DumpOpticalSurface();
+
+private:
+	G4LogicalVolume* FindLogicalVolume(G4String lvName);
+	G4Material* FindMaterial(G4String matName);
+	G4SurfaceProperty* FindSurface(G4String surfName);
 };
 
 #endif // CRTest_GdmlConstruction_h
