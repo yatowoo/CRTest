@@ -30,18 +30,22 @@
 #include "TSystem.h"
 #include "TROOT.h"
 #include "TRint.h"
+#include "TString.h"
 
+#include<string>
 #include<vector>
 #include<map>
 
+using namespace std;
+
 // Option Candidates
-const char* optBuild[] = {"None","Debug","Release","RelWithDebInfo","MiniSizeRel"};
-const char* optScintPacking[] = {"Wrapper","Coating"};
-const char* optFiber[] = {"Single-cladding","Multi-cladding"};
-const char* optGenerator[] = {"beam","CRY","Pdu"};
-const char* optRun[] = {"Show","Normal","Jobs"};
-const char* optReadout[] = {"Normal","SD_MORE","Optical","Optical_MORE"};
-const char* optOutput[] = {"Silent","Debug","All"};
+string optBuild[] = {"None","Debug","Release","RelWithDebInfo","MiniSizeRel"};
+string optScintPacking[] = {"Wrapper","Coating"};
+string optFiber[] = {"Single-cladding","Multi-cladding"};
+string optGenerator[] = {"beam","CRY","Pdu"};
+string optRun[] = {"Show","Normal","Jobs"};
+string optReadout[] = {"Normal","SD_MORE","Optical","Optical_MORE"};
+string optOutput[] = {"Silent","Debug","All"};
 
 class CRTestWindow : public TGObject {
 	RQ_OBJECT("CRTestWindow")
@@ -81,16 +85,16 @@ private: // Local Variable
 	UInt_t fHFrameW;
 
 private: // Input Param & Options
-	std::map<const char*,TGComboBox*>* fOptions;
-	std::map<const char*,TGNumberEntry*>* fParams;
-	std::map<const char*,TGTextEntry*>* fTextInput;
+	map<string,TGComboBox*>* fOptions;
+	map<string,TGNumberEntry*>* fParams;
+	map<string,TGTextEntry*>* fTextInput;
 
-	const char* fConfigFileName;
-	const char* fGdmlFileName;
-	const char* fRootFileName;
-	const char* fMacroFileName;
-	const char* fBuildDir;
-	const char* fInstallDir;
+	TGTextBuffer* fConfigFileName;
+	TGTextBuffer* fGdmlFileName;
+	TGTextBuffer* fRootFileName;
+	TGTextBuffer* fMacroFileName;
+	TGTextBuffer* fBuildDir;
+	TGTextBuffer* fInstallDir;
 
 public:
 	CRTestWindow(const TGWindow* p, UInt_t w, UInt_t h);
@@ -107,27 +111,33 @@ public:
 	void BuildTab_Geometry();
 	void BuildTab_About();
 	void BuildComboBox(
-		TGCompositeFrame* tab, const char* name, const char* opt[], size_t n);
+		TGCompositeFrame* tab, string name, string opt[], size_t n);
 	void BuildNumberEntry(TGCompositeFrame* tab, 
-		const char* name, double val, const char* unit, 
+		string name, double val, const char* unit, 
 		TGNumberFormat::EStyle format = TGNumberFormat::EStyle::kNESRealTwo);
-	void BuildTextEntry(TGCompositeFrame* tab, const char* name, const char* val, size_t buf_size = 100);
+	void BuildTextEntry(TGCompositeFrame* tab, string name, TGTextBuffer* buf);
 };
 
 CRTestWindow::CRTestWindow(const TGWindow* p, UInt_t w, UInt_t h)
 	: fTabBasic(NULL), fTabGeom(NULL), fTabAbout(NULL)
 {
 	// Initialize Local Variable
-	fOptions = new std::map<const char*,TGComboBox*>;
-	fParams = new std::map<const char*,TGNumberEntry*>;
-	fTextInput = new std::map<const char*,TGTextEntry*>;
+	fOptions = new map<string,TGComboBox*>;
+	fParams = new map<string,TGNumberEntry*>;
+	fTextInput = new map<string,TGTextEntry*>;
 
-	fGdmlFileName = "mac/default.gdml";
-	fRootFileName = "CRTest.root";
-	fConfigFileName = "mac/default.config";
-	fMacroFileName = "mac/test_muon.mac";
-	fBuildDir = "./build";
-	fInstallDir = "./install";
+	fConfigFileName = new TGTextBuffer(100);
+	fConfigFileName->AddText(0,"mac/default.config");
+	fGdmlFileName = new TGTextBuffer(100);
+	fGdmlFileName->AddText(0,"mac/default.gdml");
+	fRootFileName = new TGTextBuffer(100);
+	fRootFileName->AddText(0,"CRTest.root");
+	fMacroFileName = new TGTextBuffer(100);
+	fMacroFileName->AddText(0,"mac/test_muon.mac");
+	fBuildDir = new TGTextBuffer(100);
+	fBuildDir->AddText(0,"./build");
+	fInstallDir = new TGTextBuffer(100);
+	fInstallDir->AddText(0,"./install");
 
 	fDrawFunc = NULL;
 	fHFrameH = 20;
@@ -220,29 +230,29 @@ CRTestWindow::~CRTestWindow(){
 }
 
 void CRTestWindow::BuildTextEntry(TGCompositeFrame* tab,
-	const char* name, const char* val, size_t buf_size = 100)
+	string name, TGTextBuffer* buf)
 {
 	TGHorizontalFrame* hframe = 
 		new TGHorizontalFrame(tab, fHFrameW, fHFrameH, kLHintsExpandX);
-	TGLabel* label = new TGLabel(hframe,name);
+	TGLabel* label = new TGLabel(hframe,name.c_str());
 
-	TGTextEntry* entry = new TGTextEntry(hframe,val);
+	TGTextEntry* entry = new TGTextEntry(hframe,buf);
 	entry->Resize(fHFrameW,fHFrameH);
 
 	hframe->AddFrame(label, fLayoutLabel);
 	hframe->AddFrame(entry, fLayoutInput);
 	tab->AddFrame(hframe, fLayoutHFrame);
 
-	fTextInput->insert(std::pair<const char*,TGTextEntry*>(name,entry));
+	fTextInput->insert(pair<string,TGTextEntry*>(name,entry));
 }
 
 void CRTestWindow::BuildNumberEntry(TGCompositeFrame* tab, 
-	const char* name, double val, const char* unit, 
+	string name, double val, const char* unit, 
 	TGNumberFormat::EStyle format = TGNumberFormat::EStyle::kNESRealTwo){
 
 	TGHorizontalFrame* hframe = 
 		new TGHorizontalFrame(tab, fHFrameW, fHFrameH, kLHintsExpandX);
-	TGLabel* label = new TGLabel(hframe,name);
+	TGLabel* label = new TGLabel(hframe,name.c_str());
 	TGLabel* labelUnit = new TGLabel(hframe,unit);
 
 	TGNumberEntry* entry = 
@@ -254,20 +264,20 @@ void CRTestWindow::BuildNumberEntry(TGCompositeFrame* tab,
 	hframe->AddFrame(labelUnit, fLayoutUnit);
 	tab->AddFrame(hframe, fLayoutHFrame);
 
-	fParams->insert(std::pair<const char*,TGNumberEntry*>(name,entry));
+	fParams->insert(std::pair<string,TGNumberEntry*>(name,entry));
 
 }
 
 void CRTestWindow::BuildComboBox(
 	TGCompositeFrame* tab, 
-	const char* name, const char* opt[], size_t n)
+	string name, string opt[], size_t n)
 {
 	TGHorizontalFrame* hframe = 
 		new TGHorizontalFrame(tab, fHFrameW, fHFrameH, kLHintsExpandX);
-	TGLabel* label = new TGLabel(hframe,name);
+	TGLabel* label = new TGLabel(hframe,name.c_str());
 	TGComboBox* option = new TGComboBox(hframe,100);
 	for(unsigned int i = 0; i < n; i++)
-		option->AddEntry(opt[i],i);
+		option->AddEntry(opt[i].c_str(),i);
 	option->EnableTextInput(false);
 	option->Select(0);
 	option->Resize(fHFrameW,fHFrameH);
@@ -276,7 +286,7 @@ void CRTestWindow::BuildComboBox(
 	hframe->AddFrame(option, fLayoutInput);
 	tab->AddFrame(hframe, fLayoutHFrame);
 
-	fOptions->insert(std::pair<const char*,TGComboBox*>(name,option));
+	fOptions->insert(std::pair<string,TGComboBox*>(name,option));
 }
 
 void CRTestWindow::BuildTab_Basic(){
@@ -290,15 +300,15 @@ void CRTestWindow::BuildTab_Basic(){
 	BuildTextEntry(fTabBasic, "Install_Dir", fInstallDir);
 
 	BuildComboBox(fTabBasic, "Build_Type",
-		optBuild, sizeof(optBuild)/sizeof(char*));
+		optBuild, sizeof(optBuild)/sizeof(string));
 	BuildComboBox(fTabBasic, "Generator_Type",
-		optGenerator, sizeof(optGenerator)/sizeof(char*));
+		optGenerator, sizeof(optGenerator)/sizeof(string));
 	BuildComboBox(fTabBasic, "Execute_Type", 
 		optRun, sizeof(optRun)/sizeof(char*));
 	BuildComboBox(fTabBasic, "Readout_Option", 
-		optReadout, sizeof(optReadout)/sizeof(char*));
+		optReadout, sizeof(optReadout)/sizeof(string));
 	BuildComboBox(fTabBasic, "Output_Option", 
-		optOutput, sizeof(optOutput)/sizeof(char*));
+		optOutput, sizeof(optOutput)/sizeof(string));
 }
 
 void CRTestWindow::BuildTab_Geometry(){
@@ -307,9 +317,9 @@ void CRTestWindow::BuildTab_Geometry(){
 	BuildNumberEntry(fTabGeom, "Detector_Size_X", 500, "mm");
 	
 	BuildComboBox(fTabGeom, "PS_Packing_Type",
-		optScintPacking, sizeof(optScintPacking)/sizeof(char*));
+		optScintPacking, sizeof(optScintPacking)/sizeof(string));
 	BuildComboBox(fTabGeom, "Fiber_Type",
-		optFiber, sizeof(optFiber)/sizeof(char*));
+		optFiber, sizeof(optFiber)/sizeof(string));
 }
 
 void CRTestWindow::BuildTab_About(){
@@ -318,15 +328,33 @@ void CRTestWindow::BuildTab_About(){
 
 // Processing [TODO : generate cmd with variables] 
 void CRTestWindow::DoConfigure(){
-	gSystem->Exec("mkdir -p .build");
+	TString cmd = "mkdir -p ";
+	cmd += TString(fBuildDir->GetString());
+	gSystem->Exec(cmd.Data());
 }
 
 void CRTestWindow::DoBuild(){
-	gSystem->Exec("cd .build;cmake ../code;make -j4;");
+	DoConfigure();
+	TString cmd = "cd ";
+	cmd = cmd + TString(fBuildDir->GetString()) + TString(";");
+	
+	TGLBEntry* buildType = NULL;
+	if(fOptions->find("Build_Type") != fOptions->end())
+		buildType = fOptions->find("Build_Type")->second->GetSelectedEntry();
+	if(buildType)
+		cmd = cmd + TString("cmake -DCMAKE_BUILD_TYPE=")
+		+TString(((TGTextLBEntry*)buildType)->GetText()->GetString()) + TString(" ")
+		+TString(gSystem->pwd()) + TString(";");
+		// TODO : find or input source dir?
+	cmd = cmd + TString("make -j");
+
+	gSystem->Exec(cmd.Data());
 }
 
 void CRTestWindow::DoRun(){
-	gSystem->Exec("./.build/CRTest");
+	TString cmd = TString(fBuildDir->GetString());
+	cmd += TString("/CRTest");	
+	gSystem->Exec(cmd.Data());
 }
 
 
@@ -341,7 +369,7 @@ void CRTestWindow::DoTextChanged(){
 
 void CRTestWindow::DoDraw(){
 	if(fDrawFunc) delete fDrawFunc;
-	TString fcn = "sin(" + std::to_string(fDrawParam->GetNumber())
+	TString fcn = "sin(" + to_string(fDrawParam->GetNumber())
 		+ "*x)";
 	fDrawFunc = new TF1("f1",fcn.Data(),0,TMath::Pi());
 	fDrawFunc->SetLineWidth(3);
