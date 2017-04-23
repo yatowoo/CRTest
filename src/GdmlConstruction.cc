@@ -12,6 +12,8 @@
 #include "G4GDMLParser.hh"
 #include "G4GDMLAuxStructType.hh"
 
+#include "G4GeometryManager.hh"
+#include "G4SolidStore.hh"
 #include "G4LogicalVolume.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4VPhysicalVolume.hh"
@@ -25,18 +27,14 @@
 #include<vector>
 
 GdmlConstruction::GdmlConstruction(G4GDMLParser *gdml)
-	: SysConstruction(), fWorldPV(NULL), fGdml(gdml)
-{
-	Init();
-}
+	: SysConstruction(), fWorldPV(NULL), fGdml(gdml), fGdmlFileName("")
+{}
 
 GdmlConstruction::GdmlConstruction(G4String gdmlFileName)
 	: SysConstruction(), fWorldPV(NULL), fGdml(NULL)
 {
 	fGdml = new G4GDMLParser;
-	fGdml->Read(gdmlFileName, false);
-
-	this->Init();
+	fGdmlFileName = gdmlFileName;
 }
 
 GdmlConstruction::~GdmlConstruction()
@@ -68,6 +66,19 @@ void GdmlConstruction::Init(){
 
 G4VPhysicalVolume *GdmlConstruction::Construct()
 {
+  if(fWorldPV){
+	  G4GeometryManager::GetInstance()->OpenGeometry();
+	  G4PhysicalVolumeStore::GetInstance()->Clean();
+	  G4LogicalVolumeStore::GetInstance()->Clean();
+	  G4SolidStore::GetInstance()->Clean();
+	  G4LogicalSkinSurface::CleanSurfaceTable();
+	  G4LogicalBorderSurface::CleanSurfaceTable();
+	  fGdml->Clear();
+  }
+  fGdml->Read(fGdmlFileName, false);
+
+  this->Init();
+
   return fWorldPV;
 }
 

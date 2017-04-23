@@ -43,6 +43,11 @@ private:
 	G4LogicalVolume* fPmt;
 
 	G4GDMLParser* fGdml;
+	G4String fGdmlFileName;
+
+public: // UIcmd
+	G4String GetGdmlFileName(){return fGdmlFileName;};
+	void SetGdmlFileName(G4String fileName){fGdmlFileName = fileName;};
 };
 
 #endif // CRTest_GdmlConstruction_h
