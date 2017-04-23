@@ -8,7 +8,7 @@
   <solidref ref="slabScintS" />
   <physvol>
     <volumeref ref="Groove" />
-    <position unit="mm" x="0" y="0" z="(-detectorZ+grooveDepth)/2" />
+    <position unit="mm" x="0" y="0" z="(-scintillatorZ+grooveDepth)/2" />
   </physvol>
 </volume>
 
