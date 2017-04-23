@@ -294,6 +294,7 @@
  <!-- Optical Cement -->
 <matrix name="Optical_Cement_RINDEX" coldim="2" values="2.91*eV 1.58" />
 <matrix name="EJ500_RINDEX" coldim="2" values="2.91*eV 1.57" />
+<matrix name="LONG_ABSLENGTH" coldim="2" values="2.91*eV 10.*m" />
 
 <!-- Optical Surface Property -->
 

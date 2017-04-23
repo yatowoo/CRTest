@@ -17,7 +17,7 @@
 <opticalsurface name="Teflon-rough" model="unified" finish="groundbackpainted" type="dielectric_dielectric" value="6.0" />
 
 <!-- AS Gamma Exp. Simulation -->
-<opticalsurface name="Tyvek" model="unified" finish="ground" type="dielectric_dielectric" value="0.2" />
+<opticalsurface name="Tyvek" model="unified" finish="ground" type="dielectric_metal" value="0.2" />
 <opticalsurface name="EJ200-polished" model="unified" finish="ground" type="dielectric_dielectric" value="0.04" />
 <opticalsurface name="EJ200-rough" model="unified" finish="ground" type="dielectric_dielectric" value="0.12" />
 

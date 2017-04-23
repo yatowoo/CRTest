@@ -74,6 +74,7 @@
   <composite n="2" ref="Carbon" />
   <composite n="1" ref="Oxygen" />
   <property name="RINDEX" ref="EJ500_RINDEX"/>
+  <property name="ABSLENGTH" ref="LONG_ABSLENGTH"/>
 </material>
 
 <!-- WLS Fiber -->
@@ -105,7 +106,7 @@
   <composite n="5" ref="Carbon" />
   <composite n="2" ref="Oxygen" />
   <property name="RINDEX" ref="CLADDING1_RINDEX"/>
-  <property name="ABSLENGTH" ref="Y11_ABSLENGTH"/>
+  <property name="ABSLENGTH" ref="LONG_ABSLENGTH"/>
 </material>
 
 <material formula=" " name="Fiber_CLADDING2_FluorPMMA" >
@@ -115,7 +116,7 @@
   <composite n="5" ref="Carbon" />
   <composite n="2" ref="Oxygen" />
   <property name="RINDEX" ref="CLADDING2_RINDEX"/>
-  <property name="ABSLENGTH" ref="Y11_ABSLENGTH"/>
+  <property name="ABSLENGTH" ref="LONG_ABSLENGTH"/>
 </material>
 
 
