@@ -46,8 +46,8 @@
 <!-- Scintillator -->
 <material formula=" " name="EJ200_PVT" >
   <D value="1.023" />
-  <composite n="517" ref="Hydrogen" />
-  <composite n="469" ref="Carbon" />
+  <fraction n="0.08413" ref="Hydrogen" />
+  <fraction n="0.91587" ref="Carbon" />
   <property name="RINDEX" ref="EJ200_RINDEX"/>
   <property name="SCINTILLATIONYIELD" ref="EJ200_SCINTILLATIONYIELD"/>
   <property name="FASTCOMPONENT" ref="EJ200_FASTCOMPONENT"/>
@@ -57,8 +57,8 @@
 </material>
 <material formula=" " name="BC408_PVT" >
   <D value="1.32" />
-  <composite n="11" ref="Hydrogen" />
-  <composite n="10" ref="Carbon" />
+  <fraction n="0.08397" ref="Hydrogen" />
+  <fraction n="0.91603" ref="Carbon" />
   <property name="RINDEX" ref="BC408_RINDEX"/>
   <property name="SCINTILLATIONYIELD" ref="BC408_SCINTILLATIONYIELD"/>
   <property name="FASTCOMPONENT" ref="BC408_FASTCOMPONENT"/>

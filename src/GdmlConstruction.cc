@@ -35,6 +35,7 @@ GdmlConstruction::GdmlConstruction(G4String gdmlFileName)
 {
 	fGdml = new G4GDMLParser;
 	fGdmlFileName = gdmlFileName;
+	this->Init();
 }
 
 GdmlConstruction::~GdmlConstruction()
@@ -45,6 +46,8 @@ GdmlConstruction::~GdmlConstruction()
 
 void GdmlConstruction::Init(){
   assert(fGdml != NULL);
+  fGdml->Read(fGdmlFileName, false);
+  
   fWorldPV = fGdml->GetWorldVolume();
   if(!fWorldPV){
 	  G4cout << "[#] ERROR - CAN NOT FOUND WORLD SETUP - "
@@ -75,7 +78,6 @@ G4VPhysicalVolume *GdmlConstruction::Construct()
 	  G4LogicalBorderSurface::CleanSurfaceTable();
 	  fGdml->Clear();
   }
-  fGdml->Read(fGdmlFileName, false);
 
   this->Init();
 

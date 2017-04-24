@@ -18,11 +18,12 @@
     <variable name="detectorX" value="25" />
     <variable name="detectorY" value="2000" />
     <variable name="detectorZ" value="10" />
+    <variable name="wrapGap" value="0.1" />
     <variable name="coatingThickness" value="0.12" />
     
-    <variable name="moduleX" value="detectorX" />
-    <variable name="moduleY" value="detectorY" />
-    <variable name="moduleZ" value="detectorZ" />
+    <variable name="moduleX" value="detectorX-2*wrapGap" />
+    <variable name="moduleY" value="detectorY-2*wrapGap" />
+    <variable name="moduleZ" value="detectorZ-2*wrapGap" />
 
     <variable name="scintillatorX" value="moduleX-2*coatingThickness" />
     <variable name="scintillatorY" value="moduleY-2*coatingThickness" />
@@ -56,7 +57,58 @@
   </solids>
 
   <structure>
-    &Groove;
+    <volume name="PMT">
+      <materialref ref="G4_Al" />
+      <solidref ref="pmtS" />
+    </volume>
+
+    <volume name="Core">
+      <materialref ref="Y11_CORE_PS" />
+      <solidref ref="coreS" />
+    </volume>
+
+    <volume name="Cladding1">
+      <materialref ref="Fiber_CLADDING1_PMMA"/>
+      <solidref ref="cladding1S"/>
+      <physvol>
+        <volumeref ref="Core"/>
+      </physvol>
+    </volume>
+
+    <volume name="Cladding2">
+      <materialref ref="Fiber_CLADDING2_FluorPMMA"/>
+      <solidref ref="cladding2S"/>
+      <physvol>
+        <volumeref ref="Cladding1"/>
+      </physvol>
+    </volume>
+
+    <volume name="Fiber">
+      <materialref ref="AIR"/>
+      <solidref ref="fiberS"/>
+      <physvol>
+        <volumeref ref="Cladding2"/>
+      </physvol>
+      <physvol copynumber="0">
+        <volumeref ref="PMT"/>
+        <position unit="mm" z="-fiberL/2.+pmtZ/2."/>
+      </physvol>
+      <physvol copynumber="1">
+        <volumeref ref="PMT"/>
+        <position unit="mm" z="fiberL/2.-pmtZ/2."/>
+      </physvol>
+    </volume>
+
+    <volume name="Groove">
+      <materialref ref="AIR" />
+      <solidref ref="grooveS" />
+      <physvol>
+        <volumeref ref="Fiber" />
+        <rotation name="fiberRot" x="90" unit="deg" />
+        <position unit="mm" z="grooveDepth/2-claddingR*1.1"/>
+      </physvol>
+    </volume>
+    
     &Detector;
 
     <volume name="World">
@@ -137,7 +189,7 @@
 
   </userinfo>
 
-  <setup name="Test_Slab" version="6" >
+  <setup name="Test_Slab_ITEP" version="3" >
     <world ref="World" />
   </setup>
 

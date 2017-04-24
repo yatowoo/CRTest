@@ -4,6 +4,5 @@
 /analysis/verbose 1
 /run/verbose 2
 /run/initialize
-/process/optical/scintillation/setYieldFactor 0.8
-/gun/position 0 0 -10 mm
-/run/beamOn 100
+/process/optical/scintillation/setYieldFactor 0.01
+/run/beamOn 10

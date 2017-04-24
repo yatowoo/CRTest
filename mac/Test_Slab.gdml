@@ -18,11 +18,12 @@
     <variable name="detectorX" value="60" />
     <variable name="detectorY" value="60" />
     <variable name="detectorZ" value="10" />
+    <variable name="wrapGap" value="0.1" />
     <variable name="coatingThickness" value="0.12" />
-    
-    <variable name="moduleX" value="detectorX" />
-    <variable name="moduleY" value="detectorY" />
-    <variable name="moduleZ" value="detectorZ" />
+
+    <variable name="moduleX" value="detectorX-2*wrapGap" />
+    <variable name="moduleY" value="detectorY-2*wrapGap" />
+    <variable name="moduleZ" value="detectorZ-2*wrapGap" />
 
     <variable name="scintillatorX" value="moduleX-2*coatingThickness" />
     <variable name="scintillatorY" value="moduleY-2*coatingThickness" />
@@ -107,7 +108,7 @@
       <auxiliary auxtype="Skin" auxvalue="DetectorBorder">
         <auxiliary auxtype="SurfaceName" auxvalue="Black" />
         <auxiliary auxtype="LVname" auxvalue="Detector" />
-        <auxiliary auxtype="Material" auxvalue="OpSurface_Border" />
+        <auxiliary auxtype="Material" auxvalue="OpSurface_Black" />
       </auxiliary>
 
       <auxiliary auxtype="Skin" auxvalue="ScintWrapper">
@@ -137,7 +138,7 @@
 
   </userinfo>
 
-  <setup name="Test_Slab" version="6" >
+  <setup name="Test_Slab_Lab204" version="3" >
     <world ref="World" />
   </setup>
 
