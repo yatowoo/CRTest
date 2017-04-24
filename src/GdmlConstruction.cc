@@ -12,6 +12,8 @@
 #include "G4GDMLParser.hh"
 #include "G4GDMLAuxStructType.hh"
 
+#include "G4GeometryManager.hh"
+#include "G4SolidStore.hh"
 #include "G4LogicalVolume.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4VPhysicalVolume.hh"
@@ -25,18 +27,14 @@
 #include<vector>
 
 GdmlConstruction::GdmlConstruction(G4GDMLParser *gdml)
-	: SysConstruction(), fWorldPV(NULL), fGdml(gdml)
-{
-	Init();
-}
+	: SysConstruction(), fWorldPV(NULL), fGdml(gdml), fGdmlFileName("")
+{}
 
 GdmlConstruction::GdmlConstruction(G4String gdmlFileName)
 	: SysConstruction(), fWorldPV(NULL), fGdml(NULL)
 {
 	fGdml = new G4GDMLParser;
-	fGdml->Read(gdmlFileName, false);
-
-	this->Init();
+	fGdmlFileName = gdmlFileName;
 }
 
 GdmlConstruction::~GdmlConstruction()
@@ -68,6 +66,19 @@ void GdmlConstruction::Init(){
 
 G4VPhysicalVolume *GdmlConstruction::Construct()
 {
+  if(fWorldPV){
+	  G4GeometryManager::GetInstance()->OpenGeometry();
+	  G4PhysicalVolumeStore::GetInstance()->Clean();
+	  G4LogicalVolumeStore::GetInstance()->Clean();
+	  G4SolidStore::GetInstance()->Clean();
+	  G4LogicalSkinSurface::CleanSurfaceTable();
+	  G4LogicalBorderSurface::CleanSurfaceTable();
+	  fGdml->Clear();
+  }
+  fGdml->Read(fGdmlFileName, false);
+
+  this->Init();
+
   return fWorldPV;
 }
 
@@ -307,4 +318,125 @@ void GdmlConstruction::DumpVolume(
 		DumpVolume(thePV, prefix+" | ", expanded);
 	}
 
+}
+
+#include "G4NistManager.hh"
+G4Material* GdmlConstruction::FindMaterial(G4String matName)
+{
+	G4Material* material = G4Material::GetMaterial(matName);
+	if(!material)
+		G4NistManager::Instance()->FindOrBuildMaterial(matName);
+	if(!material){
+		G4cerr << "[#] ERROR - Material NOT FOUND" << G4endl;
+		return NULL;
+	}
+	return material;
+}
+
+G4LogicalVolume* GdmlConstruction::FindLogicalVolume(G4String lvName)
+{
+	G4LogicalVolume* lvptr = G4LogicalVolumeStore::GetInstance()->GetVolume(lvName);
+	if(!lvptr){
+		G4cerr << "[#] ERROR - Logical Volume NOT FOUND" << G4endl;
+		return NULL;
+	}
+	return lvptr;
+}
+
+G4bool GdmlConstruction::SetMaterial(G4String lvName, G4String matName)
+{
+	G4LogicalVolume* lvptr = FindLogicalVolume(lvName);
+	if(!lvptr) return false;
+	G4Material* material = FindMaterial(matName);
+	if(!material) return false;
+	lvptr->SetMaterial(material);
+
+	return true;
+}
+
+G4SurfaceProperty* GdmlConstruction::FindSurface(G4String surfName)
+{
+	const G4SurfacePropertyTable* surfTable = 
+		G4SurfaceProperty::GetSurfacePropertyTable();
+	G4SurfaceProperty* surf = NULL;
+	for(unsigned int i = 0; i < surfTable->size() ; i++){
+		surf = (*surfTable)[i];
+		if(surf->GetName() == surfName)
+			break;
+		else
+			surf = NULL;
+	}
+	if(!surf)
+		G4cerr << "[#] ERROR - Surface Property NOT FOUND" << G4endl;
+	return surf;
+}
+
+G4bool GdmlConstruction::SetSkinSurface(G4String lvName, G4String surfName)
+{
+	if(lvName == "PMT") return SetPmtType(surfName);
+
+	G4LogicalVolume* lvptr = FindLogicalVolume(lvName);
+	if(!lvptr) return false;
+	
+  G4LogicalSkinSurface* surf = G4LogicalSkinSurface::GetSurface(lvptr);
+
+	G4OpticalSurface* op_surf = (G4OpticalSurface*)FindSurface(surfName);
+	if(!op_surf) return false;
+  if(!surf){
+    new G4LogicalSkinSurface(lvName+"_Skin",lvptr,op_surf);
+  }else
+    surf->SetSurfaceProperty(op_surf);
+
+  if(!op_surf->GetMaterialPropertiesTable()){
+	  G4Material* material = FindMaterial(G4String("OpSurface_") + surfName);
+	  if(!material) return false;
+	  op_surf->SetMaterialPropertiesTable(material->GetMaterialPropertiesTable());
+  }
+	return true;
+}
+// TODO : Merge with more if-else ?
+G4bool GdmlConstruction::SetPmtType(G4String type)
+{
+	G4LogicalVolume* lvptr = FindLogicalVolume("PMT");
+	if(!lvptr) return false;
+	G4LogicalSkinSurface* surf = G4LogicalSkinSurface::GetSurface(lvptr);
+	if(!surf){
+		G4cerr << "[#] ERROR - PMT photocathod NOT SET" << G4endl;
+		return false;
+	}
+	G4OpticalSurface* op_surf = (G4OpticalSurface*)(surf->GetSurfaceProperty());
+	G4Material* material = FindMaterial("OpSurface_PMT_"+type);
+	if(!material) return false;
+
+	op_surf->SetMaterialPropertiesTable(material->GetMaterialPropertiesTable());
+
+	return true;
+}
+
+void GdmlConstruction::DumpMaterialAndSurface()
+{
+	G4LogicalVolumeStore* lvTable =
+		G4LogicalVolumeStore::GetInstance();
+	
+	G4cout << "[+] INFO - Dump Logical Volume Material & Surface Table" << G4endl;
+	for(unsigned int i = 0 ; i < lvTable->size() ; i++)
+	{
+		G4LogicalVolume* lvptr = (*lvTable)[i];
+		G4Material* material = lvptr->GetMaterial();
+		
+		G4cout << " | " << lvptr->GetName() << "\t| " << material->GetName()
+			<< "\t| ";
+		
+		G4LogicalSkinSurface* surf = G4LogicalSkinSurface::GetSurface(lvptr);
+		if(surf)
+			G4cout << surf->GetSurfaceProperty()->GetName() << G4endl;
+		else
+			G4cout << "NONE" << G4endl; 
+	}
+}
+
+void GdmlConstruction::DumpOpticalSurface()
+{
+  G4cout << "[+] INFO - Dump Surface Table" << G4endl;
+  G4SurfaceProperty::DumpTableInfo();
 }

@@ -5,6 +5,12 @@
 
 #include "Argument.hh"
 
+#ifdef __unix
+#include "unistd.h"
+#else
+#include "direct.h"
+#endif
+
 Argument::Argument()
 {
 	Initialize();
@@ -18,9 +24,11 @@ Argument::Argument(int argc, char* argv[]){
 Argument::~Argument(){}
 
 void Argument::Initialize(){
-	gdmlFileName = "./mac/default.gdml";
-    macroFileName = "./mac/run.mac";
-	rootFileName = "CRTest";
+	char buf[1024];
+	G4String dir = getcwd(buf, 1024);
+	gdmlFileName = dir + "/mac/default.gdml";
+    macroFileName = dir + "/mac/run.mac";
+	rootFileName = dir + "/CRTest.root";
 	rndFactor = 1;
 	uiUse = true;
 	visUse = true;
