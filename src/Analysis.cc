@@ -82,7 +82,7 @@ G4bool Analysis::FillEntryForRun(){
 
 G4int Analysis::CreateNtupleForOpDebug(){
 	
-	if(fRunNtuple < 0) return -1;
+	if(fRunNtuple < 0 || fOpDebugNtuple > 0) return -1;
 	
 	G4int ntupleID = rootData->CreateNtuple(
 		"OpDbg"," Storege Optical Photon for Debug");
