@@ -75,11 +75,14 @@ void Generator::GeneratePrimaries(G4Event *anEvent)
   // for beam/optical test - generate position only
   if(fTriggerMode){
     G4int count = 0;
-    while(!CheckEndpoint())
-    {
+    G4ThreeVector boundary = GetWorldBoundary();
+    do{
       GeneratePosition();
       count ++;
-    }
+    }while(!CheckEndpoint(boundary.z()) && count < 10000);
+    if(count > 5000)
+      G4cout << "[+] WARNING - BAD trigger efficiency. "
+        << "Samples : " << count << "- by Generator " << G4endl;
   }
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }
