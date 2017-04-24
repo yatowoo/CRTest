@@ -24,6 +24,7 @@
 #include "G4RunManager.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcommand.hh"
+#include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
@@ -48,6 +49,9 @@ private:
     G4UIdirectory* fGeneratorDir;
 
     G4UIcmdWithAString* fGeneratorType;
+    G4UIcmdWithABool* fTriggerCmd;
+    G4UIcmdWithAString* fTiggerRange;
+
 	G4UIcmdWithAString* fGdmlFile;
 	G4UIcmdWithAString* fMaterialCmd;
 	G4UIcmdWithAString* fSkinCmd;

@@ -28,30 +28,30 @@ SysMessenger::SysMessenger(G4RunManager* runManager)
   fCRTestDir = new G4UIdirectory("/CRTest/");
   fCRTestDir->SetGuidance("CRTest UI commands");
   // Geometry
-  fGeomDir = new G4UIdirectory("/CRTest/geom/");
+  fGeomDir = new G4UIdirectory("/CRTest/geometry/");
   fGeomDir->SetGuidance("System Construction");
     // GDML
-  fGdmlFile = new G4UIcmdWithAString("/CRTest/geom/setGdmlFile", this);
+  fGdmlFile = new G4UIcmdWithAString("/CRTest/geometry/setGdmlFile", this);
   fGdmlFile->SetGuidance("Set .gdml file for construction");
   fGdmlFile->SetParameterName("file_name",false);
   fGdmlFile->SetDefaultValue("mac/default.gdml");
   fGdmlFile->AvailableForStates(G4State_Idle);
     // Logical Volume - Material
-  fMaterialCmd = new G4UIcmdWithAString("/CRTest/geom/setMaterial", this);
+  fMaterialCmd = new G4UIcmdWithAString("/CRTest/geometry/setMaterial", this);
   fMaterialCmd->SetGuidance("Set material for logical volume : lvName matName");
   fMaterialCmd->SetParameterName("lvName:matName",true);
   fMaterialCmd->AvailableForStates(G4State_Idle);
     // Logical Volume - Skin surface
-  fSkinCmd = new G4UIcmdWithAString("/CRTest/geom/setSkin", this);
+  fSkinCmd = new G4UIcmdWithAString("/CRTest/geometry/setSkin", this);
   fSkinCmd->SetGuidance("Set skin surface for logical volume : lvName surfName");
   fSkinCmd->SetParameterName("lvName:surfName",true);
   fSkinCmd->AvailableForStates(G4State_Idle);
     // Logical Volume - Dump material & skin surface
-  fMatSkinDumpCmd = new G4UIcmdWithoutParameter("/CRTest/geom/dumpMaterial", this);
+  fMatSkinDumpCmd = new G4UIcmdWithoutParameter("/CRTest/geometry/dumpMaterial", this);
   fMatSkinDumpCmd->SetGuidance("Dump logical volume material & skin surface");
   fMatSkinDumpCmd->AvailableForStates(G4State_Idle);
     // Dump surface list
-  fSurfaceDumpCmd = new G4UIcmdWithoutParameter("/CRTest/geom/dumpSurface", this);
+  fSurfaceDumpCmd = new G4UIcmdWithoutParameter("/CRTest/geometry/dumpSurface", this);
   fSurfaceDumpCmd->SetGuidance("Dump surface list");
   fSurfaceDumpCmd->AvailableForStates(G4State_Idle);
   
@@ -65,6 +65,17 @@ SysMessenger::SysMessenger(G4RunManager* runManager)
   fGeneratorType->SetParameterName("type",true);
   fGeneratorType->SetDefaultValue("beam");
   fGeneratorType->AvailableForStates(G4State_Idle);
+
+  fTriggerCmd = new G4UIcmdWithABool("/CRTest/generator/trigger", this);
+  fTriggerCmd->SetGuidance("Turn ON/OFF generator trigger mode");
+  fTriggerCmd->SetDefaultValue(false);
+  fTriggerCmd->AvailableForStates(G4State_Idle);
+
+  fTiggerRange = new G4UIcmdWithAString("/CRTest/generator/range", this);
+  fTiggerRange->SetGuidance("Tigger Range : x_min x_max y_min y_max unit)");
+  fTiggerRange->SetParameterName("range",true);
+  fTiggerRange->SetDefaultValue("0 0 0 0 mm");
+  fTiggerRange->AvailableForStates(G4State_Idle);
 }
 
 SysMessenger::~SysMessenger()
@@ -80,23 +91,38 @@ SysMessenger::~SysMessenger()
 void SysMessenger::SetNewValue(G4UIcommand* cmd, G4String val)
 {
   const G4String cmdPath = cmd->GetCommandPath();
-  if(cmdPath.contains(fGeneratorDir->GetCommandPath())){
+  if(cmdPath.contains(fGeneratorDir->GetCommandPath()))
+  {
+    G4RunManager* runMgr = G4RunManager::GetRunManager();
+    Generator* gun = (Generator*)(runMgr->GetUserPrimaryGeneratorAction());
     if(cmd == fGeneratorType){
       G4cout << "[+] CMD - Set generator type - " << val
         << " - by SysMessenger." << G4endl;
-      G4RunManager* runManager = G4RunManager::GetRunManager();
       if(val != fGeneratorType->GetCurrentValue())
       {
-        delete runManager->GetUserPrimaryGeneratorAction();
+        delete runMgr->GetUserPrimaryGeneratorAction();
         if(val == "beam")
-          runManager->SetUserAction(new Generator);
+          runMgr->SetUserAction(new Generator);
         else if(val == "CRY")
-          runManager->SetUserAction(new CryGenerator("./mac/setup.file"));
+          runMgr->SetUserAction(new CryGenerator("./mac/setup.file"));
         else if(val == "Pdu")
-          runManager->SetUserAction(new PduGenerator);
+          runMgr->SetUserAction(new PduGenerator);
       }            
       G4cout << "[+] CMD - Current Type : " << fGeneratorType->GetCurrentValue()
         << " - by SysMessenger." << G4endl;
+    }else if(cmd == fTriggerCmd)
+    {
+      gun->SetTriggerMode(fTriggerCmd->GetNewBoolValue(val));
+    }else if(cmd == fTiggerRange){
+      G4String xmin, xmax, ymin, ymax, unit;
+      std::stringstream ss;
+      ss << val;
+      ss >> xmin >> xmax >> ymin >> ymax >> unit;
+      G4double u = G4UIcommand::ValueOf(unit.c_str()); // default : mm
+      gun->SetXmin(G4UIcommand::ConvertToDouble(xmin.c_str()) * u);
+      gun->SetXmax(G4UIcommand::ConvertToDouble(xmax.c_str()) * u);
+      gun->SetYmin(G4UIcommand::ConvertToDouble(ymin.c_str()) * u);
+      gun->SetYmax(G4UIcommand::ConvertToDouble(ymax.c_str()) * u);
     }
   }
   else if(cmdPath.contains(fGeomDir->GetCommandPath())){
