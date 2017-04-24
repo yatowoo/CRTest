@@ -18,7 +18,8 @@
 #include "Randomize.hh"
 
 Generator::Generator()
-    : G4VUserPrimaryGeneratorAction()
+  : G4VUserPrimaryGeneratorAction(), 
+  fTriggerMode(false), fXmin(0), fXmax(0), fYmin(0), fYmax(0)
 {
     G4int nofParticles = 1;
     fParticleGun = new G4ParticleGun(nofParticles);
@@ -27,13 +28,8 @@ Generator::Generator()
     G4ParticleDefinition *particleDefinition =
         G4ParticleTable::GetParticleTable()->FindParticle("mu-");
     fParticleGun->SetParticleDefinition(particleDefinition);
-    fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0., 0., 1.));
-    fParticleGun->SetParticleEnergy(3.0 * GeV);
-    G4ThreeVector position = GetWorldBoundary();
-    position.setX(0.);
-    position.setY(0.);
-    position.setZ(-position.z());
-    fParticleGun->SetParticlePosition(position);
+
+    Generate();
 }
 
 Generator::~Generator()
@@ -42,10 +38,63 @@ Generator::~Generator()
 	G4cout << "[-] INFO - Generator deleted. " << G4endl;
 }
 
+void Generator::Generate()
+{
+  GeneratePosition();
+  GenerateDirection();
+  GenerateKineticEnergy();
+}
+
+void Generator::GeneratePosition()
+{
+  G4ThreeVector position = GetWorldBoundary();
+  position.setX(0.);
+  position.setY(0.);
+  
+  if(fTriggerMode){
+    position.setX(fXmin + (fXmax-fXmin) * G4UniformRand());
+    position.setY(fYmin + (fYmax-fYmin) * G4UniformRand());
+  }
+
+  position.setZ(-position.z());
+
+  fParticleGun->SetParticlePosition(position);
+}
+void Generator::GenerateDirection()
+{
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0., 0., 1.));
+}
+
+void Generator::GenerateKineticEnergy()
+{
+  fParticleGun->SetParticleEnergy(3.0 * GeV);
+}
+
 void Generator::GeneratePrimaries(G4Event *anEvent)
 {
+  // for beam/optical test - generate position only
+  if(fTriggerMode){
+    G4int count = 0;
+    while(!CheckEndpoint())
+    {
+      GeneratePosition();
+      count ++;
+    }
+  }
+  fParticleGun->GeneratePrimaryVertex(anEvent);
+}
 
-    fParticleGun->GeneratePrimaryVertex(anEvent);
+G4bool Generator::CheckEndpoint(G4double boundaryZ)
+{
+  G4ThreeVector position = fParticleGun->GetParticlePosition();
+  G4ThreeVector direction = fParticleGun->GetParticleMomentumDirection();
+
+  G4ThreeVector end = position + (boundaryZ-position.z()) * direction;
+  if(end.x() < fXmin || end.x() > fXmax 
+    || end.y() < fYmin || end.y() > fYmax)
+    return false;
+  
+  return true;
 }
 
 G4ThreeVector Generator::GetWorldBoundary(){
