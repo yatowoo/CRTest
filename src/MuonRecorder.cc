@@ -39,6 +39,18 @@ MuonRecorder* MuonRecorder::Instance(){
 	return fgInstance;
 }
 
+void MuonRecorder::Reset()
+{
+	fEk->clear();
+	fTime->clear();
+	fX->clear();
+	fY->clear();
+	fZ->clear();
+	fPX->clear();
+	fPY->clear();
+	fPZ->clear();
+}
+
 void MuonRecorder::CreateEntry(
 	G4int ntupleID, G4RootAnalysisManager* rootData)
 {

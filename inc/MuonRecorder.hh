@@ -33,6 +33,8 @@ public:
 	
 	G4bool Record(const G4Track*);
 
+	void Reset();
+
 private:
 	static MuonRecorder* fgInstance;
 

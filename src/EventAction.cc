@@ -8,6 +8,7 @@
 #include "Analysis.hh"
 #include "CryHit.hh"
 #include "OpRecorder.hh"
+#include "MuonRecorder.hh"
 
 #include "G4UserEventAction.hh"
 #include "G4Event.hh"
@@ -32,9 +33,8 @@ void EventAction::BeginOfEventAction(const G4Event *anEvent)
 	G4int eventID = anEvent->GetEventID();
     G4cout << "[-] INFO - Event " << eventID
            << " begins. - by EventAction" << G4endl;
-    OpRecorder* Recorder = OpRecorder::Instance();
-    Recorder->Reset();
-
+	OpRecorder::Instance()->Reset();
+	MuonRecorder::Instance()->Reset();
 	Analysis::Instance()->SetCurrentEvent(eventID);
 }
 
