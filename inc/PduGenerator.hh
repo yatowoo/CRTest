@@ -29,18 +29,21 @@ public:
 public:
   virtual void GeneratePrimaries(G4Event *anEvent);
 
+private: // Override Base virtual method
+  virtual void GeneratePosition();
+  virtual void GenerateDirection();
+  virtual void GenerateKineticEnergy();
+
 private:
   static G4double PduModel(G4double*,G4double*);
   G4double GetTheta(); // muon zenith angle
   G4ThreeVector GetDirection(); // muon momentim direction
 
 private:
-  G4ParticleGun *fParticleGun;
-  G4ParticleTable *fParticleTable;
-
   TF1 *fPduModel;
   G4double fEmin;
   G4double fEmax;
+  G4double fTheta;
 };
 
 #endif /*CRTest_PduGenerator_h*/

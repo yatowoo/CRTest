@@ -5,34 +5,26 @@
 
 <define>
   <position name="targetPos" unit="cm" x="0" y="0" z="0" />
-  <position name="detectorPos1" unit="cm" x="0" y="0" z="-10" />
-  <position name="detectorPos2" unit="cm" x="0" y="0" z="10" />
+  <position name="detectorPos1" unit="cm" x="0" y="0" z="-1" />
+  <position name="detectorPos2" unit="cm" x="0" y="0" z="1" />
 </define>
 
 <materials>
 </materials>
 
 <solids>
-  <box aunit="radian" lunit="cm" name="targetS" x="1" y="1" z="5" />
+  <box aunit="radian" lunit="cm" name="targetS" x="1" y="1" z="1" />
   <box aunit="radian" lunit="cm" name="detectorS" x="5" y="5" z="0.1" />
-  <box aunit="radian" lunit="cm" name="worldS" x="6" y="6" z="24" />
+  <box aunit="radian" lunit="cm" name="worldS" x="6" y="6" z="6" />
 
   <trd name = "triBarModuleS"  x1="0." x2="20" y1="50" y2="50" z="10" lunit= "mm"/>
   <trd name = "triBarScintS"  x1="0." x2="20-2*0.12*(1.414+1)" y1="50" y2="50" z="10-0.12*(1+1.414)" lunit= "mm"/>
 </solids>
 
 <structure>
-  <volume name="Scint">
-    <materialref ref="G4_Pb" />
-    <solidref ref="triBarScintS" />
-  </volume>
   <volume name="Target">
     <materialref ref="G4_Pb" />
-    <solidref ref="triBarModuleS" />
-    <physvol>
-      <volumeref ref="Scint" />
-      <position unit="mm" z="0.12*0.207"/>
-    </physvol>
+    <solidref ref="targetS" />
   </volume>
   <volume name="Detector">
     <materialref ref="G4_Si" />
@@ -46,23 +38,8 @@
         <positionref ref="detectorPos2" />
     </physvol>
     <physvol>
-        <volumeref ref="Target" />
-        <position z="-5" unit="mm" />
-    </physvol>
-    <physvol>
       <volumeref ref="Target" />
-      <position x="-10" z="-5" unit="mm" />
-      <rotation y="180" unit="degree" />
-    </physvol>
-    <physvol>
-      <volumeref ref="Target" />
-      <position z="5" unit="mm" />
-      <rotation z="90" unit="degree" />
-    </physvol>
-    <physvol>
-      <volumeref ref="Target" />
-      <position y="-10" z="5" unit="mm" />
-      <rotation z="90" y="180" unit="degree" />
+      <positionref ref="targetPos" />
     </physvol>
   </volume>
 </structure>
