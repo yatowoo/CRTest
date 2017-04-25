@@ -31,6 +31,7 @@ private:
     G4String macroFileName;
 	G4String rootFileName;
 	G4int rndFactor;
+  G4int rndSeed;
 	G4bool uiUse;
 	G4bool visUse;
 
@@ -39,6 +40,7 @@ public: // Getters
 	G4String Macro(){return macroFileName;}
 	G4String Root(){return rootFileName;}
 	G4int RndFactor(){return rndFactor;}
+  G4int RndSeed(){return rndSeed;}
 	G4bool Ui(){return uiUse;}
 	G4bool Vis(){return visUse;}
 };

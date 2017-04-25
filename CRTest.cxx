@@ -44,7 +44,7 @@ int main (int argc, char** argv){
         ui = new G4UIExecutive(argc, argv);
     // Random
     G4Random::setTheEngine(new CLHEP::RanecuEngine);
-	G4Random::setTheSeed(time(NULL)*args.RndFactor(),3);
+    G4Random::setTheSeed(args.RndSeed(),3);
     // Run manager
     G4RunManager* runManager = new G4RunManager;
     // Welcome info.

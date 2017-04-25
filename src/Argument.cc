@@ -7,6 +7,7 @@
 
 #ifdef __unix
 #include "unistd.h"
+#include "time.h"
 #else
 #include "direct.h"
 #endif
@@ -30,6 +31,11 @@ void Argument::Initialize(){
     macroFileName = dir + "/mac/run.mac";
 	rootFileName = dir + "/CRTest.root";
 	rndFactor = 1;
+#ifdef __unix
+   rndSeed = time(NULL) * rndFactor;
+#else
+   rndSeed = 1.;
+#endif
 	uiUse = true;
 	visUse = true;
 }
@@ -83,6 +89,7 @@ void Argument::Print(){
 		<< " | + GDML File : " << gdmlFileName << G4endl
 		<< " | + Execute File : " << macroFileName << G4endl
 		<< " | + ROOT File : " << rootFileName << G4endl
+    << " | + Random Seed : " << rndSeed << G4endl
 		<< " | + Random Seed Factor : " << rndFactor << G4endl
 		<< " | + Enable UI : " << (uiUse?"True":"False") << G4endl
 		<< " | + Enable Visualization : " << (visUse?"True":"False") << G4endl
