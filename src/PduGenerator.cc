@@ -85,16 +85,18 @@ void PduGenerator::GeneratePrimaries(G4Event *anEvent)
 // Accept-Reject method to sample muon zenith angle
 G4double PduGenerator::GetTheta()
 {
+	using namespace TMath;
   // [TODO] create a general A-R method in class Generator
   G4double rnd, theta, val;
   do
   {
     // [TODO] change to CLHEP or G4
     theta = G4UniformRand() * TMath::Pi() / 2.;
-    val = TMath::Cos(theta) * TMath::Cos(theta);
+		// Zenith angular distribution
+    val = Sin(theta) * Cos(theta) * Cos(theta) * Cos(theta);
     rnd = G4UniformRand();
   } while (rnd > val);
-  return val;
+  return theta;
 }
 
 G4ThreeVector PduGenerator::GetDirection()
